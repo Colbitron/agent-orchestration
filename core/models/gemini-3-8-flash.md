@@ -13,7 +13,7 @@ access:
   subscriptions: [google-ai-pro, google-ai-ultra]   # plus a free Gemini CLI OAuth tier (60 req/min, 1,000/day)
   api: true
   harnesses: [gemini-cli, cursor, opencode]
-  invoke_via: [gemini-cli]
+  invoke_via: [gemini-cli, agy-cli]
 
 pricing_per_mtok:
   input: 0.75                    # introductory until 2026-12-31; 1.50 from 2027-01-01

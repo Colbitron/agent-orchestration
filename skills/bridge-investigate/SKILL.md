@@ -69,8 +69,9 @@ If you find nothing, say so clearly and list exactly what you inspected.
 
 Write the prompt to `<artifact dir>/investigate-<model>-prompt.md` (artifact
 dir: session scratchpad, else `/tmp/agent-orchestration/`), output to
-`investigate-<model>.md`, read-only flags, 20-minute timeout per the bridges
-README. Run in the background (the Bash tool caps foreground at 10 minutes)
+`investigate-<model>.md`, read-only flags, 20-minute timeout
+(`sh ${CLAUDE_PLUGIN_ROOT}/core/bridges/_timeout.sh 1200 <cmd>`, exit 124 =
+timeout). Run in the background (the Bash tool caps foreground at 10 minutes)
 and keep working on the question yourself meanwhile. In a workflow or
 fan-out, use the `bridge-runner` agent, named `[<model>] investigate <topic>`.
 A timeout is **no result**; read any partial output before deciding to rerun.

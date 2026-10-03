@@ -9,10 +9,9 @@ argument-hint: "[uncommitted | branch <name> | commit <sha> | pr <n>] [focus]"
 
 Cross-family review: the model that wrote the code does not review it. The
 kit root is `${CLAUDE_PLUGIN_ROOT}`, also announced in the
-`<agent-orchestration>` block at session start. Read
-`${CLAUDE_PLUGIN_ROOT}/core/bridges/README.md` (common rules) and
-`core/strategies/verification-and-review.md` §3 and §5 if you have not this
-session.
+`<agent-orchestration>` block at session start. Read `core/bridges/README.md`
+and `core/strategies/verification-and-review.md` §3, §5 from it if you have
+not this session.
 
 ## 1. Identify the review target
 
@@ -76,13 +75,15 @@ known non-goals). Never paste secrets.
   is the session scratchpad, else `/tmp/agent-orchestration/`. Pass it the
   way the bridge file says (stdin or `"$(cat …)"`) so quoting cannot break.
 - Output goes to `<artifact dir>/review-<model>.md`.
-- Wrap the command in the 20-minute timeout from the bridges README rule 4.
-  Claude Code's Bash tool caps foreground commands at 10 minutes, so run it
-  in the background and keep working; you are notified when it exits.
+- Wrap it in the 20-minute timeout:
+  `sh ${CLAUDE_PLUGIN_ROOT}/core/bridges/_timeout.sh 1200 <bridge command>`
+  (stdin must be a pipe or `< /dev/null`). Claude Code's Bash tool caps
+  foreground commands at 10 minutes, so run it in the background and keep
+  working; you are notified when it exits.
 - Inside a workflow or fan-out, give this step to the `bridge-runner` agent
   instead, named `[<model>] review <target>`.
-- Exit by timeout (142 from the perl wrapper, 124 from `gtimeout`) means **no
-  result**, not "nothing found". Check the output file for partial text.
+- Exit 124 means timeout: **no result**, not "nothing found". Check the
+  output file for partial text.
 
 ## 5. Verify, then present
 

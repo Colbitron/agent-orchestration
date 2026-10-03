@@ -13,7 +13,7 @@ access:
   subscriptions: [chatgpt-plus, chatgpt-pro]
   api: true                      # OpenAI API and Amazon Bedrock (announced at launch)
   harnesses: [codex, cursor, opencode, t3-code]   # cursor access reportedly revoked; see Evidence
-  invoke_via: [codex-cli]
+  invoke_via: [codex-cli, cursor-cli, opencode-cli]
 
 pricing_per_mtok:
   input: 10

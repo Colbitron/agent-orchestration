@@ -1,5 +1,5 @@
 ---
-name: orchestrate
+name: ao-orchestrate
 description: How to delegate work using the user's routing table. Use before spawning subagents or shelling out to another model for any non-trivial task; picks the model and effort per task type, shapes the delegated prompt (what / done / out), and applies the standing rules and permissions.
 ---
 
@@ -9,7 +9,7 @@ The kit root is `KIT_ROOT`. The user's routing table should already be in
 your context: your global instructions tell you to read
 `~/.agent-orchestration/routing.md`, `glossary.md`, and `lessons.md` at
 session start. If you have not, read them now. If `routing.md` does not
-exist, stop and run the `setup` skill first; do not guess which models the
+exist, stop and run the `ao-setup` skill first; do not guess which models the
 user can afford.
 
 ## Before delegating anything
@@ -30,9 +30,9 @@ user can afford.
      pieces whose model this harness can run
    - a worktree plus a separate session for checkpointed work that needs
      CI and review between steps
-   - a `bridge-*` skill when the model lives in another harness
-     (`bridge-review`, `bridge-implement`, `bridge-investigate`,
-     `bridge-verify`)
+   - an `ao-bridge-*` skill when the model lives in another harness
+     (`ao-bridge-review`, `ao-bridge-implement`, `ao-bridge-investigate`,
+     `ao-bridge-verify`)
    - if your harness has no subagents, do the bounded piece yourself or
      bridge it; do not pretend to spawn one
 5. Name the subagent, stage, or bridge call with the model prefix
@@ -60,5 +60,5 @@ user can afford.
 
 ## When something goes wrong
 
-Use the `lesson` skill with what you expected and what happened, so the
+Use the `ao-lesson` skill with what you expected and what happened, so the
 improvement loop records it.

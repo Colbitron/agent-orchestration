@@ -13,7 +13,7 @@ access:
   subscriptions: [claude-pro, claude-max]
   api: true
   harnesses: [claude-code, cursor, opencode, t3-code]
-  invoke_via: [claude-cli]
+  invoke_via: [claude-cli, cursor-cli]
 
 pricing_per_mtok:
   input: 4

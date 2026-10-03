@@ -17,18 +17,18 @@ them for you, so this instruction is the loader. Skip it only if an
 
 **If `routing.md` does not exist**, do not assume which models,
 subscriptions, or CLIs the user has. Offer to run the setup interview: use
-the `setup` skill, or follow `KIT_ROOT/core/interview/setup-interview.md`
+the `ao-setup` skill, or follow `KIT_ROOT/core/interview/setup-interview.md`
 step by step.
 
 **Before delegating anything non-trivial** (a subagent, another CLI, another
-model), use the `orchestrate` skill, or read
+model), use the `ao-orchestrate` skill, or read
 `KIT_ROOT/core/strategies/delegation-prompting.md` and the other strategy
 docs in `KIT_ROOT/core/strategies/`. To call a model in another harness,
-use the `bridge-*` skills; exact commands live in `KIT_ROOT/core/bridges/`.
+use the `ao-bridge-*` skills; exact commands live in `KIT_ROOT/core/bridges/`.
 
 **Standing rule:** the routing table is defaults, not limits. If a cheaper
 model's output misses the bar, escalate to a smarter model without asking.
 Judge the output, not the price tag.
 
-When a delegation goes wrong, use the `lesson` skill to record it.
+When a delegation goes wrong, use the `ao-lesson` skill to record it.
 <!-- /agent-orchestration -->

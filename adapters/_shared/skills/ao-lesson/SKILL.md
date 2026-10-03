@@ -1,5 +1,5 @@
 ---
-name: lesson
+name: ao-lesson
 description: Record a lesson from a delegation that went wrong and turn it into a durable config change. Use when the user says an agent or model did something unexpected, asks "how do we prevent this going forward", or after a bridged model misbehaved. Input is "[what you expected] -> [what happened]".
 ---
 
@@ -20,7 +20,7 @@ what they confirm.
    repeat. Candidates, in order of preference:
    - a line in the user's `~/.agent-orchestration/lessons.md`
    - an exact command or flag correction in the relevant
-     `KIT_ROOT/core/bridges/<id>.md` or `bridge-*` skill
+     `KIT_ROOT/core/bridges/<id>.md` or `ao-bridge-*` skill
    - a per-model note in `~/.agent-orchestration/config.yaml` (an `effort`
      or `cost` override, or disabling a model for a task), followed by
      regenerating the table

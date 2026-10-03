@@ -1,5 +1,5 @@
 ---
-name: setup
+name: ao-setup
 description: Interview the user about their harnesses, model subscriptions, priorities, and autonomy comfort, then generate their personal routing table and glossary under ~/.agent-orchestration. Use when the user asks to set up, configure, re-run, or update agent orchestration or model routing, or when no routing table exists at ~/.agent-orchestration/routing.md.
 ---
 
