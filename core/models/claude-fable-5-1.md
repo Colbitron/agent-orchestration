@@ -10,7 +10,7 @@ confidence: high
 
 api_ids: [claude-fable-5-1]
 access:
-  subscriptions: [claude-max]
+  subscriptions: [claude-pro, claude-max]
   api: true
   harnesses: [claude-code, cursor, opencode, t3-code]
   invoke_via: [claude-cli]

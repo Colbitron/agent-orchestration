@@ -350,3 +350,27 @@ without a Claude gate.
   the "input four times higher" remark; the ~370K Codex window is the speaker's
   belief; ExploitBench high-cheaper-than-low may be a table error; OpenAI said
   the earliest snapshot's passivity was reduced, "not a removal of it."
+
+### Score rationale
+
+- **intelligence 9:** highest ceiling measured ("tasks that only this model can
+  complete that Fable still just isn't quite capable of"). Docked from 10
+  because the axis means unsupervised, and its dumb spikes undercut that.
+- **taste 4:** UI around Fable 5 tier "with dumber mistakes", filler copy,
+  bad game feel, scope creep, 6 vs 2 PR follow-ups. Above Sol 6.1 (2), whose
+  UI regressed further.
+- **floor 3:** the speaker churned off it for spikiness that reached
+  "Gemini Flash" lows; the revert incident. Lowest of the frontier models.
+  Sol 6.1 is 6.
+- **thoroughness 10:** "still the most thorough", best decomposition plan,
+  quadruple-confirms at xhigh. Sol 6.1 (9) is close but noisier.
+- **cost_efficiency 6:** best tokens-per-task of the frontier tier and about
+  half of Fable's cost per task. Pulled down by $1 cache reads in a
+  cache-dominated workload, the 5x per-token gap to Sol 6.1, and death-loop
+  runs that ship nothing.
+- **speed 4:** "can be slow"; about 30 TPS; 4x longer on deep debugging. Its
+  computer use is fast, but typical coding is not.
+- **computer_use 10:** best anywhere, "two or three" generations ahead.
+- **orchestration 10:** unmatched swarm coordination and steering. The floor
+  risk is already in `floor`; the `orchestrate` task fit is `good`, not
+  `best`, because owning a must-land end state needs a high floor.

@@ -113,7 +113,8 @@ What drives cost, subscription quirks, what effort level to use for value.
 
 ## Evidence
 List of sources: research file sections, URLs, dates. Mark anything
-unverified.
+unverified. End with a `### Score rationale` table giving one line per
+axis explaining the number in the frontmatter.
 ```
 
 ## Scoring rubric
