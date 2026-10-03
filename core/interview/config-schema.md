@@ -13,7 +13,7 @@ and Codex has one config and one routing table.
   config.yaml      what the user told the interview (this schema)
   routing.md       generated routing table and standing rules
   glossary.md      generated glossary (defaults + user overrides)
-  log.jsonl        optional: one line per delegated task, for tuning
+  runs.jsonl        optional: one line per delegated task, for tuning
   lessons.md       appended by the improvement loop; never regenerated
 ```
 
@@ -109,7 +109,7 @@ glossary:
 # Logging for the improvement loop.
 logging:
   enabled: true
-  path: ~/.agent-orchestration/log.jsonl
+  path: ~/.agent-orchestration/runs.jsonl
 ```
 
 ## Derivation rules the generator follows

@@ -32,8 +32,8 @@ models the user can afford.
      and review between steps
    - a bridge skill (`/agent-orchestration:bridge-*`) when the model lives
      in another harness
-5. Name the subagent or stage with the model prefix (`opus:implement-auth`,
-   `sol:review-auth`) so the user can see who ran what.
+5. Name the subagent or stage with the model prefix (`[opus] implement
+   auth`, `[sol] review auth`) so the user can see who ran what.
 
 ## While work runs
 

@@ -95,7 +95,7 @@ than editing this file; lessons go in lessons.md.
   to stop and ask. See delegation-prompting.
 - Review: <cross-family rule as resolved>.
 - Prefix every subagent or workflow stage name with the model it runs on
-  (e.g. `sol:review-auth`) so the human can see who did what.
+  (e.g. `[sol] review-auth`) so the human can see who did what.
 - If a bridged model returns nothing, it must say so and name what it
   inspected; do not re-run on an empty result.
 - Log each delegated task to <logging.path> if logging is enabled.

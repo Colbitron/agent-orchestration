@@ -78,7 +78,7 @@ Reviewer character (`research/claude-supplemental.md § V1.5, § V1.7`;
 
 ## 3. Writing the review prompt
 
-Use the `review` template in `delegation-prompting.md` §15. Non-negotiable
+Use the `review` template in `delegation-prompting.md` §14. Non-negotiable
 elements:
 
 - **A precise target:** uncommitted diff, branch vs base, a commit, or a PR
@@ -94,7 +94,7 @@ elements:
 - **Read-only by default.** Reviewers do not edit. Use a read-only sandbox
   where the harness offers one.
 - **Simple prompts for GPT reviewers.** Do not prompt a GPT model as if it
-  were Claude (`delegation-prompting.md` §13).
+  were Claude (`delegation-prompting.md` §12).
 - **Safe wording.** Ask "are there bugs in this?" rather than compile-probing
   phrasing (`research/claude-supplemental.md § V2.3`).
 
@@ -216,7 +216,7 @@ judgment to the reviewer step.
 
 ## 9. Babysitting a PR
 
-Use the `babysit` template (`delegation-prompting.md` §15). The procedure,
+Use the `babysit` template (`delegation-prompting.md` §14). The procedure,
 from Theo's skill (`research/claude-supplemental.md § V2.2`):
 
 1. **Monitor.** If the harness offers a PR-monitoring tool, use it so you
