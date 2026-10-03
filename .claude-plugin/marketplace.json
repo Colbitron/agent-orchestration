@@ -1,0 +1,12 @@
+{
+  "name": "agent-orchestration",
+  "owner": { "name": "Colby" },
+  "description": "Marketplace for the agent-orchestration kit.",
+  "plugins": [
+    {
+      "name": "agent-orchestration",
+      "source": "./",
+      "description": "Portable model routing and agent orchestration kit."
+    }
+  ]
+}

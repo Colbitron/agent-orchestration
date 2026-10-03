@@ -1,0 +1,7 @@
+{
+  "name": "agent-orchestration",
+  "version": "0.1.0",
+  "description": "Portable model routing and agent orchestration: a setup interview builds your personal routing table from model profiles, plus bridge skills to call other models from the shell.",
+  "author": { "name": "Colby" },
+  "keywords": ["orchestration", "routing", "subagents", "codex", "models"]
+}
