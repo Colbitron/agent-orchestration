@@ -93,8 +93,11 @@ tasks before trusting it.
   5.5 › 3. Weaknesses, pitfalls and misconceptions`).
 - **Audit bench.** 80.7 on "find opportunities to improve T3 Code" vs 87.4 for 6.1
   Sol and 83.8 for Astra (`research/gpt-releases.md § Deep code review, auditing,
-  and investigation: his main use`). An earlier Grok "once outperformed Fable on
-  an earlier version of this bench" (`research/claude-releases.md § Video 3`).
+  and investigation: his main use`).
+- **Decomposition planning.** Grok 4.7 "once outperformed Fable on an earlier
+  version of" Theo's PR-decomposition bench; it is not ranked on the current
+  version (`research/claude-releases.md § Video 3: Claude Sonnet 5.5 › 6.
+  Subagents, orchestration, delegation and verification`).
 - **Coding agent index.** AA Coding Agent Index 56 in Grok Build, 4th behind Fable
   5.1, GPT-6 Astra and Opus 5 (`research/model-gaps.md § 3a. Grok 4.7`).
 - **Other benches.** AA Intelligence Index 46; DeepSWE about 71–73%;
@@ -194,8 +197,9 @@ Handoff patterns:
 - `research/gpt-releases.md § Deep code review, auditing, and investigation: his
   main use` (80.7).
 - `research/claude-releases.md § Video 2: Claude Opus 5.5 › 3. Weaknesses,
-  pitfalls and misconceptions` and `§ Video 3` (Grok above Opus/Fable on the
-  audit bench).
+  pitfalls and misconceptions` (Grok above Opus/Fable on the audit bench) and
+  `§ Video 3: Claude Sonnet 5.5 › 6. Subagents, orchestration, delegation and
+  verification` (decomposition bench).
 - URLs: [xAI Grok 4.7 docs](https://docs.x.ai/developers/grok-4-7),
   [xAI models and pricing](https://docs.x.ai/docs/models),
   [AA: Benchmarking Grok 4.7](https://artificialanalysis.ai/articles/benchmarking-grok-4-7),
