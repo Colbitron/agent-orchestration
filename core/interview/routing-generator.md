@@ -49,6 +49,12 @@ For each task id in `core/tasks.md` and each enabled model:
 
 Special rules:
 
+- **Expensive models are reserved for wide work.** A model whose user
+  `cost` is 4 or lower may win only rows whose width in `core/tasks.md` is
+  `wide` or `very wide` (and `frontend`, where taste dominates). On every
+  other row the next candidate wins and the expensive model becomes the
+  fallback. This keeps a quota-capped model like Fable for the tasks that
+  need its floor instead of burning it on quick fixes and polling.
 - `review`: primary must be from a family other than the family most used
   for `feature`. If only one family is enabled, pick the model with the
   highest `thoroughness` that is not the `feature` primary and add the line
