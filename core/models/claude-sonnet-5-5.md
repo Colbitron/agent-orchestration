@@ -5,7 +5,7 @@ vendor: anthropic
 family: claude
 status: current
 released: null
-as_of: 2026-10-02
+as_of: 2026-10-08
 confidence: medium
 
 api_ids: [claude-sonnet-5-5]
@@ -18,15 +18,18 @@ access:
 pricing_per_mtok:
   input: 2
   output: 10
-  cache_read: 0.20
+  cache_read: 0.10
   cache_write: 2.50
 context_window: 1000000
 notes_on_cost: >
-  Half Opus's price on input, output and cache writes, but cache reads cost the same
-  $0.20/M. In agentic loops cache reads dominate (50%+ of Sonnet's bill), and it is the
-  most token-hungry model measured (272K tokens per Cursor Bench task; about 360K tokens
-  read per request vs 110K for 6.1 Sol). Like-for-like coding work costs as much as Opus
-  or more. It is cheap only on short, bounded investigations (about 5 minutes).
+  Half Opus's price on every line item since cache reads were cut to $0.10/M in
+  October 2026 (they were $0.20/M, the same as Opus). In agentic loops cache reads
+  dominate, and it is the most token-hungry model measured (272K tokens per Cursor
+  Bench task; about 360K tokens read per request vs 110K for 6.1 Sol). It is cheaper
+  than Opus only while it reads less than about twice Opus's tokens, so like-for-like
+  coding work lands at roughly Opus's cost with a slower wall clock (inference; no
+  like-for-like run since the cut). It is clearly cheap on short, bounded
+  investigations (about 5 minutes).
 
 effort:
   levels: [low, medium, high, xhigh, max]
@@ -41,26 +44,26 @@ scores:
   taste: 4
   floor: 6
   thoroughness: 6
-  cost_efficiency: 5
+  cost_efficiency: 6
   speed: 6
   computer_use: 4
   orchestration: 3
 
 tasks:
-  quick-fix:      {fit: ok, note: "Anthropic positions it for 'well scoped everyday tasks', but the speaker would 'just use Opus': like-for-like it is not cheaper."}
-  feature:        {fit: poor, note: "Do not route main implementation here when Opus is available; same or higher cost, slower wall clock."}
-  long-run:       {fit: poor, note: "Long tool-heavy loops are where equal cache-read pricing and token hunger erase its discount; 43 vs 36 min wall clock vs Opus on Fish Slop."}
+  quick-fix:      {fit: ok, note: "Anthropic positions it for 'well scoped everyday tasks', but the speaker would 'just use Opus': even after the cache-read cut, like-for-like cost is about Opus's for a weaker result."}
+  feature:        {fit: poor, note: "Do not route main implementation here when Opus is available; about the same cost after the cache-read cut, less capable, slower wall clock."}
+  long-run:       {fit: poor, note: "Long tool-heavy loops are where token hunger eats its discount: the cache-read cut makes it half Opus's price per token, but it read 1.25x to 3.5x Opus's tokens; 43 vs 36 min wall clock vs Opus on Fish Slop."}
   frontend:       {fit: poor, note: "'Hideous', 'boring', 'awful' animations, scroll bugs; weakest of the Claude trio. Use Fable, then Opus."}
   review:         {fit: ok, note: "Not tested as a PR reviewer; 6.1 Sol was far more thorough on audits. Same-family as Claude authors, so use OpenAI for review."}
   investigate:    {fit: good, note: "Bounded investigations with a clear deliverable: finding specific behaviours, confirming a hunch about an API or code path."}
   analyze:        {fit: best, note: "Beat Opus at about half the price in about 5 minutes on the speaker's decomposition bench ('best value I've seen'). Astra made the best plan; 6.1 Sol may now be cheaper."}
-  bulk:           {fit: ok, note: "Claimed good at documents, slides and spreadsheets (lightly evidenced); token hunger hurts high-volume work. Haiku 5.5 (unreleased) targets this slot."}
+  bulk:           {fit: ok, note: "Claimed good at documents, slides and spreadsheets (lightly evidenced); token hunger hurts high-volume work. Haiku 5.5 (shipped October 2026) now takes bounded, verifiable high-volume work as a subagent; see claude-haiku-5-5.md."}
   research:       {fit: good, note: "Scoping research and hunch-checking for an orchestrator; external web research specifically is not covered in research."}
   computer-use:   {fit: poor, note: "Much improved (OS World 'neck and neck' with Opus 5.5; beat Pokemon Red from screenshots), but the speaker still uses Astra almost exclusively."}
   copy:           {fit: ok, note: "Writes 'way more clearly' than the previous generation with Claude-isms removed; no copy-specific test in research."}
-  3d-games:       {fit: good, note: "Fish Slop 3D was 'one of the best I've ever seen' (Blender models, 120 FPS), but took about 40 min and about $16 at API prices."}
+  3d-games:       {fit: good, note: "Fish Slop 3D was 'one of the best I've ever seen' (Blender models, 120 FPS), but took about 40 min and about $16 at API prices (before the cache-read cut)."}
   prompt-writing: {fit: unknown, note: "Not covered in research."}
-  babysit:        {fit: poor, note: "Not tested directly; babysitting is a long poll-and-fix loop, where its cache-read economics are worst (inference from the cost evidence)."}
+  babysit:        {fit: poor, note: "Not tested directly; babysitting is a long poll-and-fix loop, where its token hunger costs most even at the new $0.10/M cache-read price (inference from the cost evidence)."}
   orchestrate:    {fit: poor, note: "Positioned as a tool other models call, not a lead; no evidence of it orchestrating."}
 
 role_hints:
@@ -75,8 +78,8 @@ A subagent for bounded investigation and analysis, dispatched by an Opus or
 Fable lead: deep dives into a codebase, decomposition research, confirming
 hunches. On those it gave the best cost per point the speaker had seen. Do not
 select it as a primary model, for implementation, for front end, or for any long
-agentic loop: it is not cheaper than Opus there, because cache reads cost the
-same and it burns more tokens.
+agentic loop. Cache reads now cost half what Opus pays, but it burns more tokens
+and more wall clock, so there it costs about the same as Opus for weaker work.
 
 ## Strengths
 
@@ -111,13 +114,19 @@ same and it burns more tokens.
 
 ## Weaknesses and failure modes
 
-- **Not cheaper than Opus in practice.** Cache reads were not cut ($0.20/M,
-  same as Opus). In agentic work, cache reads are "like 50 plus" percent of
-  Sonnet's cost (about 20% for Opus, under 5% for Fable). "Sonnet consistently
-  comes out as if not more expensive than opus does" on like-for-like code tasks
-  (`research/claude-releases.md § Video 3 › 3. Weaknesses, pitfalls and
-  misconceptions`). On AA it cost roughly the same as Fable 5.1, mostly because
-  of max.
+- **Not meaningfully cheaper than Opus in loops.** Until October 2026 its
+  cache reads cost $0.20/M, the same as Opus, and made up "like 50 plus" percent
+  of Sonnet's agentic cost (about 20% for Opus, under 5% for Fable). On that
+  pricing, "Sonnet consistently comes out as if not more expensive than opus
+  does" on like-for-like code tasks (`research/claude-releases.md § Video 3 ›
+  3. Weaknesses, pitfalls and misconceptions`). Anthropic has since cut Sonnet's
+  cache reads to $0.10/M, so it is now half Opus's price on every line item.
+  Token hunger (next bullet) still eats much of that: like-for-like it should
+  land at about Opus's cost rather than above it (inference; no like-for-like
+  run since the cut). On AA it cost roughly the same as Fable 5.1, mostly
+  because of max; AA has since repriced it and it "shifted quite a bit to the
+  left" on Theo's chart (`transcripts/claude/releases/claude-haiku-5-5.html`
+  19:14-19:30).
 - **Token-hungry.** Cursor Bench: 271,920 tokens per task, the most ever
   recorded (Opus 218K), "more than 5x" Sol and Astra. In Fish Slop it used more
   than 3.5x Opus's input tokens. About 360K tokens read per request vs about 110K
@@ -170,7 +179,7 @@ What the dispatch prompt should contain (from the speaker's examples):
   > can't explain.
 
 - An explicit statement that the task is read-only analysis, so it stays short
-  and bounded. Its cost advantage disappears in long loops.
+  and bounded. Its cost advantage shrinks to about nothing in long loops.
 - When reusing a long-running Sonnet thread, say explicitly that the topic has
   changed.
 
@@ -221,17 +230,36 @@ Handoff patterns:
   subscription, the speaker now prefers 6.1 Sol for review and investigation: it
   did three rounds of work for about half the cost of one Sonnet round. Keep
   Sonnet as the analysis subagent for Claude-only users.
-- **Haiku 5.5 (announced, not released)** is meant for high-volume,
-  cost-sensitive work and may take Sonnet's bulk slot once profiled.
+- **Haiku 5.5 (shipped October 2026)** costs $0.10 / $0.50 per M in/out for
+  prompts up to 100K tokens and 5x that above. It is a subagent for bounded,
+  verifiable work: file search, data gathering, categorisation, reading docs,
+  many cheap attempts. It takes the high-volume part of Sonnet's bulk slot, not
+  its analysis role. See `core/models/claude-haiku-5-5.md`.
+- **Opus plus Haiku may leave no room for Sonnet (Theo's opinion).** In the
+  Haiku 5.5 video, after AA repriced Sonnet for the cache-read cut, Theo reads
+  the Anthropic Pareto line on his chart of Artificial Analysis aggregate data
+  as "all of Haiku for the cheap and most of Opus for the less cheap". Sonnet
+  "offers nothing now. Maybe just barely on high", and "you can avoid Sonnet
+  entirely and just use Opus and Haiku"
+  (`transcripts/claude/releases/claude-haiku-5-5.html` 37:22-37:45). This is
+  his reading of aggregate benchmark data, not a task test. The kit keeps
+  Sonnet as the analysis subagent above: Haiku does not replace judgment work,
+  and analysis that needs judgment stays with Sonnet or Opus.
 
 ## Cost notes
 
-- $2 / $10 per M in/out, cache writes $2.50/M, cache reads $0.20/M (same as
-  Opus; not cut). The per-token discount does not apply to the line item that
-  dominates agentic bills.
-- Cost-effective only for short, bounded investigations that finish quickly
-  (about 5 minutes on the audit bench). Long loops erase the saving.
-- AA cost per run: max $7.60 (vs Astra max $3.26); xhigh "pretty close to
+- $2 / $10 per M in/out, cache writes $2.50/M, cache reads $0.10/M since
+  October 2026 (Anthropic pricing page, fetched 2026-10-08). Before the cut
+  cache reads were $0.20/M, the same as Opus, so the discount skipped the line
+  item that dominates agentic bills. Now every line item is half Opus's.
+- In a cache-read-dominated loop Sonnet is cheaper than Opus only while it
+  reads less than twice Opus's tokens. It used 1.25x Opus's tokens on Cursor
+  Bench and 3.5x Opus's input tokens on one Fish Slop build, which puts it
+  between about 0.6x and 1.75x Opus's cost (arithmetic in
+  `core/strategies/cost-model.md` §5).
+- Clearly cost-effective for short, bounded investigations that finish quickly
+  (about 5 minutes on the audit bench). Long loops eat most of the saving.
+- AA cost per run (before the cache-read cut): max $7.60 (vs Astra max $3.26); xhigh "pretty close to
   Astra's price"; high and medium transcribed as "$18 and 59", probably $1.18
   and $0.59 (ambiguous).
 - Conflicting cost data. The Sonnet video has Sonnet at about half Opus's cost
@@ -239,6 +267,7 @@ Handoff patterns:
   Opus at $5 on the "find opportunities to improve T3 Code" task, and $15 vs
   Opus $50 on a Fish Slop run (the Opus run was contaminated by a Fable
   subagent). These are different tasks; the research does not reconcile them.
+  All of these runs predate the cache-read cut.
 - Subscription: about $2,300/week of API-equivalent usage on the $200 plan.
   Other Claude plans are not covered in research.
 - Effort for value: high. xhigh for harder analysis; it beat max on Frontier
@@ -260,6 +289,13 @@ Handoff patterns:
 - API id and 1M context come from the bundled Claude API reference (model table
   cached 2026-09-25), not from `research/`. Data retention / ZDR for Sonnet is
   not covered in research.
+- Cache-read price of $0.10/M: Anthropic pricing page, fetched 2026-10-08
+  ("Cache hits and refreshes on Claude Opus 5.5 and Claude Sonnet 5.5 are
+  priced at 0.05x the base input price"). Opus 5.5 stays at $0.20/M.
+- `transcripts/claude/releases/claude-haiku-5-5.html` (Theo's Haiku 5.5 launch
+  video, about 2026-10-07): cache-read cut at 4:36, AA repricing at
+  19:07-19:30, Pareto-line view at 37:22-37:45. Digested as
+  `research/claude-releases.md § V4.4` and `§ V4.8`.
 - Release month: not stated (`released: null`).
 - Confidence is medium: one dedicated video plus comparisons in the Sol video,
   with conflicting cost data; no Anthropic prompt guide for Sonnet in research.
@@ -272,7 +308,7 @@ Handoff patterns:
 | taste | 4 | Weakest front end of the trio ("hideous", "awful" animations); clearer prose than Sonnet 5 and a good 3D game, but no code-style or copy evidence lifts it. |
 | floor | 6 | "Fewer dumb spikes" than Astra and good intent tracking, but only evidenced on bounded tasks; no long-run evidence. Scored conservatively. |
 | thoroughness | 6 | Slightly above Opus on the decomposition bench (Opus is 5), but far less thorough than 6.1 Sol and Astra on audits. |
-| cost_efficiency | 5 | Best cost per point on bounded analysis, but equal cache-read price, record token use and slower wall clock make it no cheaper than Opus (6) in agentic loops. |
+| cost_efficiency | 6 | Raised from 5 on 2026-10-08. The 5 rested on cache reads costing the same as Opus; the cut to $0.10/M halves the line item that dominates its agentic bill, AA repriced it "quite a bit to the left", and bounded analysis (already its best cost per point) got cheaper. Not above Opus (6): record token use and slower wall clock put like-for-like loops at about parity, and on the AA Pareto line it "offers nothing now. Maybe just barely on high" (Theo). |
 | speed | 6 | Highest raw TPS of the trio and about 2x faster than Opus on the 5-minute audit, but slower wall clock than Opus on the 40-minute build. |
 | computer_use | 4 | Much improved and level with Opus on OS World; Astra still preferred. Same score as Fable and Opus. |
 | orchestration | 3 | No evidence of it leading; the speaker positions it strictly as a tool other models call. |

@@ -3,9 +3,9 @@ id: claude-haiku-4-5
 name: Claude Haiku 4.5
 vendor: anthropic
 family: claude
-status: current                  # retirement "not sooner than 2026-10-15"; Haiku 5.5 announced, unreleased
+status: deprecated               # superseded by claude-haiku-5-5 (released 2026-10); retirement "not sooner than 2026-10-15"
 released: 2025-10
-as_of: 2026-10-02
+as_of: 2026-10-08
 confidence: medium               # specs from Anthropic docs (high); routing from web research plus one Theo rule, no hands-on use
 
 api_ids: [claude-haiku-4-5, claude-haiku-4-5-20251001]   # Bedrock anthropic.claude-haiku-4-5; Vertex claude-haiku-4-5@20251001
@@ -65,20 +65,19 @@ tasks:
   orchestrate:    {fit: poor, note: "Not a lead model."}
 
 role_hints:
-  as_primary: "Never. Don't route real work here; wait for Haiku 5.5 and re-profile."
+  as_primary: "Never. Superseded by Haiku 5.5; route to claude-haiku-5-5 instead."
   as_subagent: "Only for trivial, verifiable chores inside an Anthropic-only flow (file search summaries, commit messages, classification)."
   never_for: ["anything that must land", "code review", "planning or analysis", "investigation", "work that needs post-2025 API knowledge", "repos that exceed a 200K context", "leading other agents"]
 ---
 
 ## Summary
 
-Don't use it, at least until Haiku 5.5 ships. Haiku 4.5 is Anthropic's current
-small model. Its Artificial Analysis Intelligence Index is 17, far below the cheap
-tiers from other labs, and Theo's roster says "Never use haiku ... It's not useful
+Don't use it. Haiku 4.5 is superseded by Haiku 5.5 (see `claude-haiku-5-5.md`),
+which is cheaper per token and far stronger on Anthropic's benchmarks. Its
+Artificial Analysis Intelligence Index is 17, far below the cheap tiers from
+other labs, and Theo's roster says "Never use haiku ... It's not useful
 for anything real." This profile comes from vendor docs and aggregators, not
-hands-on testing; test it on your own tasks before trusting any of it. It is
-likely to be replaced within weeks: Haiku 5.5 is announced but unreleased, and
-4.5 can be retired from 2026-10-15.
+hands-on testing. It is kept for reference; 4.5 can be retired from 2026-10-15.
 
 ## Strengths
 
@@ -144,12 +143,7 @@ Handoff patterns:
 - **Replace it, don't hand off to it.** In a Claude-only kit, Sonnet 5.5 or Opus
   5.5 at medium takes the cheap slot; in a mixed kit, 6.1 Sol or a cheap-tier
   model does.
-- **Re-profile on Haiku 5.5.** Anthropic says Haiku 5.5 is "built for high volume
-  and cost-sensitive applications", "our first Haiku release in a year", with
-  "many of the same improvements" as Opus 5.5 (`research/claude-releases.md`
-  transcription notes and `§ Video 2: Claude Opus 5.5 › 4. Pricing, speed,
-  context and limits`). When it ships, write a new profile; it will likely
-  replace this one.
+- **Superseded: see claude-haiku-5-5.md.**
 
 ## When this beats the frontier
 

@@ -84,6 +84,33 @@ Signals not to:
   [so] each later PR is a smaller PR" (`research/claude-releases.md § V1.2`).
 - The task is taste-sensitive UI where one coherent hand matters more than speed.
 
+### Many cheap attempts with cheap verification
+
+A fan-out of cheap workers beats one smart worker only when both hold:
+
+- A random try from a cheap model is nearly as good as a thoughtful try from a
+  smart model. "If the gap between a random try from a dumb model and a
+  thoughtful try from a smart model isn't that big, Haiku 5.5 is going to
+  slaughter" (`research/claude-releases.md § V4.6`, ~23:34).
+- Each attempt can be verified by running code, so a wrong try costs little.
+
+Anthropic's egg-drop demo (a single vendor run, ~22:17-23:20): Opus 5.5 alone
+took 3 min 37 s, 25 attempts, $0.47. Opus 5.5 plus 10 Haiku 5.5 subagents took
+58 s, 86 attempts, $0.14. Theo's caution: "This is a small subset of work."
+
+Required controls:
+
+- **Cap the number of agents.** Told to "use lots of subagents and use Haiku 5.5
+  for all subagents", Opus proposed about 100 Haiku agents for 1,495 PRs
+  (~35:13-35:58). The orchestrator sets the ceiling, not the lead.
+- **Keep each Haiku request under about 100K prompt tokens.** Above that, every
+  request pays the higher price tier, cache hits included (`cost-model.md` §10).
+- **Share one rate-limit budget** when agents hit the same external API. Parallel
+  fetches hit GitHub's 5,000 requests per hour limit and locked Theo's GitHub
+  integration out for about 50 minutes (~33:46-34:56).
+- **Make "cannot" or "nothing found" a valid return.** The same run saved error
+  bodies as data, said it would wait for the quota reset, and never resumed.
+
 ## 4. Lead behaviour while subagents run
 
 - **Keep working.** Do not idle while subagents run. Test their findings as

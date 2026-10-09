@@ -5,7 +5,7 @@ vendor: openai
 family: gpt
 status: current
 released: 2026-09                # about 2026-09-22, alongside GPT-6 Sol (from transcripts)
-as_of: 2026-10-02
+as_of: 2026-10-08
 confidence: low                  # web research only; one aggregator number; Theo: 6.0 Sol and Luna "weren't that good"
 
 api_ids: [gpt-6-luna]
@@ -106,6 +106,10 @@ good".
   router sent most traffic to a cheap model, took 104 steps vs 19 for Astra low,
   and cost more (`research/gpt-releases.md § Critique of naive cost routers`).
   That test did not use Luna, but the risk applies to any low-index model.
+- **Behind Haiku 5.5 on Anthropic's launch benchmarks.** Terminal-Bench 4.0: Luna
+  16.4% vs Haiku 5.5 39.2%. OSWorld 2.1: Luna 48.9% vs Haiku 5.5 72.4% partial
+  credit. These are Anthropic's numbers, unverified (`research/claude-releases.md
+  § V4.2`).
 - **Unknowns.** Cache-read price, speed, Codex availability and computer-use
   support are not confirmed.
 - **Family traits (inferred).** Sol and Astra have weak UI taste and write filler
@@ -138,6 +142,12 @@ Do not route here for:
 - Anything that must merge or ship without review.
 - Review, investigation, planning, frontend, copy, long runs, leading agents.
 - Hard multi-step agent tasks where step count drives cost; use 6.1 Sol at low.
+
+Against Haiku 5.5:
+- Theo's Haiku video places Luna as "cheaper always, dumber always" than Haiku
+  5.5 on Artificial Analysis cost vs intelligence. His cross-vendor value line
+  runs Luna, then GPT-6.1 Sol, then Opus 5.5. In an Anthropic-only environment,
+  Haiku 5.5 now fills Luna's slot (`research/claude-releases.md § V4.8`).
 
 Handoff patterns:
 - **Luna gathers, Opus/Sol ship.** Luna reads and extracts; Sol or Opus decides
@@ -176,6 +186,9 @@ Handoff patterns:
   (cheap/bulk tier).
 - `research/gpt-releases.md § Video 2: GPT-6.1 Sol › 1. Subject and thesis`
   ("weren't that good") and `§ Critique of naive cost routers`.
+- `research/claude-releases.md § V4.2` (Anthropic's Haiku 5.5 launch benchmarks
+  vs Luna) and `§ V4.8` (Luna "cheaper always, dumber always" than Haiku 5.5;
+  cross-vendor value line).
 - `research/claude-releases.md` transcription notes ("Luna" = OpenAI cheap model
   released alongside GPT-6 Sol).
 - URLs: [OpenAI models](https://developers.openai.com/api/docs/models),

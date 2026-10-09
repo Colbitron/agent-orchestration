@@ -6,14 +6,16 @@ a workflow stage, or a shell-out. The short version: **use `high`, never use
 
 Citations: `research/<file>.md § V1.3` means Video 1, section 3 of that file.
 `INSP` means `transcripts/general/agent-orchestration-inspiration.html`
-(recorded in the Fable 5 / GPT-5.5 / Opus 4.8 era).
+(recorded in the Fable 5 / GPT-5.5 / Opus 4.8 era). `H55` means
+`transcripts/claude/releases/claude-haiku-5-5.html` at the given timestamp
+(Theo's Haiku 5.5 launch video, about 2026-10-07).
 
 ---
 
 ## 1. What effort actually controls
 
-Effort levels (`low`, `medium`, `high`, `xhigh`, `max` on current Claude and
-GPT models) are not "think this much". They are "think **up to** this much".
+Effort levels (`low`, `medium`, `high`, `xhigh`, `max` on current Claude
+models, Haiku 5.5 included, and GPT models) are not "think this much". They are "think **up to** this much".
 
 - `low` through `xhigh` are **ceilings**. The model thinks as much as it needs
   and stops at the cap. A trivial message at `high` stays short: Theo sent
@@ -66,9 +68,10 @@ Theo's only use for it is "just trying to burn a limit"
 | Claude Fable 5.1 | `high` | `low` for routine, known-simple work; `medium` to stop a rabbit hole | `max`; `xhigh` without evidence | "Doesn't seem to benefit as much going beyond high" (`research/claude-releases.md § V1.2`). See §6 on the low/xhigh conflict. |
 | Claude Opus 5.5 | `high` | `medium` for scoped or cost-sensitive work; `xhigh` for a polish/refinement pass | `low`, `max` | Harness default appears to be `medium` (`research/claude-releases.md § V2.4`). "Low is really bad"; "low and max are dangerous... medium, high, XH high, those all have seemed really good" (`research/claude-releases.md § V2.3`). |
 | Claude Sonnet 5.5 | `high` | `xhigh` for harder analysis | `low`, `max`; treat `medium` as weaker than Opus `medium` | "Medium is a lot stronger with Opus than it is with Sonnet" (`research/claude-releases.md § V3.3`). Exception: `low` is fine when Sonnet is only a wrapper that shells out to another model (§7). |
+| Claude Haiku 5.5 | `high` for subagent work | `xhigh` for a harder bounded pass | `max` until re-baselined (§6); reasoning off; `low` as for other Anthropic models (§6) | Levels `low` to `max`; API default is `medium`, so set the level explicitly. Theo's AA chart shows `xhigh` and `max` as the best value in Anthropic's range (H55 14:01-14:09); the never-`max` rule stands until the user's own re-baseline tests it. Never turn reasoning off: Anthropic models are "bad at that" (H55 10:23-11:25). Thinking can only be disabled at `high` or below (Anthropic docs). |
 | GPT-6 Astra | `high` | `low` for science-style tasks (54.3% on Terminal Bench Science at `low`) | `max`; `fast` mode; careless `ultra` | "High does seem to be one of the best options"; `xhigh` sometimes scored below `high` (`research/gpt-releases.md § V1.2`). "If you're using fast with Astra, you're probably using Astra wrong" (`research/model-selection.md § V2.3`). |
 | GPT-6.1 Sol | `low` | `high` | `xhigh`, `max` | Low "is the cost and efficiency star": DeepSWE at $0.21/task and 4.8 min, matching Opus 5.5 `max` at $14.65 and 50 min (`research/gpt-releases.md § V2.2`). |
-| Others (Grok, Haiku, open-weight) | `high` | — | `max` | No effort-specific evidence. Start at `high` and log results. |
+| Others (Grok, open-weight) | `high` | — | `max` | No effort-specific evidence. Start at `high` and log results. |
 
 Profiles in `core/models/` carry the authoritative `effort:` block per model;
 when a profile and this table disagree, the profile wins because it is dated.
@@ -139,7 +142,15 @@ when the user's config prefers it.
 you should use any anthropic model on low right now"
 (`research/claude-releases.md § V3.3`), which conflicts with the Fable `low`
 praise. The kit rule above (Fable `low` only for routine, test-verified work;
-Opus and Sonnet never `low` for real work) covers both.
+Opus, Sonnet and Haiku 5.5 never `low` for real work) covers both.
+
+**Haiku 5.5 and `max`.** On Theo's chart of Artificial Analysis data, Haiku
+5.5 at `xhigh` and `max` are "the best value in that range within
+Anthropic's line of models" (H55 14:01-14:09), and `max` is still cheap in
+absolute terms. That conflicts with §2. **Kit rule:** `high` by default and
+`xhigh` when a bounded task needs more; no `max` until the user's re-baseline
+(`improvement-loop.md` §6) shows it pays on their own tasks. Whatever the
+level, keep reasoning on.
 
 ## 7. Bundled modes that hide effort
 

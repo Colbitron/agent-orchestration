@@ -2,7 +2,7 @@
 id: claude-cli
 harness: claude-code
 binary: claude                   # ~/.local/bin/claude -> ~/.local/share/claude/versions/<ver>
-reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-4-5]
+reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5]
 auth: "claude auth login (Pro/Max subscription or Console), or ANTHROPIC_API_KEY (the only option with --bare)"
 verified: local                  # claude --help 2.1.288, smoke test run 2026-10-02
 as_of: 2026-10-02
@@ -58,6 +58,9 @@ cd <WORKTREE> && perl -e 'alarm shift; exec @ARGV' 2700 \
 | Spend cap | `--max-budget-usd <amount>` (print only) |
 | Working dir | none; `cd <D>`. `--add-dir <dirs...>` for extra access |
 | Reproducible | `--bare` (no CLAUDE.md/hooks/skills/MCP; **API key only**) |
+
+The `haiku` alias now resolves to Haiku 5.5 (`claude-haiku-5-5`). To pin the old model, pass
+its full ID: `--model claude-haiku-4-5`.
 
 ## Prompting this model family
 Claude takes wide, context-rich prompts: goal, done conditions, constraints and

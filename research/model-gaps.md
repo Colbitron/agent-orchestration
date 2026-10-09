@@ -1,13 +1,13 @@
 # Model gaps: profiles for models missing from the routing table
 
-**As of 2026-10-02.** Web research done on that date.
+**As of 2026-10-02.** Web research done on that date. Haiku entries updated 2026-10-08 for the Haiku 5.5 launch (official pricing page plus `research/claude-releases.md` Video 4).
 
 ## How to read this
 
 - These profiles come from **web research only**: vendor docs, pricing pages, model cards, launch posts and third-party benchmark sites. None of the models were run hands-on. The other profiles in this folder come from video transcripts of people using the models; treat these as lower-fidelity.
 - **Vendor benchmark numbers are self-reported.** Where an independent number exists (mostly Artificial Analysis, "AA"), it is given next to the vendor number.
 - **"unverified"** means only one non-vendor source gave the number, sources disagreed, or no source was found. Do not hard-code these numbers into routing logic without checking them.
-- **Baseline for routing advice:** Claude Opus 5.5 (`claude-opus-5-5`, $4 / $20 per MTok, cache hit $0.20, 1M context, 128K output; AA Intelligence Index 54 at `high`, about 80 tok/s, about $1.82 per AA task). [Anthropic models overview](https://platform.claude.com/docs/en/about-claude/models/overview), [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing), [AA leaderboard](https://artificialanalysis.ai/leaderboards/models)
+- **Baseline for routing advice:** Claude Opus 5.5 (`claude-opus-5-5`, $4 / $20 per MTok, cache hit $0.20 (unchanged at the Haiku 5.5 launch, which cut only Sonnet 5.5's cache reads), 1M context, 128K output; AA Intelligence Index 54 at `high`, about 80 tok/s, about $1.82 per AA task). [Anthropic models overview](https://platform.claude.com/docs/en/about-claude/models/overview), [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing), [AA leaderboard](https://artificialanalysis.ai/leaderboards/models)
 - **About AA "cost per task":** this is AA's measured USD cost to run one Intelligence Index task at the prices in force on the measurement date. It includes each model's token verbosity, so it shows real cost better than list price does. Promotional prices skew it.
 
 ---
@@ -16,7 +16,7 @@
 
 | What our notes say | What is current (2026-10-02) | Source |
 |---|---|---|
-| "Claude Haiku 4.5 / Haiku 5.x" | **Haiku 4.5 is still the current Haiku.** There was never a Haiku 5. Anthropic announced **Haiku 5.5** on 2026-09-22 as coming "in the coming weeks". It has no ID, price or model card yet. Haiku 4.5's retirement date is "not sooner than **October 15, 2026**", so it may be retired soon. | [Anthropic models overview](https://platform.claude.com/docs/en/about-claude/models/overview), [Mike Krieger on X](https://x.com/mikeyk/status/2102441803253535060), [cellcog](https://cellcog.ai/blog/claude-haiku-5-5-release-date/) |
+| "Claude Haiku 4.5 / Haiku 5.x" | **Haiku 5.5 shipped about 2026-10-07** with ID `claude-haiku-5-5` and is now the current Haiku. Haiku 4.5 is superseded; its retirement date is "not sooner than **October 15, 2026**". There was never a Haiku 5. (Updated 2026-10-08; Haiku 5.5 was announced 2026-09-22 as coming "in the coming weeks".) | [Anthropic models overview](https://platform.claude.com/docs/en/about-claude/models/overview), [Mike Krieger on X](https://x.com/mikeyk/status/2102441803253535060), [cellcog](https://cellcog.ai/blog/claude-haiku-5-5-release-date/) |
 | "Gemini 3.x Pro" | The best *generally available* Gemini for coding is **Gemini 3.8 Flash** (GA 2026-09-02). **Gemini 3.5 Pro was announced at I/O in May and never shipped.** **Gemini 3.1 Pro is still "preview"** and now scores below 3.8 Flash. **Gemini 4 Argon** was announced 2026-09-30 and is in restricted access only. | [Gemini models](https://ai.google.dev/gemini-api/docs/models), [Google blog: 3.8 Flash](https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/), [Google blog: Gemini 4 Argon](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/) |
 | "Grok 4.7" / "GrokBuild" | **Grok 4.7** (`grok-4.7`, 2026-09-21) is current. **Grok Build** is the terminal agent (CLI binary `grok`). **grok-build-0.1** is a separate, cheaper coding model. xAI now brands itself "SpaceXAI" in places. | [xAI Grok 4.7 docs](https://docs.x.ai/developers/grok-4-7), [Grok Build docs](https://docs.x.ai/build/overview) |
 | "GPT-5.6 Sol vs GPT-6.1 Sol" | **Both exist.** GPT-5.6 Sol (`gpt-5.6-sol`, released 2026-07-09, $4/$20) is the **previous** generation. Then came **GPT-6 Sol** (2026-09-22) and **GPT-6.1 Sol** (`gpt-6.1-sol`, 2026-09-29, $2/$10). **GPT-6.1 Sol is the current Sol.** "Sol" is often mis-captioned as "Soul". | [OpenAI models](https://developers.openai.com/api/docs/models), [OpenAI gpt-6.1-sol model page](https://developers.openai.com/api/docs/models/gpt-6.1-sol), [OpenAI gpt-5.6-sol model page](https://developers.openai.com/api/docs/models/gpt-5.6-sol), [TechCrunch](https://techcrunch.com/2026/09/29/openai-launches-gpt-6-1-sol-says-it-nearly-matches-gpt-6-astra-and-costs-less/), [Wikipedia: GPT-5.6](https://en.wikipedia.org/wiki/GPT-5.6) |
@@ -34,7 +34,8 @@ Prices are list prices in USD per 1M tokens (input / cached input / output). "AA
 |---|---|---|---|---|---|---|
 | *Baseline: Claude Opus 5.5 (high)* | no | 4 / 0.20 / 20 | 1M / 128K | 54 | 80 | 1.82 |
 | *Ref: GPT-6.1 Sol (high)* | no | 2 / 0.10 / 10 | 1.05M / 128K | 50 | 50 | 0.32 |
-| Claude Haiku 4.5 | no | 1 / 0.10 / 5 | 200K / 64K | 17 | 103 | 0.28 |
+| Claude Haiku 4.5 (superseded) | no | 1 / 0.10 / 5 | 200K / 64K | 17 | 103 | 0.28 |
+| Claude Haiku 5.5 | no | 0.10 / 0.01 / 0.50 for prompts ≤100K tokens; 5x above 100K (0.50 / 0.05 / 2.50) | 1M / 128K | not found | 100-200 (reported, provider-dependent; not an AA figure) | unverified |
 | Gemini 3.8 Flash (high) | no | 0.75 / 0.075 / 3.75 (intro, until 2026-12-31; then 1.50 / 0.15 / 7.50) | 1M / 64K | 41 | 305 (AA, via Vellum) | unverified |
 | Gemini 4 Argon (high) | no | 2 / 0.10 / 10 (intro; standard 4 / 20) | 1M output limit; context unverified | 53 | not listed | 1.99 |
 | Gemini 3.1 Pro Preview | no | 2 / 0.20 / 12 (≤200K) | unverified | 30 | 116 | 0.67 |
@@ -55,9 +56,11 @@ Prices are list prices in USD per 1M tokens (input / cached input / output). "AA
 
 ---
 
-## 1. Claude Haiku 4.5 (and Haiku 5.5 status)
+## 1. Claude Haiku 4.5 (superseded) and Claude Haiku 5.5
 
-**Confidence: HIGH** for the specs (Anthropic docs). **MEDIUM** for routing advice (no hands-on use, and the model may be replaced within weeks).
+**Confidence: HIGH** for the specs (Anthropic docs). **MEDIUM** for routing advice: no hands-on use here, and the Haiku 5.5 advice rests on one launch-day video (`research/claude-releases.md` Video 4).
+
+The Haiku 4.5 facts below are kept for history. Haiku 5.5 replaced it on about 2026-10-07.
 
 - **Model IDs:** `claude-haiku-4-5-20251001` (pinned) and alias `claude-haiku-4-5`. Bedrock: `anthropic.claude-haiku-4-5`. Vertex: `claude-haiku-4-5@20251001`.
 - **Released:** 2025-10-15. **Retirement:** "not sooner than October 15, 2026", so it could be retired from about two weeks from now.
@@ -73,14 +76,26 @@ Prices are list prices in USD per 1M tokens (input / cached input / output). "AA
   - Claude Code one-shot: `claude -p "summarise the changes in src/auth" --model haiku` (the alias `haiku` resolves to the current Haiku; non-interactive with `-p`).
   - API: `curl https://api.anthropic.com/v1/messages -H "x-api-key: $ANTHROPIC_API_KEY" -H "anthropic-version: 2023-06-01" -H "content-type: application/json" -d '{"model":"claude-haiku-4-5","max_tokens":4096,"messages":[{"role":"user","content":"..."}]}'`
   - Scriptable: yes.
-- **Haiku 5.5:** announced 2026-09-22 alongside Opus 5.5, "launching in the coming weeks", with "many of the same improvements". As of about 2026-09-29 it had no ID, price or benchmarks. Template:
-  - ID: ___ | Price: ___ / ___ / ___ | Context: ___ | Max out: ___ | Effort support: ___ | AA II: ___
-- **Routing suggestion (vs Opus 5.5):**
+- **Haiku 5.5:** announced 2026-09-22 alongside Opus 5.5, shipped about 2026-10-07. Values from the official pricing page and the Claude API reference (fetched 2026-10-06 to 2026-10-08):
+  - ID: `claude-haiku-5-5` | Price (≤100K prompt tokens): $0.10 input / $0.01 cache hit / $0.50 output; 5-minute cache write $0.125, 1-hour $0.20; batch $0.05 / $0.25 | Price (>100K prompt tokens): 5x, i.e. $0.50 / $0.05 / $2.50, cache writes $0.625 / $1.00, batch $0.25 / $1.25 | Context: 1M | Max out: 128K | Effort support: low / medium / high / xhigh / max, default `medium`; adaptive thinking on by default, can be disabled only at `high` or below; `budget_tokens` returns 400 | AA II: not found
+  - **100K rule (official):** the prompt length counts all input tokens, including cache reads and cache writes, and each request is priced on its own. A request over 100K pays the higher prices even when part of its prompt is a cache hit. Haiku 5.5 is the only current Anthropic model without flat 1M-context pricing.
+  - Newer tokenizer: about 30% more tokens than Haiku 4.5 for the same text. No server-side refusal fallback. Supports compaction, task budgets and computer use.
+  - Speed: 100 to 200 tok/s depending on provider (reported); about 180 tok/s in Claude Code on one subscription (`research/claude-releases.md` § V4.2).
+  - Vendor benchmarks (not independently verified): Terminal-Bench 4.0 39.2% (Haiku 4.5 0.0%, GPT-6 Luna 16.4%, Sonnet 5.5 70.6%); OSWorld 2.1 72.4% partial credit at max (strict pass 37.1%). Anthropic says Sonnet and Opus remain better for complex agentic coding.
+  - On the release, Anthropic cut Sonnet 5.5 cache reads from $0.20 to $0.10. Opus 5.5 stays at $0.20.
+- **Haiku 5.5 routing suggestion** (from `research/claude-releases.md` § V4.8):
+  - Use it as a **subagent** under Opus, not as a primary or interactive model: codebase search where grep is not enough, data gathering, reading docs or logs, vetting several hypotheses, categorisation, summaries.
+  - Use it for many-attempts work that has a cheap, objective verifier (tests, a simulator, a script).
+  - Do **not** give it implementation, code review, merge decisions or PR-readiness audits. In the video it trusted green CI as proof of readiness and cornered itself on a GitHub rate limit.
+  - Never disable thinking. For reasoning-off classification, prefer GPT-6 Luna or another OpenAI cheap model.
+  - Keep requests under 100K prompt tokens; above that every price rises 5x. Long Claude Code sessions cross it quickly (47 of 51 requests in one game build). A Claude Code autocompact window of 100K for Haiku is reported to help (unverified).
+  - If cross-vendor routing is allowed, GPT-6 Luna is slightly better value per dollar on AA. Haiku 5.5 is the pick for Anthropic-only setups.
+- **Routing suggestion for Haiku 4.5 (vs Opus 5.5, historical):**
   - Use it only inside Claude Code / Agent SDK flows where staying on Anthropic matters: Explore-style file search, grep summaries, commit-message and changelog drafting, classification.
   - Do **not** give it multi-file implementation, review or planning. On independent indexes it is now clearly below non-Anthropic cheap models.
   - If cross-vendor routing is allowed, prefer Gemini 3.8 Flash, GPT-6 Luna or DeepSeek V4.1 Flash for cheap bulk work.
-  - Re-evaluate when Haiku 5.5 ships. It is likely to replace this profile entirely.
-- **Sources:** [Anthropic models overview](https://platform.claude.com/docs/en/about-claude/models/overview) · [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing) · [Anthropic Haiku 4.5 launch](https://www.anthropic.com/news/claude-haiku-4-5) · [AA leaderboard](https://artificialanalysis.ai/leaderboards/models) · Haiku 5.5: [Mike Krieger on X](https://x.com/mikeyk/status/2102441803253535060), [cellcog](https://cellcog.ai/blog/claude-haiku-5-5-release-date/), [docsbot](https://docsbot.ai/models/claude-haiku-5-5)
+  - Re-evaluate when Haiku 5.5 ships. It is likely to replace this profile entirely. [Update 2026-10-08: Haiku 5.5 has shipped; see the Haiku 5.5 bullets above.]
+- **Sources:** [Anthropic models overview](https://platform.claude.com/docs/en/about-claude/models/overview) · [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing) · [Anthropic Haiku 4.5 launch](https://www.anthropic.com/news/claude-haiku-4-5) · [AA leaderboard](https://artificialanalysis.ai/leaderboards/models) · Haiku 5.5: [Mike Krieger on X](https://x.com/mikeyk/status/2102441803253535060), [cellcog](https://cellcog.ai/blog/claude-haiku-5-5-release-date/), [docsbot](https://docsbot.ai/models/claude-haiku-5-5), `research/claude-releases.md` Video 4
 
 ---
 
@@ -404,5 +419,5 @@ Prices are list prices in USD per 1M tokens (input / cached input / output). "AA
 |---|---|---|---|
 | Frontier | (existing: Fable 5.1, Opus 5.5, GPT-6 Astra) + **Gemini 4 Argon** when generally available | AA 53, cheap at intro price, low hallucination | Gemini 3.1 Pro, 3.5 Pro (unreleased) |
 | Mid / second opinion | **GPT-6.1 Sol** (already profiled), **Grok 4.7** (diversity), **MiMo-V2.6-Pro** (cheapest AA-46) | Different model families for review and arena runs | Qwen3.8-Max (cost), Kimi K3 (slow and costly), GLM-5.3 at max (cost, unless on Coding Plan) |
-| Cheap / bulk | **DeepSeek V4.1 Flash**, **Gemini 3.8 Flash**, **GPT-6 Luna**, **GLM-5.3-Flash** | AA 38-42 at a few cents per task; pick by cache pattern, speed and output length | Claude Haiku 4.5 (AA 17; wait for Haiku 5.5), MiniMax M3 |
+| Cheap / bulk | **DeepSeek V4.1 Flash**, **Gemini 3.8 Flash**, **GPT-6 Luna**, **GLM-5.3-Flash** | AA 38-42 at a few cents per task; pick by cache pattern, speed and output length | Claude Haiku 4.5 (AA 17; superseded), MiniMax M3. **Anthropic-only option: Claude Haiku 5.5** for cheap bulk, subagent search and categorisation, if prompts stay under 100K tokens (5x price above) |
 | Local / offline | Qwen3-Coder-Next, gpt-oss-20b/120b | Run on one GPU | anything 700B+ |

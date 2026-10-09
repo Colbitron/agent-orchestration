@@ -5,7 +5,7 @@ vendor: anthropic
 family: claude
 status: current
 released: null
-as_of: 2026-10-02
+as_of: 2026-10-08
 confidence: high
 
 api_ids: [claude-opus-5-5]
@@ -317,8 +317,10 @@ Handoff patterns:
 - $4 / $20 per M in/out, cache reads $0.20/M ("60% cheaper"), cache writes $5/M.
   Anthropic: 40% cheaper than Opus 5 on typical workloads.
 - Cache reads are about 20% of its agentic bill (vs under 5% for Fable, 50%+ for
-  Sonnet), per the Sonnet video. That is why Sonnet is not cheaper than Opus in
-  long loops.
+  Sonnet), per the Sonnet video. That was why Sonnet was not cheaper than Opus in
+  long loops. [Update 2026-10-08: Sonnet 5.5's cache reads were cut to $0.10/M
+  at the Haiku 5.5 launch; Opus stays at $0.20/M. Like-for-like loops now land
+  near parity, not above Opus; see `core/strategies/cost-model.md § 5`.]
 - AA per task: medium about $1.34, high about half of Astra max ($3.26), xhigh
   approaching Astra, max "almost six bucks" (about 120K tokens per task).
 - Subscription is where it wins: "The amount of value you get out of your $200

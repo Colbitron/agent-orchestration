@@ -2,7 +2,7 @@
 id: t3-code-mcp
 harness: t3-code
 binary: null                     # not a CLI: the `t3-code` MCP server T3 Code injects into every provider session
-reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-4-5, gpt-6-astra, gpt-6-1-sol]
+reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, gpt-6-astra, gpt-6-1-sol]
 auth: "none from the caller: the MCP server is authenticated by T3 Code; each target provider uses its own login (claude auth login, codex login, agent login, grok login, opencode auth login)"
 verified: docs                   # T3 Code repo docs (docs/orchestration-v2/orchestrator-mcp-server.md); not run here
 as_of: 2026-10-02

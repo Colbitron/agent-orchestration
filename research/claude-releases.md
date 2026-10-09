@@ -1,10 +1,11 @@
 # Claude 5.x Release Videos: Detailed Summaries
 
-Source: three auto-generated YouTube transcripts (plain text) by the same speaker. He identifies himself as "Theo" in the Sonnet video and refers to his products T3 Code and Lakebed. Files:
+Source: four auto-generated YouTube transcripts (plain text) by the same speaker. He identifies himself as "Theo" in the Sonnet video and refers to his products T3 Code and Lakebed. Files:
 
 - `scratchpad/txt/claude-fable-5-1.clean.txt`
 - `scratchpad/txt/claude-opus-5-5.clean.txt`
 - `scratchpad/txt/claude-sonnet-5-5.clean.txt`
+- `transcripts/claude/releases/claude-haiku-5-5.html` (Video 4, read from a plain-text extraction with timestamps)
 
 ## Transcription notes (read first)
 
@@ -26,8 +27,17 @@ The transcripts are speech-to-text and contain systematic mis-hearings. This doc
 | "Witchai" | a design-comparison site made by someone called "Dra" (name uncertain) |
 | "fish slop" / "Fishlop 3D" | the speaker's personal game-generation test |
 | "3JS" | three.js |
+| "Raichu", "Hiku", "ha coup", "haik coup", "Hike" | Haiku (Video 4) |
+| "Jev" | an OpenAI cheap model he recommends for reasoning-off categorisation (Video 4). The exact model name is uncertain. |
+| "Slopalytics", "Sloppytics" | the speaker's cost/intelligence dashboard, fed by Artificial Analysis data |
+| "Prime" | ThePrimeagen |
+| "Pto line", "proto line" | the Pareto line on his charts |
+| "Son of 55", "Sonic 55" | Sonnet 5.5 |
+| "61 soul", "GPT61 Soul" | GPT-6.1 Sol |
+| "Lydia" | an Anthropic employee quoted on autocompact settings (name uncertain) |
+| Code Rabbit sponsor segment (Video 4, about 2:18 to 3:40) | skipped |
 
-None of the videos mentions Haiku 4.5. The Opus 5.5 and Sonnet 5.5 videos say that **Haiku 5.5 is "coming in the next few weeks"** and is "built for high volume and cost-sensitive applications".
+Videos 1 to 3 do not evaluate Haiku 4.5; the Opus 5.5 and Sonnet 5.5 videos say Haiku 5.5 is "coming in the next few weeks". **Video 4 covers Haiku 5.5's launch** (about 2026-10-07), including the Sonnet 5.5 cache-read cut that shipped with it.
 
 ---
 
@@ -362,7 +372,7 @@ He also says: "I haven't chosen Fable for any tasks for over a week now", becaus
 ## 3. Weaknesses, pitfalls and misconceptions
 
 - **Misconception: Sonnet is cheaper than Opus in practice.** It usually isn't for agentic coding.
-  - The cache-read price **was not cut**: $0.20/M, the same as Opus 5.5. Input, output and cache-write prices are half of Opus's, but cache reads cost the same.
+  - The cache-read price **was not cut**: $0.20/M, the same as Opus 5.5. Input, output and cache-write prices are half of Opus's, but cache reads cost the same. [Update 2026-10-08: cache reads cut to $0.10 at the Haiku 5.5 launch; see § V4.4.]
   - In agentic work cache reads dominate the bill. Uncached input is "barely touched" and output is "a very small portion". So the cache-read share of cost "rounds out to under 5% with fable... closer to 20% with Opus and... like 50 plus with Sonnet."
   - "I've looked at the numbers for doing like-for-like work with opus versus sonnet for real code tasks and sonnet consistently comes out as if not more expensive than opus does."
   - On AA, "Sonnet 5.5 cost roughly the same as Fable 5.1", "neck and neck with Fable 5.1 for the most expensive run they've ever done", though mostly because of `max`.
@@ -383,7 +393,7 @@ He also says: "I haven't chosen Fable for any tasks for over a week now", becaus
 
 ## 4. Pricing, speed, context and limits
 
-- **Price:** $2/M input, $10/M output (same as Sonnet 5). Cache reads $0.20/M. Cache writes $2.50/M.
+- **Price:** $2/M input, $10/M output (same as Sonnet 5). Cache reads $0.20/M. Cache writes $2.50/M. [Update 2026-10-08: cache reads cut to $0.10 at the Haiku 5.5 launch; see § V4.4.]
   - For comparison he gives Opus 5.5 at $4 / $20 / cache read $0.20 / cache write $5, and Fable 5.1 at $10 / $50 / cache read $0.25. He says Fable's cache read is "only 25% more" than Opus's.
 - **Claims vs Sonnet 5:** "30% faster and up to 30% cheaper for most work."
 - **AA cost per run:**
@@ -433,31 +443,219 @@ This is the core of the video:
 - **Route to Sonnet 5.5 as a subagent** (dispatched by an Opus or Fable orchestrator), not as a primary or interactive model.
 - **Route to Sonnet:** codebase exploration and deep-dive analysis, architectural comprehension, decomposition research ("how could this giant change be split?"), locating specific behaviors, and verifying hunches about APIs or code. It gave the best cost per point and was about 2x faster than Opus on his audit bench.
 - **Route to Sonnet:** document, slide and spreadsheet generation, and image or screenshot understanding (claimed strengths, lightly evidenced in the video).
-- **Do not route** main implementation or day-to-day coding to Sonnet when Opus is available. Like-for-like it costs about the same or more, because cache reads cost the same $0.20 and it uses about 25% more tokens than Opus on Cursor Bench (272K vs 218K). Its wall-clock time is also worse.
+- **Do not route** main implementation or day-to-day coding to Sonnet when Opus is available. Like-for-like it costs about the same or more, because cache reads cost the same $0.20 and it uses about 25% more tokens than Opus on Cursor Bench (272K vs 218K). Its wall-clock time is also worse. [Update 2026-10-08: cache reads cut to $0.10 at the Haiku 5.5 launch; see § V4.4.]
 - **Do not route** front-end or UI design to Sonnet. It is the weakest of the three Claude models there; use Fable first, then Opus.
 - **Effort:** `high` (or `xhigh` for harder analysis). **Never `max`**: it is the most expensive setting, and on Frontier Code xhigh beat max. **Never `low`**. Treat `medium` as weaker than Opus-medium.
-- **Cost model caveat:** Sonnet's per-token discount applies to uncached input, output and cache writes, but not to cache reads. Long, tool-heavy agentic loops are where cache reads dominate, so they erode its savings. Sonnet is most cost-effective for **short, bounded investigations** that finish quickly (about 5 minutes in his bench), not multi-hour agent loops.
+- **Cost model caveat:** Sonnet's per-token discount applies to uncached input, output and cache writes, but not to cache reads. Long, tool-heavy agentic loops are where cache reads dominate, so they erode its savings. Sonnet is most cost-effective for **short, bounded investigations** that finish quickly (about 5 minutes in his bench), not multi-hour agent loops. [Update 2026-10-08: cache reads cut to $0.10 at the Haiku 5.5 launch; see § V4.4.]
 - **For exhaustive code review or a "best possible plan"**, Astra still leads. Use Sonnet when cost and speed of analysis matter more than squeezing out the last bit of thoroughness.
-- **Future slot:** Haiku 5.5 (not yet released) is intended for high-volume, cost-sensitive work. None of the transcripts evaluates Haiku 4.5.
+- **Future slot:** Haiku 5.5 (not yet released) is intended for high-volume, cost-sensitive work. None of the transcripts evaluates Haiku 4.5. [Update 2026-10-08: Haiku 5.5 shipped; see Video 4.]
 
 ---
 
+# Video 4: Claude Haiku 5.5
+
+Timestamps below are approximate and come from the transcript file. The Code Rabbit sponsor segment (about 2:18 to 3:40) is skipped.
+
+## 1. Subject and overall thesis
+
+This is a launch-day review of **Claude Haiku 5.5** (API ID `claude-haiku-5-5`), released about 2026-10-07. The speaker opens with his earlier public position that "Anthropic has no small models worth using right now". Haiku 4.5 "came out in October of last year and it was expensive at the time. Now it's just laughable" (0:16). He had told all his agents that "Haiku 4.5 should be avoided at all costs because it's useless" (0:31), and he had "taught my Claude to call Soul in order to save money because I didn't trust it calling Haiku 4.5" (1:53).
+
+He frames a good small model as "one of the biggest missing pieces. the model the other models use to search for files, to triple check changes, to do all the things that a model shouldn't waste tokens on if the model is expensive" (1:36). His first verdict: "The price is right, the performance seems solid" (2:01). He closes by revising his opening line:
+
+> "Anthropic has no small models that are worth using right now. Anthropic now has one small model that is sometimes worth using, and that is a very nice change." (40:16)
+
+His central claim is that Haiku 5.5 is a tool for other models and for applications, not a model a human should select:
+
+> "The best use cases for Haiku 55 aren't clicking it in the UI or selecting it in Cloud Code and using it. It's letting your agents use it and letting your applications use it." (22:00)
+
+He would not use it to write code (31:29; section 3). The same release cut Sonnet 5.5's cache-read price, which he says "might actually be my favorite thing about this release" (4:44).
+
+## 2. Strengths (with evidence)
+
+- **Anthropic positioning** (read from the announcement, 3:58 to 4:36):
+  - "The cheapest, fastest, and most capable small model we've ever released."
+  - "Designed for high volume cost-sensitive tasks", such as "summaries, compactions, database queries, and classification requests".
+  - "It pairs well with Opus and Sonnet as a sub [agent] on coding work", and suits "speed sensitive tasks like live customer support and browser use".
+  - "On average, it's now about 75% less money to run" than Haiku 4.5.
+- **Benchmarks (Anthropic's numbers, not independently verified):**
+  - It "absolutely decimated Haiku 4.5, getting more than double the score in the vast majority of things" (9:03).
+  - **Terminal-Bench 4.0:** "from zero to almost 40%" (9:18). The announcement gives 39.2% vs 0.0% for Haiku 4.5. GPT-6 Luna scored 16.4%. "If you're one of those people that thought Luna was decent at code, I question your judgment."
+  - **Computer use (OSWorld 2.1):** "Haiku slaughtered here. It did way better than six Luna" (9:55). The announcement gives 72.4% partial credit at max effort (53.3% at medium) vs 48.9% for Luna. The strict pass rate is 37.1%, vs 48.8% for Sonnet 5.5 and 53.2% for Opus 5.5. He has not tried it: "I haven't tried it yet. I've heard good things" (10:09). This matters because in earlier videos he said OpenAI leads computer use.
+- **Speed:** "100 to 200 TPS depending on the provider" (10:16). In Claude Code on his subscription he saw "around 180 tokens per second" (11:34).
+- **Not a token waster:** on AA tokens per task, "this is not the usual wasteful [ __ ] show that we see from these smaller models from OpenAI" (11:58). He gives no tokens-per-task figure for Haiku.
+- **Cost vs intelligence on his Slopalytics dashboard (AA data):**
+  - With max-effort points hidden, Haiku 5.5 sits "all the way on the left here, cheaper than anything else" (12:46). At that point AA had only published its xhigh and max runs.
+  - "Even though these scores are close, Opus was almost five times as expensive as the run was with Haiku" (13:43). He does not say which effort levels he is comparing.
+  - Haiku xhigh and max are "the best value in that range within Anthropic's line of models" (14:01).
+  - It dominates the other cheap closed models. Adding Gemini 4 Argon and Gemini 3.8 Flash "almost looks like we took the [Haiku] line and moved it to the right and down" (15:25). Grok 4.7 is "still below all of this" (15:38).
+  - Once AA finished all effort levels, it was "neck and neck with Luna" (39:49): "it's so close to Luna that this no longer feels like a big missing piece of the Anthropic portfolio" (40:05).
+- **Egg-drop demo (Anthropic's demo, single run, 22:17 to 23:20).** Opus 5.5 alone vs Opus 5.5 orchestrating 10 Haiku 5.5 subagents, designing a safe egg drop in a physics emulation:
+
+  | Setup | Time | Attempts | Cost |
+  |---|---|---|---|
+  | Opus 5.5 alone | about 3 min (3 min 37 s on Anthropic's chart) | 25 | $0.47 |
+  | Opus 5.5 + 10 Haiku 5.5 subagents | "under a minute" (58 s) | 86 | $0.14 |
+
+  Opus alone "is only trying one at a time because it's running single threaded", and running Opus multithreaded "would end up wasting way more money" (22:43). The Haiku setup is "able to try more things at the same time and save a ton of money and get to a result faster" (22:54).
+- **Search where most guesses are wrong:** "if you're looking through a codebase to find one file out of a bunch and you can't just do like a [ripgrep] call to find it, [Haiku] will be way cheaper and faster because it can do a lot of things at once without causing crazy bills" (23:27).
+- **Taste for its size:**
+  - A community video demo "cost 60 cents an API cost to make [and] was built in under 20 minutes". "This is insanely impressive for the money" (24:52 to 25:00).
+  - He credits Anthropic models having "pretty good like taste built in", from design data he thinks was "obsessively trimmed" (25:08).
+  - On the Witchai design comparison, with the Claude design skill loaded, it was "comically better than Grock" (25:25), and "It's not picking cringe fonts as much as models used to" (26:00).
+  - For people "picking Haiku as their model for costsensitive reasons... this is usable. It's not great" (27:08). It "means like the $20 Claude sub might be usable for code", which he did not test (27:25).
+- **Few outright bad decisions in Fish Slop.** Apart from missing mouse look, "It's not making bad decisions. It's just not making impressive ones" (29:30). He partly retracts this a few seconds later (section 3).
+- **Single-provider value (17:48 to 18:12).** Even if Sol and Luna are "slightly usually" better per dollar, there are reasons to want an Anthropic small model: an Anthropic spend commitment, having only a Claude Code subscription ("don't want to also subscribe to codeex"), or "models that understand each other better... when opus prompts [Sol] worse than when opus prompts haiku. I don't know how true that is". "For once, it's no longer irresponsible to use Haiku like it was before."
+
+## 3. Weaknesses, pitfalls and misconceptions
+
+- **Misconception: a cheap model makes coding cheap.** Asked whether he would use Haiku 5.5 for code, he says "No" (31:29 to 31:37):
+  > "Coding is not what makes LLMs expensive... Getting the context needed to do that is expensive. Verifying that it worked is expensive... Regenerating it eight times because you got it wrong the first seven, that's expensive." (31:37 to 32:15)
+  - Generating the code once the context is cached is "a few pennies", even on Fable: "It is not that expensive to generate 500 output tokens once the input tokens are cached" (32:30).
+  - "I don't get why people are looking for a dumb model to do the code part. The code is cheap. The expensive part is all of the prep before you write the code file and all the verification after" (32:37).
+  - Exception: if you want several versions and "you know if it worked or not trivially", "haiku generating five or eight versions to test could be worth it" (33:01).
+  - On having Haiku implement a smart model's plan: "a dumb model might be able to implement parts of it. Cool... You already spent the money on the plan though" (33:34 to 33:46).
+- **Cost inversion when it flails.**
+  > "If Opus can solve a problem in 100k tokens and Haiku burns a million before it figures out it can't, Haiku ends up more expensive. So for a lot of work, not only is Haiku not able to do it, Haiku will cost more money as it fails to do it." (36:23 to 36:48)
+- **Bad with reasoning off.** ThePrimeagen tweeted that he swapped GPT-6 Luna for Haiku 5.5 with reasoning off in his automations and saw "a worse pass rate and a much much higher fail rate as well as it being noticeably slower" (10:23 to 10:39). This is secondhand, via a tweet. The speaker's explanation:
+  > "Open AAI has trained their models to be good at that. Anthropic has trained their models to be bad at that." (10:47)
+  - Anthropic removed the no-reasoning option on Opus (and, he thinks, Sonnet), "So you always have to let it reason at least a little bit." Haiku kept it "because people use it for work that they just want a response in quick, but it's not very good at that" (11:00).
+- **Small models corner themselves (PR audit, 27:40 to 34:56).** He had Haiku 5.5 audit T3 Code's roughly 1,500 open PRs: one thread for performance-related PRs and one to categorise all of them. He first told it to use Sol subagents by accident, then corrected it (28:05).
+  - **Shallow audit.** It found 40 performance-related open PRs, but "Top of the list below is merge ready cuz [GitHub] report's clean. So, it thinks that they're ready just cuz GitHub said so. It didn't seem to audit them thoroughly itself" (30:47).
+  - **Rate-limit failure.** Its script's "parallel [PR] fetches... used most of my 5,000 requests per hour" on GitHub. "The script saved the error body as though it was API data and then failed because it would hit errors when it ran [jq] on that" (33:46 to 34:11). He says the rate limit was "probably my fault because I was doing a lot of these types of things across a lot of data".
+  - **Dead thread.** It said it would wait for the quota to reset, refetch 181 PRs and fix the script to reject non-JSON responses, "Except for the fact that it didn't trigger anything to spin itself back up... So this thread is just done until I tell it to keep going" (34:26 to 34:42).
+  - **Side effects on the human.** "Small models will corner themselves like this, make something harder for not just themselves, but for me" (34:48). It locked him out of T3 Code's GitHub integration "for at least the next 50 minutes" (34:56).
+- **Fish Slop 3D build is weak (28:23 to 30:11; cost at 30:11 to 30:40).**
+  - No mouse look ("Only moving with uh space, shift, and [WASD]"), no sound, broken corner geometry, and the second alien attack came too early: "It is not honoring the original source the way I was hoping it would" (29:51).
+  - It is "roughly the same tier as the Grock version, which was offensively bad" (28:49), though without its outright wrong decisions.
+  - Against GPT-6 Astra: "its lows aren't as low as [Astra's], but its highs are a tenth as high as [Astra's]" (29:56).
+- **Front end needs the design skill.** Without it, "Now we're back into classic [LLM] design" (26:15). Even with it, several designs were "not my favorite".
+- **The 100K price cliff.** Above 100K input tokens every price rises 5x (section 4). He calls a 100K threshold "very small especially for like longunning agentic work" (6:58). Claude Code sessions cross it fast: 47 of 51 Fish Slop requests did (30:26).
+- **It does not push the Pareto line much.** "I do wish this model pushed the [Pareto] line a bit more" (19:00).
+  - Against Luna, "Haiku is slightly smarter for meaningfully more money" (16:44). Luna "is cheaper than Haiku always. It's also dumber always" (16:00).
+  - With GPT-6.1 Sol added, "just barely more going from 21.3 cents to 21.4 cents you get a huge jump in intelligence" (16:52). Read with the chart narration, a Haiku point and a Sol point sit at almost the same cost per task with Sol much smarter; the transcript does not name each point. "If we were to turn Haiku off here oh that's a much smoother line."
+  - "61 soul on low is as cheap as [Haiku] on low, largely due to the token efficiency difference" (12:58).
+  - AA's own chart "is a bit more brutal showing it is not on the Pareto line" (21:37).
+- **Max effort** is "still pretty cheap, but more than I would want it to be" (12:51).
+
+## 4. Pricing, speed, context and limits
+
+- **Price.** He reads out "1 cent per mill tokens read, 12.5 cents per million [cache] token [writes], 10 cents for normal [input], and 50 cents per mill out" (6:07 to 6:23). The official pricing page (fetched 2026-10-08) matches, in USD per million tokens:
+
+  | Model | Input | Output | Cache read | 5m cache write | 1h cache write | Batch in / out |
+  |---|---|---|---|---|---|---|
+  | Haiku 5.5, prompt ≤ 100K tokens | 0.10 | 0.50 | 0.01 | 0.125 | 0.20 | 0.05 / 0.25 |
+  | Haiku 5.5, prompt > 100K tokens | 0.50 | 2.50 | 0.05 | 0.625 | 1.00 | 0.25 / 1.25 |
+  | Haiku 4.5 (for comparison) | 1 | 5 | 0.10 | 1.25 | 2 | 0.50 / 2.50 |
+  | Sonnet 5.5 (after the cut) | 2 | 10 | 0.10 | 2.50 | 4 | 1 / 5 |
+  | Opus 5.5 (unchanged) | 4 | 20 | 0.20 | 5 | 8 | 2 / 10 |
+
+  - Against Sonnet 5.5 this is "20x cheaper in output tokens and input tokens", about 20x cheaper on cache writes, and "cash reads are a tenth the price too" (6:23 to 6:40).
+  - "Haiku 45 was that same cash read price and then half the price across the board" (5:58), i.e. Haiku 4.5's cache read equalled the new Sonnet 5.5 price and its other prices were half of Sonnet's.
+- **The 100K rule.** "If you go over 100k tokens, the price doesn't double. It 5x's" (7:04). Official wording: a request's prompt length counts all its input tokens, including cache reads and cache writes, and each request is priced on its own; a request over the threshold pays the higher prices even when part of its prompt is a cache hit. Haiku 5.5 is the only current Anthropic model excluded from flat 1M-context pricing (official pricing page). He notes Anthropic used to double prices past roughly 200K to 270K and "stopped doing that somewhat recently" (6:40).
+- **His reading of the two tiers (7:21 to 8:22):**
+  - Big contexts need "much more RAM", which costs more.
+  - Anthropic probably made the sub-100K tier "way cheaper, possibly like eating some of their own margin", and recovers some of it above 100K.
+  - It makes "the main use case, which is quick reads and categorization checks like that, as absurdly cheap as possible", to compete with OpenAI's cheap model ("Jev"): "they are making it harder and harder to justify spinning up another API when you could just throw a haiku."
+  - It also makes "sure they don't bankrupt themselves when people use this inside of cloud code". Above 100K it is "still half the price [it] was before", i.e. half of Haiku 4.5.
+- **Sonnet 5.5 cache-read cut (4:36 to 5:58).** Announced with Haiku: "We are [halving] the price of Sonnet 55's cash reads." It went "from 20 cents per million cash reads to 10 cents which is the same cash read price as a model like GPT61 Soul."
+  - Why it matters to his Video 3 critique (§ V3.3): "the cash read price for Sonnet 55 wasn't just too expensive for Sonnet, it was the same price as Opus. So the thing that made up about 30 to 50% of your bill was the same for sonnet and for opus which meant the price difference between these models was not particularly large if you use them for agentic work" (5:08 to 5:31). "That is a huge change actually that makes the whole lineup make way more sense" (4:44).
+  - After AA repriced its runs: "Sonnet is shifted quite a bit to the left which makes it much more compelling on the Pareto line. Actually not that much more... Sonnet feels less bad now by quite a bit with that change" (19:14 to 19:30).
+  - Official footnote: cache hits and refreshes on Opus 5.5 and Sonnet 5.5 cost 0.05x the base input price, i.e. $0.10 on Sonnet 5.5 and $0.20 on Opus 5.5. Sonnet's cache reads are now half of Opus's, like its other prices. Its higher token use (§ V3.3) is unchanged.
+- **AA cost points cited:**
+  - Sonnet 5.5 at max did "almost 200,000 tokens per task", "2.5 times" Fable 5.1's 78K, at a cost "slightly higher than Fable 51" (12:05 to 12:21).
+  - On a linear axis, Sonnet xhigh is "a fine value at 2.75 per task", while Sonnet max "makes literally no sense at $[7.86] per task" (15:01). Video 3 gave $7.60. These are probably pre-cut prices.
+  - "The price gap between Opus 5 low and [Haiku] 55 Max is not as big as you would think. It's 20 cents to 55. So it's around 2x more money for Opus if you're willing to deal with low" (36:56). "Opus 5" is Opus 5.5. The figures are Haiku 5.5 at max about $0.21 per AA task and Opus 5.5 at low about $0.55 (checked 2026-10-08; the spoken order is easy to misread). So Haiku at its most expensive setting still costs well under half of Opus at its cheapest.
+- **Speed:** 100 to 200 tok/s depending on provider; about 180 tok/s in Claude Code on his subscription.
+- **Fish Slop cost breakdown (30:11 to 30:40).** About $1 of usage in total:
+  - "a shitload of cash read tokens, 9.73 million of them";
+  - "A bunch of 1 hour cash writes because it always writes 1 hour, which is annoying";
+  - uncached input "only 102 tokens because it was cashing constantly";
+  - output "about 30 cents";
+  - "47 [of] 51 requests exceeded 100k input tokens, so they used Haiku's higher price tier."
+  - "If I had capped the context, the game probably would have come out much worse, but it would have been way cheaper."
+- **Context and output (official, not stated in the video):** 1M context, 128K max output. The practical cheap window is 100K.
+- **Effort and thinking (official, not stated in the video):** low, medium, high, xhigh and max; default `medium`. Adaptive thinking is on by default. Thinking can be disabled only at `high` or below; `budget_tokens` is rejected. The newer tokenizer produces about 30% more tokens than Haiku 4.5 for the same text.
+- **Subscription API credit (reported, unverified).** He says the launch notes give 20x subscribers "$200 in API credit every month" and 5x subscribers "$100", so "you're effectively able to get an API key like you would if you were paying, but they preload it" (20:12 to 20:28). The stated use is building apps "that [have] Haiku or Sonnet built into it". He was relieved because people feared Anthropic would stop subscriptions working in tools like T3 Code; it has not (19:48 to 20:12). A secondary source (the-decoder) describes the same amounts as a credit for programmatic use (Agent SDK, `claude -p`, Claude Code GitHub Actions, third-party apps signed in with the subscription), billed at API rates and dated to 2026-06-15. Check the account before relying on it.
+- **SDKs:** the Anthropic Python and TypeScript SDKs gain computer-use and browser-use support (21:12).
+
+## 5. Recommended prompting style and workflow
+
+- **Let your orchestrator pick it.** "I won't be the one to pick it, but I trust Opus to do a good enough job picking it at the times where it makes sense" (39:15). On a big subscription he would not select it himself: "I'm on the $200 tier and I would rather just use Opus" (36:15).
+- **Keep reasoning on.** "You always have to let it reason at least a little bit" (11:00). For reasoning-off categorisation, "just use Jev unless you need like vision and then haiku or Luna makes sense... probably Luna cuz it's cheaper especially with reasoning off" (11:08 to 11:25).
+- **Give it breadth, not depth:**
+  > "When the model is unsure about a theory and it wants to vet four things to confirm it or wants to go look at eight apps in the world and like random open source projects to compare against or read through a bunch of documentation to figure out some facts about some idea you have. That is when haiku is incredible." (33:16 to 33:34)
+- **Many cheap attempts plus a verifier:**
+  > "For the subset of tasks where more attempts is more valuable than smart attempts, where you'd rather try 10 times and verify each result, then spend a little more time trying once and hoping it's right. If the gap between a random try from a dumb model and a thoughtful try from a smart model isn't that big, Haiku 55 is going to slaughter. This is a small subset of work." (23:34 to 23:58)
+- **The orchestrator prompt he used (35:13 to 35:27).** Same audit prompt as before, with two changes. He added "use lots of sub [agents] and workflows to review these PRs and to use Haiku 55 for all sub [agents] throughout the work" and "minimize work that you do yourself outside of actually getting the data and orchestrating the sub [agents]". And he ran it on Opus instead of Haiku.
+- **Hand findings to a smart model to land.** For a PR the Haiku audit flagged, he pastes it into Opus: "this seems like it is a change worth landing. Can you figure out if that's the case? Fix anything that you think needs to be fixed and get this merged if you're confident it's ready to go. Full send." (31:04 to 31:13)
+- **Load the Claude design skill** for any front-end work. He had uninstalled it and says "I definitely need to bring it back" (26:24).
+- **Cap context when cost matters more than quality.** Keep Haiku prompts under 100K, for example with the autocompact setting in section 7 (unverified).
+- **Guard API-heavy scripts.** This is an inference from the PR-audit failure, not a stated tip: when Haiku drives scripts against rate-limited APIs, cap concurrency, have the script reject error bodies, and confirm a real scheduled wake-up instead of trusting "I'll wait".
+
+## 6. Subagents, orchestration, delegation and verification
+
+- **Core pattern: Opus orchestrates, Haiku gathers.**
+  > "When Opus needs to go collect a bunch of data or read through tons of [ __ ] or just categorize things, Haiku is going to be an incredible addition to my portfolio of models." (39:08)
+- **In applications:** "building it in so when data comes in, Haiku will audit it and categorize it or having Sonnet or Opus call Haiku for testing different things out exploring the codebase to find stuff" (22:10).
+- **Parallel attempts beat one careful serial attempt** when checking a result is cheap. The egg-drop demo (section 2) shows 3.4x the attempts at about 30% of the cost in about a quarter of the time. The simulator gives an objective pass or fail.
+- **His CLAUDE.md change:** "I am going to go edit my Claude MD to no longer force everything to be opus or [Sol] sub [agents] because this is cheap enough that it would make real sense" (24:06). He is "hoping Opus is smart enough to know what that subset is. I have not pushed it hard enough to know yet" (23:58).
+- **Opus re-run of the PR audit (35:42 to 35:58).** Opus reasoned: "1495 open PR is a huge number to tackle a sub agents maybe batches of around 15 PRs per haiku agent would mean roughly a 100 agents running beyond the typical small scale workflow guidelines but the user explicitly wants quote lots of sub agents". He called it "actually being thoughtful", and expected Opus to "not only be able to not hit my rate limits, it should find ways to work around them, too" (35:27). He never showed the result ("This is going to take too long. I am curious what the results are", 39:31), so the outcome is unknown.
+- **Verification stays with smart models.** Haiku's audit treated green GitHub checks as proof a PR was ready. Opus then vets, fixes and merges.
+- **His duo: Opus plus GPT-6.1 Sol.** "I personally am sticking to my Opus and Soul duo" (39:08). Opus does the coding, and his agents "consult with Soul for opinions before they put up the PR... Soul catches all the dumb things opus might miss" (38:50 to 38:59). "I love 61 soul as an auditor" (38:42).
+  - Sol is not the middle tier between Haiku and Opus, even though it sits there on the chart: "I wouldn't think of soul as for things that haiku is too dumb for and opus is too expensive for. I'd think of soul as a different family with similar intelligence" (38:02 to 38:10). Asking Sol is like asking "your friend who works at a different company" (38:33).
+  - Haiku's role in the duo is the cheap gatherer under Opus.
+- **Same-family prompting:** he repeats a claim that Opus prompts Haiku better than it prompts Sol, adding "I don't know how true that is" (18:04).
+
+## 7. Claude Code specifics
+
+- **Model picker:** do not select Haiku interactively; let Opus delegate to it (22:00, 36:15).
+- **Autocompact at 100K (unverified).** "Anthropic employees like Lydia [name uncertain] have come out publicly and said if you want to keep your bill cheap and not worry about this, you can manually set Haiku 5.5's autocompact window to 100K so that you're always working within that cheaper token pricing. Apparently, this is [saved] per model. So, this will only apply to Haiku, including sub [agents]" (8:31 to 8:55). He presents it as useful "if you're working on API billing or you're on like bedrock". Not verified: Claude Code's `/autocompact` sets an auto-compact window between 100K and 1M, but per-model persistence and coverage of subagents are not confirmed.
+- **Cache writes are always 1-hour in Claude Code:** "it always writes 1 hour, which is annoying" (30:20). On Haiku's ≤100K tier that is $0.20/M instead of $0.125/M for a 5-minute write.
+- **Throughput:** about 180 tok/s on his subscription.
+- **CLAUDE.md:** drop rules that force every subagent to be Opus or Sol (24:06).
+- **Skills:** reinstall the Claude design skill for front-end work (26:24).
+- **Subscription credit:** if the reported credit applies to `claude -p` (section 4), programmatic runs such as this repo's claude-cli bridge may bill against that credit at API rates rather than against plan limits. Unverified.
+- **Long waits:** in T3 Code, Haiku said it would wait for a rate limit to reset but "didn't trigger a wait. We would show that in the UI if it did" (34:34). The thread stalled until he intervened.
+- The "$20 Claude sub might be usable for code" with Haiku is his speculation; he did not test it (27:25).
+- He did not discuss hooks, MCP or plugins.
+
+## 8. Routing-table implications (Haiku 5.5)
+
+- **Route to Haiku 5.5 as a subagent**, dispatched by Opus (or Sonnet), not as a primary or interactive model when Opus is available.
+- **Route to Haiku:** codebase search where grep is not enough, data collection, reading large volumes of documentation or logs, surveying external projects, vetting several hypotheses in parallel, categorisation and triage, summaries and compaction.
+- **Route to Haiku for many-attempts work** that has a cheap, objective verifier (tests, a simulator, a script). The egg-drop demo is the evidence, from a single vendor run.
+- **Do not route** implementation, code review, merge decisions or PR-readiness audits to Haiku. It trusted green CI as proof of readiness. Execution and verification stay with Opus, with Sol as the cross-family auditor.
+- **Do not route** unattended long loops or API-heavy scripts against external rate limits to Haiku without guards. It cornered itself, broke the human's GitHub integration for about 50 minutes, and stalled.
+- **Do not route** tasks Opus would finish in far fewer tokens. A flailing Haiku can cost more than Opus.
+- **Never turn reasoning off.** For reasoning-off classification, prefer OpenAI's cheap model or GPT-6 Luna unless vision is needed.
+- **Keep Haiku requests under 100K input tokens.** Above that every token costs 5x. Short subagent tasks with fresh context fit; long Claude Code sessions do not (47 of 51 Fish Slop requests crossed it). The autocompact cap may help (unverified).
+- **Effort:** official default `medium`. His AA chart shows xhigh and max as the best value in Anthropic's lineup and still cheap in absolute terms. That is one aggregate benchmark, so the cross-video "never `max`" rule should stand for Haiku until tested on your own tasks.
+- **Cross-vendor:** if OpenAI models are allowed, the best value per dollar on AA is GPT-6 Luna, then GPT-6.1 Sol, then Opus 5.5. Haiku 5.5 is "neck and neck" with Luna but slightly worse per dollar. Haiku's case is a single-provider setup: an Anthropic spend commitment, a Claude Code-only subscription, or (unverified) better Opus-to-Haiku prompting.
+- **Anthropic-only lineup:** the Pareto line is now "all of Haiku for the cheap and most of Opus for the less cheap" (37:22). "Sonnet just doesn't offer much with the Pareto line. Actually, it offers nothing now. Maybe just barely on high" (37:37). "I think you can avoid Sonnet entirely and just use Opus and [Haiku]" (37:45). This weakens Video 3's case for Sonnet as the analysis subagent, which rested on one deep-audit bench; the cache-read cut helps Sonnet, but on AA it is still barely on the line.
+- **Computer use and browser use:** Anthropic's OSWorld numbers make Haiku a cheap candidate, but the speaker has not tested it. Keep the existing computer-use route until it is tested.
+- **Front end:** only for cost-sensitive work, and only with the design skill loaded: "usable... not great".
+
+---
+
+
 # Cross-video synthesis (for the routing table)
 
-| Dimension | Fable 5.1 | Opus 5.5 | Sonnet 5.5 |
-|---|---|---|---|
-| Price in / out / cache read / cache write ($/M) | 10 / 50 / 0.25 / not stated | 4 / 20 / 0.20 / 5 | 2 / 10 / 0.20 / 2.50 |
-| Speaker's role for it | Hardest long-horizon work, PR takeovers, orchestration, front-end design | **Default daily driver**; ZDR-compliant | **Subagent for analysis / research**; not human-selected |
-| Effort guidance | Default `high`; `low` often fine; little gain beyond `high` | `medium` (default) / `high` / `xhigh`; avoid `low` and `max` | `high` / `xhigh`; avoid `low` and `max`; `medium` weaker than Opus's |
-| Token efficiency | Poor vs OpenAI; 1.7x Fable 5 output | Poor: about 120K tokens per AA task at max (vs Astra 27K) | Worst: 272K tokens per Cursor Bench task |
-| Front-end taste | Best (with design skill) | OK and steerable; design skill doesn't help | Weak |
-| Exhaustive review / audit | Better than Opus, below Astra | Below Fable, Astra, Sol, Grok 4.7 | Slightly above Opus on his decomposition bench, at half the cost |
-| Known quirks | Few progress updates; dense prose; asks permission; scope creep (nearby fixes, extra tests); safeguard fallback to Opus | Context-window anxiety; dumb spikes; repair loops; slow to commit; runaway at `max` | Faster TPS but slower wall-clock; cache-read pricing makes it no cheaper for long agentic loops |
-| Data retention | No ZDR (Enterprise Frontier Safeguards option) | ZDR available | Not discussed |
+| Dimension | Fable 5.1 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
+|---|---|---|---|---|
+| Price in / out / cache read / cache write ($/M) | 10 / 50 / 0.25 / not stated | 4 / 20 / 0.20 / 5 | 2 / 10 / 0.10 (cut from 0.20 at the Haiku 5.5 launch) / 2.50 | 0.10 / 0.50 / 0.01 / 0.125 at ≤100K prompt tokens; 5x (0.50 / 2.50 / 0.05 / 0.625) above 100K |
+| Speaker's role for it | Hardest long-horizon work, PR takeovers, orchestration, front-end design | **Default daily driver**; ZDR-compliant | **Subagent for analysis / research**; not human-selected | **Subagent and app component** for search, data gathering, categorisation and many cheap attempts; not human-selected; not for writing code |
+| Effort guidance | Default `high`; `low` often fine; little gain beyond `high` | `medium` (default) / `high` / `xhigh`; avoid `low` and `max` | `high` / `xhigh`; avoid `low` and `max`; `medium` weaker than Opus's | Never turn reasoning off; xhigh and max are Anthropic's best value on his AA chart (untested hands-on); official default `medium` |
+| Token efficiency | Poor vs OpenAI; 1.7x Fable 5 output | Poor: about 120K tokens per AA task at max (vs Astra 27K) | Worst: 272K tokens per Cursor Bench task | "Not the usual wasteful" small model on AA (no figure); Fish Slop used 9.73M cache-read tokens for about $1 |
+| Front-end taste | Best (with design skill) | OK and steerable; design skill doesn't help | Weak | "Usable... not great" with the design skill; "classic LLM design" without |
+| Exhaustive review / audit | Better than Opus, below Astra | Below Fable, Astra, Sol, Grok 4.7 | Slightly above Opus on his decomposition bench, at half the cost | Weak: called PRs merge-ready because GitHub checks were green |
+| Known quirks | Few progress updates; dense prose; asks permission; scope creep (nearby fixes, extra tests); safeguard fallback to Opus | Context-window anxiety; dumb spikes; repair loops; slow to commit; runaway at `max` | Faster TPS but slower wall-clock; cache-read pricing makes it no cheaper for long agentic loops [Update 2026-10-08: cache reads cut to $0.10; see § V4.4.] | Bad with reasoning off; corners itself (rate limits, stalled thread); 100K price cliff; can cost more than Opus when it flails |
+| Data retention | No ZDR (Enterprise Frontier Safeguards option) | ZDR available | Not discussed | Not discussed |
 
 Points stated across videos:
 
-- **Never use `max`** on any of these models. In both later videos it is shown to raise the reasoning *floor*, causing more than 10x token blowups and loops, sometimes with worse scores.
-- Cache-read pricing, not headline input/output price, decides cost in agentic loops.
-- Computer use is better routed to OpenAI (Astra). Anthropic models lag there per the speaker, though Sonnet and Opus are now "neck and neck" on OS World.
+- **Never use `max`** on any of these models. In both later videos it is shown to raise the reasoning *floor*, causing more than 10x token blowups and loops, sometimes with worse scores. Video 4 is a partial exception: Haiku 5.5 max is still cheap per AA task and sits on Anthropic's value line, but he still calls Sonnet max senseless. Keep the rule until Haiku max is tested on your own tasks.
+- **Never turn reasoning off** on Anthropic models. Video 4 extends the "avoid `low`" advice: Haiku 5.5 with reasoning off did worse than GPT-6 Luna with reasoning off (ThePrimeagen's result, secondhand).
+- Cache-read pricing, not headline input/output price, decides cost in agentic loops. Video 4 adds the Haiku 5.5 100K tier: above 100K prompt tokens every Haiku price rises 5x, cache reads included.
+- **Anthropic-only stack:** after Video 4 he says "you can avoid Sonnet entirely and just use Opus and [Haiku]", with Haiku as the cheap subagent tier. Across vendors his value line is GPT-6 Luna, GPT-6.1 Sol, Opus 5.5, and his working duo is Opus plus Sol as auditor.
+- Computer use is better routed to OpenAI (Astra). Anthropic models lag there per the speaker, though Sonnet and Opus are now "neck and neck" on OS World. Anthropic's OSWorld numbers put Haiku 5.5 well above GPT-6 Luna, but he has not tried it.
 - The best exhaustive planner/reviewer in his tests is GPT-6 Astra: "most thorough" but "spiky and weird".

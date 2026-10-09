@@ -2,7 +2,7 @@
 id: cursor-cli
 harness: cursor
 binary: agent                    # AMBIGUOUS: Grok Build also installs `agent`. Call Cursor by absolute path ($CURSOR_AGENT)
-reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-4-5, gpt-6-astra, gpt-6-1-sol, gpt-6-luna, gemini-3-8-flash, grok-4-7]
+reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, gpt-6-astra, gpt-6-1-sol, gpt-6-luna, gemini-3-8-flash, grok-4-7]
 auth: "agent login (Cursor account/plan) or CURSOR_API_KEY / --api-key"
 verified: docs                   # Cursor CLI is not installed on this machine
 as_of: 2026-10-02
