@@ -11,9 +11,9 @@ Every adapter has to give the user three things (`docs/ARCHITECTURE.md`,
    writes `~/.agent-orchestration/{config.yaml,routing.md,glossary.md}`.
 2. **Load the routing table every session**: `routing.md`, `glossary.md`,
    and `lessons.md` from `~/.agent-orchestration/`.
-3. **Invoke the skills**: `ao-setup`, `ao-orchestrate`, `ao-lesson`, and the four
-   bridges (`ao-bridge-review`, `ao-bridge-implement`, `ao-bridge-investigate`,
-   `ao-bridge-verify`).
+3. **Invoke the skills**: `ao-setup`, `ao-refresh`, `ao-orchestrate`,
+   `ao-lesson`, and the four bridges (`ao-bridge-review`,
+   `ao-bridge-implement`, `ao-bridge-investigate`, `ao-bridge-verify`).
 
 Subagent definitions with pinned models depend on the user's routing table,
 so they are not installed here. The ao-setup skill offers to write them in
@@ -67,6 +67,7 @@ makes the second install a no-op for that file.
 ```sh
 sh adapters/install.sh <harness> --dry-run      # see what would change
 sh adapters/install.sh <harness> [--kit-root PATH]
+sh adapters/install.sh <harness> --update       # after pulling a new kit version
 ```
 
 For each harness the script:
@@ -74,19 +75,37 @@ For each harness the script:
 1. Resolves `KIT_ROOT` (default: this repo) and checks it holds `core/`.
 2. Copies `_shared/skills/*` into the global skills dir, replacing the
    `KIT_ROOT` placeholder with the path (sed into a temp file, then `mv`).
-   An existing skill file is never overwritten: it is reported as "up to
-   date" or "SKIPPED (differs)". Delete it and re-run to update.
-3. Appends `_shared/AGENTS.fragment.md` (placeholder substituted) to the
+   A plain install never overwrites an existing skill file: it is reported
+   as "up to date" or "SKIPPED (differs)".
+3. Writes a manifest, `<skills dir>/.agent-orchestration-manifest`. Its
+   first line names the hash tool (`shasum -a 256`, else `sha256sum`, else
+   `cksum`); each other line is `<hash> <path relative to the skills dir>`,
+   the hash of the file as installed (placeholder substituted).
+4. Appends `_shared/AGENTS.fragment.md` (placeholder substituted) to the
    global instructions file, or creates the file. If the marker
    `<!-- agent-orchestration -->` is already there, it does nothing. To
    uninstall, delete the block between that marker and
    `<!-- /agent-orchestration -->`.
-4. Prints harness-specific warnings (override files that shadow the target,
+5. Prints harness-specific warnings (override files that shadow the target,
    UNVERIFIED paths) and the next step: open a new session and run the
    `ao-setup` skill.
 
+`--update` brings an earlier install up to date. A skill file whose hash
+still matches the manifest (you never edited it) is overwritten and its
+manifest entry updated. One whose hash differs is reported as "SKIPPED
+(edited locally; use --force to overwrite)" and keeps its old entry, so the
+next update still sees the edit. With no manifest (an install from before
+manifests existed), every existing file that differs counts as edited and
+is skipped. The block between the two markers in the instructions file is
+replaced with the current fragment, never appended twice; if the markers
+are not exactly one well-formed block, the file is left alone with a
+warning. For Cursor, the paste file `cursor-user-rule.md` is rewritten.
+
+`--force` implies `--update` and also overwrites edited skill files.
+`--dry-run` combines with both and reports what each file would get.
+
 The kit root is baked into the installed files. If you move the repo,
-delete the installed skills and the marked block, then re-run.
+re-run with `--update` (or `--force` for files you edited).
 
 ## Adding a harness
 

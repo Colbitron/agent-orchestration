@@ -1,22 +1,33 @@
 #!/bin/sh
 # agent-orchestration adapter installer (POSIX sh).
 #
-#   sh adapters/install.sh <harness> [--kit-root PATH] [--dry-run]
+#   sh adapters/install.sh <harness> [--update] [--force] [--kit-root PATH] [--dry-run]
 #
 # Harnesses: codex cursor opencode pi grok agy (alias: antigravity) gemini claude
 #
 # For each harness it:
 #   1. resolves KIT_ROOT (default: the repo this script lives in)
 #   2. copies adapters/_shared/skills/* into the harness's global skills dir,
-#      with the KIT_ROOT placeholder substituted
+#      with the KIT_ROOT placeholder substituted, and records the hash of each
+#      installed file in <skills dir>/.agent-orchestration-manifest
 #   3. appends adapters/_shared/AGENTS.fragment.md (KIT_ROOT substituted) to
 #      the harness's global instructions file, unless the marker line
 #      "<!-- agent-orchestration -->" is already there
 #   4. prints what it did and what to do next
 #
-# It never overwrites a file: skills that already exist are skipped (and
-# reported as up to date or different), instruction files are only appended
-# to or created.
+# A plain install never overwrites a file: skills that already exist are
+# skipped (and reported as up to date or different), instruction files are
+# only appended to or created.
+#
+# --update brings an earlier install up to date with this kit. A skill file
+# whose hash still matches the manifest (never edited) is overwritten; one
+# that was edited locally, or that the manifest does not cover, is skipped.
+# The block between "<!-- agent-orchestration -->" and
+# "<!-- /agent-orchestration -->" in the instructions file is replaced.
+# --force implies --update and also overwrites locally edited skill files.
+#
+# The manifest's first line names the hash tool (shasum -a 256, sha256sum or
+# cksum); every other line is "<hash> <path relative to the skills dir>".
 #
 # Every path below cites research/harnesses.md (Part A section numbers).
 # Paths the research leaves unconfirmed are marked UNVERIFIED and produce a
@@ -25,17 +36,25 @@
 set -eu
 
 MARKER='<!-- agent-orchestration -->'
+END_MARKER='<!-- /agent-orchestration -->'
+MANIFEST_NAME='.agent-orchestration-manifest'
+MANIFEST_HEAD='# agent-orchestration manifest; hash:'
 
 usage() {
-  cat <<'EOF'
-usage: sh adapters/install.sh <harness> [--kit-root PATH] [--dry-run]
+  cat <<'USAGE'
+usage: sh adapters/install.sh <harness> [--update] [--force] [--kit-root PATH] [--dry-run]
 
 harness: codex | cursor | opencode | pi | grok | agy | antigravity | gemini | claude
 
+  --update          update an earlier install: overwrite skill files you
+                    have not edited (checked against the manifest), skip
+                    edited ones, and replace the agent-orchestration block
+                    in the instructions file
+  --force           like --update, but also overwrite edited skill files
   --kit-root PATH   kit location written into the installed files
                     (default: the repo containing this script)
   --dry-run         print what would happen; change nothing
-EOF
+USAGE
 }
 
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }
@@ -47,6 +66,8 @@ warn() { printf 'WARNING: %s\n' "$*"; WARNINGS=$((WARNINGS + 1)); }
 HARNESS=''
 KIT_ROOT=''
 DRY=0
+UPDATE=0
+FORCE=0
 WARNINGS=0
 
 while [ $# -gt 0 ]; do
@@ -58,6 +79,10 @@ while [ $# -gt 0 ]; do
       KIT_ROOT=${1#--kit-root=}; shift ;;
     --dry-run|-n)
       DRY=1; shift ;;
+    --update|-u)
+      UPDATE=1; shift ;;
+    --force|-f)
+      FORCE=1; UPDATE=1; shift ;;
     -h|--help)
       usage; exit 0 ;;
     -*)
@@ -102,6 +127,47 @@ render() { # render <src> <dst>: substitute KIT_ROOT, write dst via temp + mv
   mv "$_tmp" "$2"
 }
 
+render_out() { # render_out <src>: print src with KIT_ROOT substituted
+  sed -e "s|KIT_ROOT|$KIT_ROOT_SED|g" "$1"
+}
+
+# ---------------------------------------------------------------- hashing
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+if have shasum; then SHA256_TOOL='shasum -a 256'
+elif have sha256sum; then SHA256_TOOL='sha256sum'
+else SHA256_TOOL=''
+fi
+HASH_TOOL=${SHA256_TOOL:-cksum}
+
+hash_stdin() { # hash of stdin with $HASH_TOOL, as one word
+  case "$HASH_TOOL" in
+    cksum) cksum | awk '{ print $1 "-" $2 }' ;;
+    *) $HASH_TOOL | awk '{ print $1 }' ;;
+  esac
+}
+
+# ---------------------------------------------------------------- AGENTS.md block
+
+block_ok() { # block_ok <file>: exactly one start marker line, then an end marker line
+  M1=$MARKER M2=$END_MARKER awk '
+    { l = $0; sub(/\r$/, "", l) }
+    l == ENVIRON["M1"] { n++; if (s == 0) s = 1; next }
+    s == 1 && l == ENVIRON["M2"] { s = 2 }
+    END { exit (s == 2 && n == 1) ? 0 : 1 }' "$1"
+}
+
+render_block() { # render_block <file>: print file with its marked block replaced by the fragment
+  render_out "$SHARED/AGENTS.fragment.md" |
+    M1=$MARKER M2=$END_MARKER awk '
+      NR == FNR { frag = frag $0 "\n"; next }
+      { l = $0; sub(/\r$/, "", l) }
+      s == 0 && l == ENVIRON["M1"] { printf "%s", frag; s = 1; next }
+      s == 1 { if (l == ENVIRON["M2"]) s = 2; next }
+      { print }' - "$1"
+}
+
 # ---------------------------------------------------------------- harness table
 #
 # SKILLS_DIR    global skills dir (Agent Skills SKILL.md)
@@ -127,6 +193,9 @@ case "$HARNESS" in
     say '  claude plugin install agent-orchestration@agent-orchestration'
     say ''
     say 'Then, in any session:  /agent-orchestration:setup'
+    say ''
+    say 'To update later:  claude plugin update agent-orchestration'
+    say 'then restart and run /agent-orchestration:refresh if profiles changed.'
     say 'The plugin SessionStart hook (hooks/hooks.json) loads your routing table.'
     exit 0 ;;
 
@@ -244,9 +313,58 @@ case "$HARNESS" in
     : ;;
 esac
 
+# ---------------------------------------------------------------- manifest
+
+MANIFEST="$SKILLS_DIR/$MANIFEST_NAME"
+MAN_OK=0   # 1 when an existing manifest can be compared against
+
+if [ -f "$MANIFEST" ]; then
+  man_tool=$(sed -n "1s/^$MANIFEST_HEAD //p" "$MANIFEST")
+  case "$man_tool" in
+    cksum)
+      HASH_TOOL=cksum; MAN_OK=1 ;;
+    'shasum -a 256'|sha256sum)
+      if [ -n "$SHA256_TOOL" ]; then MAN_OK=1
+      else warn "$MANIFEST uses $man_tool, which is not available here; treating it as missing."
+      fi ;;
+    *)
+      warn "$MANIFEST has no recognised header line; treating it as missing." ;;
+  esac
+elif [ "$UPDATE" -eq 1 ] && [ "$FORCE" -eq 0 ] && [ -d "$SKILLS_DIR" ]; then
+  warn "no manifest at $MANIFEST (installed before manifests existed?), so every existing skill file that differs from this kit counts as possibly edited and is skipped. Re-run with --force to overwrite them."
+fi
+
+manifest_hash() { # manifest_hash <relpath>: recorded hash, or nothing
+  [ "$MAN_OK" -eq 1 ] || return 0
+  P=$1 awk 'NR > 1 {
+      i = index($0, " ")
+      if (i > 0 && substr($0, i + 1) == ENVIRON["P"]) { print substr($0, 1, i - 1); exit }
+    }' "$MANIFEST"
+}
+
+NEWMAN=''
+cleanup() { [ -z "$NEWMAN" ] || rm -f "$NEWMAN" "$NEWMAN.all"; }
+trap cleanup EXIT
+trap 'exit 130' INT TERM
+
+if [ "$DRY" -eq 0 ]; then
+  mkdir -p "$SKILLS_DIR"
+  NEWMAN="$MANIFEST.ao-tmp.$$"
+  : > "$NEWMAN"
+fi
+
+record() { # record <hash> <relpath>: manifest entry for the content now installed
+  [ "$DRY" -eq 1 ] || printf '%s %s\n' "$1" "$2" >> "$NEWMAN"
+}
+
 # ---------------------------------------------------------------- 1. skills
 
-SK_NEW=0; SK_SAME=0; SK_DIFF=0
+SK_NEW=0; SK_SAME=0; SK_UPD=0; SK_DIFF=0
+
+did() { # did <past> <dry-run> <path>: report an action, worded for --dry-run
+  if [ "$DRY" -eq 1 ]; then printf '  %-17s %s\n' "$2" "$3"
+  else printf '  %-11s %s\n' "$1" "$3"; fi
+}
 
 say 'Skills:'
 for skill_dir in "$SHARED"/skills/*/; do
@@ -254,34 +372,67 @@ for skill_dir in "$SHARED"/skills/*/; do
   name=$(basename "$skill_dir")
   # Every file in the skill dir (SKILL.md plus any references/ or scripts/).
   for src in $(cd "$skill_dir" && find . -type f | sed 's|^\./||' | sort); do
-    dst="$SKILLS_DIR/$name/$src"
-    if [ -e "$dst" ]; then
+    rel="$name/$src"
+    dst="$SKILLS_DIR/$rel"
+    new_hash=$(render_out "$skill_dir/$src" | hash_stdin)
+    if [ ! -e "$dst" ]; then
       if [ "$DRY" -eq 0 ]; then
-        _cmp="$dst.ao-cmp.$$"
-        sed -e "s|KIT_ROOT|$KIT_ROOT_SED|g" "$skill_dir/$src" > "$_cmp"
-        if cmp -s "$_cmp" "$dst"; then
-          say "  up to date  $dst"; SK_SAME=$((SK_SAME + 1))
-        else
-          say "  SKIPPED     $dst (exists and differs; delete it and re-run to update)"
-          SK_DIFF=$((SK_DIFF + 1))
-        fi
-        rm -f "$_cmp"
-      else
-        say "  would skip  $dst (exists)"; SK_SAME=$((SK_SAME + 1))
-      fi
-    else
-      if [ "$DRY" -eq 1 ]; then
-        say "  would create $dst"
-      else
         mkdir -p "$(dirname "$dst")"
         render "$skill_dir/$src" "$dst"
-        say "  created     $dst"
       fi
-      SK_NEW=$((SK_NEW + 1))
+      did created 'would create' "$dst"
+      record "$new_hash" "$rel"; SK_NEW=$((SK_NEW + 1))
+    elif render_out "$skill_dir/$src" | cmp -s - "$dst"; then
+      did 'up to date' 'up to date' "$dst"
+      record "$new_hash" "$rel"; SK_SAME=$((SK_SAME + 1))
+    elif [ "$UPDATE" -eq 0 ]; then
+      did SKIPPED 'would skip' "$dst (exists and differs; run with --update to update it)"
+      SK_DIFF=$((SK_DIFF + 1))
+    else
+      old_hash=$(manifest_hash "$rel")
+      cur_hash=$(hash_stdin < "$dst")
+      if [ "$FORCE" -eq 0 ] && [ -z "$old_hash" ]; then
+        did SKIPPED 'would skip' "$dst (not in the manifest, so it may be edited locally; use --force to overwrite)"
+        SK_DIFF=$((SK_DIFF + 1))
+      elif [ "$FORCE" -eq 0 ] && [ "$cur_hash" != "$old_hash" ]; then
+        did SKIPPED 'would skip' "$dst (edited locally; use --force to overwrite)"
+        SK_DIFF=$((SK_DIFF + 1))
+      else
+        [ "$DRY" -eq 1 ] || render "$skill_dir/$src" "$dst"
+        if [ "$cur_hash" = "$old_hash" ]; then did updated 'would update' "$dst"
+        else did overwritten 'would overwrite' "$dst"; fi
+        record "$new_hash" "$rel"; SK_UPD=$((SK_UPD + 1))
+      fi
     fi
   done
 done
-[ "$SK_DIFF" -gt 0 ] && warn "$SK_DIFF skill file(s) already exist with different content and were left alone."
+
+# The new manifest: entries for what is installed now, plus earlier entries
+# for files this run did not write (skipped files keep their old hash, so a
+# later --update still sees the local edit).
+if [ "$DRY" -eq 1 ]; then
+  did '' 'would write' "$MANIFEST"
+else
+  {
+    printf '%s %s\n' "$MANIFEST_HEAD" "$HASH_TOOL"
+    cat "$NEWMAN"
+    if [ "$MAN_OK" -eq 1 ]; then
+      awk 'NR == FNR { i = index($0, " "); seen[substr($0, i + 1)] = 1; next }
+           FNR > 1 { i = index($0, " "); if (i > 0 && !(substr($0, i + 1) in seen)) print }' \
+        "$NEWMAN" "$MANIFEST"
+    fi
+  } > "$NEWMAN.all"
+  mv "$NEWMAN.all" "$MANIFEST"
+  did manifest '' "$MANIFEST ($HASH_TOOL)"
+fi
+
+if [ "$SK_DIFF" -gt 0 ]; then
+  if [ "$UPDATE" -eq 0 ]; then
+    warn "$SK_DIFF skill file(s) differ from this kit and were left alone. Run with --update to update the ones you have not edited."
+  else
+    warn "$SK_DIFF skill file(s) may have local edits and were left alone. Compare them with $SHARED/skills, then re-run with --force to overwrite."
+  fi
+fi
 say ''
 
 # ---------------------------------------------------------------- 2. instructions
@@ -289,7 +440,22 @@ say ''
 say 'Instructions:'
 if [ -n "$INSTR_FILE" ]; then
   if [ -f "$INSTR_FILE" ] && grep -qF "$MARKER" "$INSTR_FILE"; then
-    say "  already present in $INSTR_FILE (marker found); unchanged"
+    if [ "$UPDATE" -eq 0 ]; then
+      say "  already present in $INSTR_FILE (marker found); unchanged (--update replaces it)"
+    elif ! block_ok "$INSTR_FILE"; then
+      warn "$INSTR_FILE does not hold exactly one block from a $MARKER line to a $END_MARKER line; left unchanged. Fix the block by hand, then re-run."
+    elif render_block "$INSTR_FILE" | cmp -s - "$INSTR_FILE"; then
+      say "  up to date in $INSTR_FILE"
+    elif [ "$DRY" -eq 1 ]; then
+      say "  would replace the agent-orchestration block in $INSTR_FILE"
+    else
+      blk="$INSTR_FILE.ao-blk.$$"
+      render_block "$INSTR_FILE" > "$blk"
+      # cat, not mv: keeps the file's permissions and any symlink.
+      cat "$blk" > "$INSTR_FILE"
+      rm -f "$blk"
+      say "  replaced the agent-orchestration block in $INSTR_FILE"
+    fi
   else
     if [ -f "$INSTR_FILE" ]; then action='append to'; else action='create'; fi
     if [ "$DRY" -eq 1 ]; then
@@ -297,7 +463,7 @@ if [ -n "$INSTR_FILE" ]; then
     else
       mkdir -p "$(dirname "$INSTR_FILE")"
       frag="$INSTR_FILE.ao-frag.$$"
-      sed -e "s|KIT_ROOT|$KIT_ROOT_SED|g" "$SHARED/AGENTS.fragment.md" > "$frag"
+      render_out "$SHARED/AGENTS.fragment.md" > "$frag"
       if [ -s "$INSTR_FILE" ]; then
         # Ensure the existing file ends with a newline, then a blank line.
         if [ "$(tail -c 1 "$INSTR_FILE" | wc -l | tr -d ' ')" -eq 0 ]; then
@@ -318,14 +484,23 @@ else
   # Cursor (§3(1)): User Rules live in Cursor Settings, not in a file. Write
   # the rendered block into the kit's own config dir for the user to paste.
   rule="$HOME/.agent-orchestration/cursor-user-rule.md"
-  if [ -e "$rule" ]; then
-    say "  $rule exists; unchanged"
+  if [ ! -e "$rule" ]; then
+    if [ "$DRY" -eq 1 ]; then
+      say "  would create $rule (paste it into Cursor Settings > Rules > User Rules)"
+    else
+      mkdir -p "$(dirname "$rule")"
+      render "$SHARED/AGENTS.fragment.md" "$rule"
+      say "  created $rule"
+    fi
+  elif render_out "$SHARED/AGENTS.fragment.md" | cmp -s - "$rule"; then
+    say "  $rule is up to date"
+  elif [ "$UPDATE" -eq 0 ]; then
+    say "  $rule exists and differs; unchanged (--update rewrites it)"
   elif [ "$DRY" -eq 1 ]; then
-    say "  would create $rule (paste it into Cursor Settings > Rules > User Rules)"
+    say "  would rewrite $rule (then paste it into Cursor again)"
   else
-    mkdir -p "$(dirname "$rule")"
     render "$SHARED/AGENTS.fragment.md" "$rule"
-    say "  created $rule"
+    say "  rewrote $rule; paste it into Cursor again"
   fi
   say '  Cursor has no global instructions file. Paste that file into'
   say '  Cursor Settings > Rules > User Rules (e.g. pbcopy < the file).'
@@ -338,15 +513,21 @@ say ''
 
 skill_cmd=$(printf '%s' "$INVOKE" | sed -e 's/<name>/ao-setup/g')
 if [ "$DRY" -eq 1 ]; then
-  say "Dry run: $SK_NEW skill file(s) would be created, $SK_SAME already present."
+  say "Dry run: $SK_NEW skill file(s) would be created, $SK_UPD updated, $SK_SAME already up to date, $SK_DIFF skipped."
 else
-  say "Done: $SK_NEW skill file(s) created, $SK_SAME up to date, $SK_DIFF skipped."
+  say "Done: $SK_NEW skill file(s) created, $SK_UPD updated, $SK_SAME up to date, $SK_DIFF skipped."
 fi
 [ "$WARNINGS" -gt 0 ] && say "$WARNINGS warning(s) above."
 say ''
 say 'Next:'
-say "  1. Start a new $HARNESS session (skills and instructions load at start)."
-say "  2. Run the ao-setup skill: $skill_cmd"
-say '     It interviews you and writes ~/.agent-orchestration/routing.md.'
-say '  3. From then on every session reads routing.md, glossary.md and lessons.md.'
+if [ "$UPDATE" -eq 1 ]; then
+  say "  1. Start a new $HARNESS session so it loads the updated skills."
+  say '  2. If model profiles changed, run the ao-refresh skill to regenerate'
+  say '     ~/.agent-orchestration/routing.md from your config.yaml.'
+else
+  say "  1. Start a new $HARNESS session (skills and instructions load at start)."
+  say "  2. Run the ao-setup skill: $skill_cmd"
+  say '     It interviews you and writes ~/.agent-orchestration/routing.md.'
+  say '  3. From then on every session reads routing.md, glossary.md and lessons.md.'
+fi
 say "  Details and optional upgrades: $KIT_ROOT/adapters/$README_DIR/README.md"

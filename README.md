@@ -40,6 +40,28 @@ See `adapters/<harness>/README.md`. The setup interview itself is plain
 markdown, so any capable agent can run it: point it at
 `core/interview/setup-interview.md`.
 
+## Updating
+
+Claude Code:
+
+```bash
+claude plugin marketplace update agent-orchestration
+claude plugin update agent-orchestration@agent-orchestration
+```
+
+Restart Claude Code, then run `/agent-orchestration:refresh` so your routing
+table picks up changed model profiles. The session-start status block tells
+you when a refresh is needed.
+
+Other harnesses, from an up-to-date checkout of this repo:
+
+```sh
+sh adapters/install.sh <harness> --update
+```
+
+It overwrites only the skill files you have not edited and replaces the
+marked block in your instructions file; see `adapters/README.md`.
+
 ## Daily use
 
 - `/agent-orchestration:orchestrate` reminds the agent how to delegate using
@@ -51,9 +73,11 @@ markdown, so any capable agent can run it: point it at
 
 ## Maintaining
 
-- New model: add `core/models/<id>.md` following `_schema.md`, re-run setup.
+- New model: follow [docs/MAINTAINING.md](docs/MAINTAINING.md), then bump
+  `version` in `.claude-plugin/plugin.json`, commit, and push, so
+  `claude plugin update` picks it up.
 - New harness: add `core/bridges/<id>.md` and `adapters/<id>/`.
 - Routing felt wrong: edit `~/.agent-orchestration/config.yaml`, not the
-  generated `routing.md`, then re-run setup.
+  generated `routing.md`, then run `/agent-orchestration:refresh` (not setup).
 
 Layout and rationale: `docs/ARCHITECTURE.md`.

@@ -20,6 +20,12 @@ subscriptions, or CLIs the user has. Offer to run the setup interview: use
 the `ao-setup` skill, or follow `KIT_ROOT/core/interview/setup-interview.md`
 step by step.
 
+**If `routing.md` exists**, compare `~/.agent-orchestration/routing.stamp`
+to the kit's profiles (or just run
+`python3 "KIT_ROOT/core/interview/generate.py" --kit-root "KIT_ROOT" --check`,
+where exit 1 means stale) and, if it is stale, use the `ao-refresh` skill
+to regenerate the table without re-running the interview.
+
 **Before delegating anything non-trivial** (a subagent, another CLI, another
 model), use the `ao-orchestrate` skill, or read
 `KIT_ROOT/core/strategies/delegation-prompting.md` and the other strategy

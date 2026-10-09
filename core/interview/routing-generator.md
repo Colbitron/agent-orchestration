@@ -34,8 +34,10 @@ For each task id in `core/tasks.md` and each enabled model:
    the profile's `cost_efficiency`.
 3. Apply `priorities.order` as the tiebreak sequence when scores are within
    one point.
-4. If `priorities.frustration_tolerance` is `low`, add 1 to `floor` before
-   weighting. If `budget_sensitivity` is `high`, add 1 to cost.
+4. If `priorities.frustration_tolerance` is `low`, add 1 to the weight of
+   `floor` in every row's weighting (a row that does not weight floor gets
+   floor ×1). If `budget_sensitivity` is `high`, do the same for cost.
+   Adding 1 to every model's score instead would change nothing.
 
 ## Step 2: pick primary and fallback
 
@@ -43,7 +45,11 @@ For each task id in `core/tasks.md` and each enabled model:
   none, `ok` with a guardrail note copied from the profile.
 - **Fallback**: next model, preferring a different family if one is enabled.
 - **Effort**: the primary profile's `effort.default`, unless `config.effort`
-  overrides it.
+  overrides it. A configured effort must be one level from that model's
+  `effort.levels`, written as a string.
+- **Overrides**: `config.routing_overrides.<task>` (primary, fallback, reason,
+  optional effort) replaces the computed row. Apply the `feature` override
+  before resolving `review`, so the review rule sees the final implementer.
 - **Why**: one sentence built from the profile's task note and the axis that
   decided it. Cite nothing; the user can read the profile.
 
@@ -58,12 +64,17 @@ Special rules:
 - `review`: primary must be from a family other than the family most used
   for `feature`. If only one family is enabled, pick the model with the
   highest `thoroughness` that is not the `feature` primary and add the line
-  "Single-family setup: a second vendor's reviewer would catch more."
+  "Single-family setup: a second vendor's reviewer would catch more." If
+  only one model is enabled, say instead: "Only one model enabled; the
+  implementer reviews its own work. Add a second model for a real gate."
+  Warn when the final review and feature primaries share a family while
+  another family is enabled.
 - `computer-use`: if no enabled model has `computer_use` ≥ 6, write
   "No capable computer-use model enabled; verify by running tests and
   reading logs instead" and leave the row's primary empty.
 - `orchestrate`: this is the model the user is sitting in front of unless
-  the primary harness can switch models. Say so in the row.
+  the primary harness can switch models. Say so in the row. With only one
+  model available in the primary harness, just name it as the session model.
 - `bulk`: if a model has user `cost` ≥ 8, it wins the row regardless of
   score as long as its fit is at least `ok`, because bulk work should burn
   the cheapest capable quota. Theo's rule.
@@ -131,7 +142,10 @@ two lines.
 
 - Every task id has a row.
 - Every primary and fallback is an enabled model.
-- No row's effort is `max`.
+- No row's effort is `max`, and every configured effort is a level the
+  model offers.
+- `tasks.md` has one task table (header row starting `| id |`) with no
+  duplicate ids.
 - The file is under about 150 lines. If not, shorten the "Why" column; do
   not drop rows.
 
@@ -141,3 +155,79 @@ Setup regenerates `routing.md` and `glossary.md` from scratch each run.
 `lessons.md` is never touched by the generator. If the user hand-edits
 routing.md, the next run will overwrite it, so setup diffs the old and new
 file and shows the user anything that would be lost before writing.
+
+## Reference implementation
+
+`core/interview/generate.py` implements steps 1 to 5. It needs Python 3.9+
+(standard library only) and a YAML parser: pyyaml if importable, otherwise
+`ruby` (the macOS system ruby works). With neither, it exits 2 with
+"install pyyaml (pip install pyyaml) or ruby".
+
+```bash
+python3 "$KIT_ROOT/core/interview/generate.py" [--check | --diff | --write] [--json]
+```
+
+- `--kit-root PATH`: the kit (default: two directories above the script).
+- `--config PATH`: default `$AGENT_ORCHESTRATION_HOME/config.yaml`, else
+  `~/.agent-orchestration/config.yaml`.
+- `--out DIR`: where the files go (default: the config's directory).
+- `--check`: writes nothing; exit 0 if `routing.md` and `glossary.md` match
+  what would be generated (ignoring the `Generated` line) and the stamp
+  matches the current profiles, `tasks.md`, kit version and
+  `config.user.updated`; exit 1 if anything is stale or differs.
+- `--diff` (the default): prints a unified diff of what `--write` would
+  change in `routing.md` and `glossary.md`. Writes nothing.
+- `--write`: writes `routing.md`, `glossary.md` and `routing.stamp`. It
+  never touches `lessons.md`, `runs.jsonl` or `config.yaml`.
+- `--json`: prints `{"up_to_date", "changed_profiles", "new_profiles",
+  "unconfigured_profiles", "rows_changed", "errors"}` (plus `warnings`)
+  instead of text. With `--write` it describes the state before writing.
+
+Optional config fields (see `config-schema.md`) carry hand-written text
+through regeneration: `autonomy.may_notes` (a qualifier after a permission
+in the "May:" line), `standing_rules.extra` (bullets appended to Standing
+rules), `bridges` (a list of `{id, note}`, one Bridges line each, replacing the
+auto-detected line for that bridge id) and `harnesses[].smoke_tested`. Glossary
+keys that match a default replace it in place; new keys are appended; a
+`null` value removes a default. Without these fields the output is the same
+as before.
+
+Exit 2 means an error, and nothing is written. The errors are:
+- no config, no YAML parser, or YAML that does not parse;
+- an unreadable enabled profile, or a score that is not a number;
+- an override naming a disabled model;
+- an effort that is `max`, not a string, or not one of the model's levels;
+- a duplicate task id;
+- a write failure. The three files are written to temp files first and
+  replaced together, keeping each existing file's mode.
+
+Warnings go to stderr and the JSON `warnings` list. The warning cases are:
+- a deprecated model that is enabled;
+- an enabled model that no harness or bridge reaches;
+- a missing score axis, tasks block or `effort.default`;
+- `propose` with `merge_prs: true` (merging is then listed under May never);
+- a quoted `enabled` value;
+- malformed optional fields. Output is byte-identical for the same
+inputs on the same UTC date; set `SOURCE_DATE_EPOCH` to pin the date.
+
+`routing.stamp` is flat text, one record per line:
+
+```
+generated <ISO-8601 UTC>
+generator generate.py 1
+kit_root <absolute path>
+kit_version <version from .claude-plugin/plugin.json, or unknown>
+kit_commit <git short sha of the kit root, or unknown>
+config_updated <config.user.updated>
+tasks <first 12 hex of sha256 of core/tasks.md>
+profile <id> <as_of> <enabled|disabled|unconfigured>
+```
+
+There is one `profile` line for every `core/models/*.md` except
+`_schema.md`, sorted by id. The session-start hook compares these lines
+with the kit to say when the table is stale.
+
+This markdown file stays the spec. Agents on harnesses without Python or a
+YAML parser follow the steps above by hand. Those runs write no stamp, so
+the session-start status keeps flagging until the script can run. Where the
+script and this file disagree, fix the script.

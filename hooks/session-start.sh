@@ -5,6 +5,115 @@
 cfg="${AGENT_ORCHESTRATION_HOME:-$HOME/.agent-orchestration}"
 root="${CLAUDE_PLUGIN_ROOT:-unknown}"
 
+# Append an id (with optional detail) to a comma-separated list, keeping at
+# most 6 entries; the caller tracks the total count for the "+N more" tail.
+# Usage: list=$(list_add "$list" "$count" "item")   ($count is the count before adding)
+list_add() {
+  if [ "$2" -ge 6 ]; then
+    printf '%s' "$1"
+  elif [ -z "$1" ]; then
+    printf '%s' "$3"
+  else
+    printf '%s, %s' "$1" "$3"
+  fi
+}
+
+# Finish a list: add "+N more" when more than 6 ids were counted.
+list_end() {
+  if [ "$2" -gt 6 ]; then
+    printf '%s, +%s more' "$1" "$(($2 - 6))"
+  else
+    printf '%s' "$1"
+  fi
+}
+
+# Read one field from the stamp: stamp_get <key> -> rest of the line after the key.
+stamp_get() {
+  awk -v k="$1" '{ sub(/\r$/, "") } $1 == k { sub(/^[^ \t]+[ \t]+/, ""); print; exit }' "$stamp" 2>/dev/null
+}
+
+# Compare the routing stamp against the kit's current profiles, tasks.md and version.
+routing_status() {
+  stamp="$cfg/routing.stamp"
+  echo
+  echo "## Routing table status"
+  if [ ! -f "$stamp" ]; then
+    echo "The routing table is unstamped (generated before stamps existed); run /agent-orchestration:refresh to regenerate and stamp it."
+    return 0
+  fi
+
+  generated=$(stamp_get generated)
+  nprof=$(awk '{ sub(/\r$/, "") } $1 == "profile" && NF >= 3 { n++ } END { print n + 0 }' "$stamp" 2>/dev/null)
+  if [ -z "$generated" ] || [ -z "$nprof" ] || [ "$nprof" -eq 0 ]; then
+    echo "The routing stamp at $stamp could not be read; run /agent-orchestration:refresh to regenerate it."
+    return 0
+  fi
+
+  models="$root/core/models"
+  if [ "$root" = "unknown" ] || [ ! -d "$models" ]; then
+    echo "Generated $generated; staleness not checked (kit files not found)."
+    return 0
+  fi
+
+  changed="" nchanged=0 new="" nnew=0
+  for f in "$models"/*.md; do
+    [ -f "$f" ] || continue
+    id=${f##*/}
+    id=${id%.md}
+    [ "$id" = "_schema" ] && continue
+    asof=$(sed -n 's/^as_of:[[:space:]]*//p' "$f" 2>/dev/null | head -n 1 |
+      sed 's/[[:space:]]*#.*$//; s/[[:space:]]*$//; s/^["'\'']//; s/["'\'']$//')
+    [ -n "$asof" ] || asof="unknown"
+    # Prints "=<as_of>" when the id has a profile line, nothing otherwise.
+    stamped=$(awk -v id="$id" '{ sub(/\r$/, "") } $1 == "profile" && $2 == id { print "=" $3; exit }' "$stamp" 2>/dev/null)
+    if [ -z "$stamped" ]; then
+      new=$(list_add "$new" "$nnew" "$id")
+      nnew=$((nnew + 1))
+    elif [ "$stamped" != "=$asof" ]; then
+      changed=$(list_add "$changed" "$nchanged" "$id ($asof)")
+      nchanged=$((nchanged + 1))
+    fi
+  done
+
+  tasks_changed=0
+  stamp_tasks=$(stamp_get tasks)
+  if [ -n "$stamp_tasks" ] && [ -f "$root/core/tasks.md" ]; then
+    if command -v shasum >/dev/null 2>&1; then
+      cur_tasks=$(shasum -a 256 "$root/core/tasks.md" 2>/dev/null | cut -c1-12)
+    elif command -v sha256sum >/dev/null 2>&1; then
+      cur_tasks=$(sha256sum "$root/core/tasks.md" 2>/dev/null | cut -c1-12)
+    else
+      cur_tasks=""
+    fi
+    if [ -n "$cur_tasks" ] && [ "$cur_tasks" != "$stamp_tasks" ]; then
+      tasks_changed=1
+    fi
+  fi
+
+  stamp_ver=$(stamp_get kit_version)
+  cur_ver=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$root/.claude-plugin/plugin.json" 2>/dev/null | head -n 1)
+  [ -n "$cur_ver" ] || cur_ver="unknown"
+  ver_changed=0
+  if [ -n "$stamp_ver" ] && [ "$stamp_ver" != "$cur_ver" ]; then
+    ver_changed=1
+  fi
+
+  if [ "$nchanged" -eq 0 ] && [ "$nnew" -eq 0 ] && [ "$tasks_changed" -eq 0 ] && [ "$ver_changed" -eq 0 ]; then
+    echo "Up to date (generated $generated)."
+    return 0
+  fi
+  if [ "$nchanged" -gt 0 ]; then
+    echo "$nchanged profile(s) changed since the table was generated: $(list_end "$changed" "$nchanged")"
+  fi
+  if [ "$nnew" -gt 0 ]; then
+    echo "$nnew new profile(s) not in the table: $(list_end "$new" "$nnew")"
+  fi
+  [ "$tasks_changed" -eq 1 ] && echo "tasks.md changed since the table was generated."
+  [ "$ver_changed" -eq 1 ] && echo "kit version $stamp_ver -> $cur_ver"
+  echo "Run /agent-orchestration:refresh to regenerate."
+  return 0
+}
+
 echo "<agent-orchestration kit root=\"$root\" config=\"$cfg\">"
 
 if [ -f "$cfg/routing.md" ]; then
@@ -20,6 +129,7 @@ if [ -f "$cfg/routing.md" ]; then
   fi
   echo
   echo "Strategy docs live under $root/core/strategies/. Read delegation-prompting.md before delegating anything."
+  routing_status
 else
   echo "No routing table found at $cfg/routing.md."
   echo "Run /agent-orchestration:setup to interview the user and build one."

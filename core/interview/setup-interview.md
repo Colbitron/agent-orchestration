@@ -114,7 +114,12 @@ with the derived cost scores and ask if any look wrong. Fix what they say.
 
 ## 7. Generate
 
-Follow `routing-generator.md` to write `routing.md` and `glossary.md`. Then
+Run the generator script, which implements `routing-generator.md`:
+`python3 <kit root>/core/interview/generate.py --kit-root <kit root> --write`.
+It writes `routing.md`, `glossary.md` and `routing.stamp`. If a table already
+exists, run it with `--diff` first and show what would be lost. If the script
+exits 2 (no YAML parser available), follow `routing-generator.md` by hand and
+say so; no stamp is written in that case. Then
 show the user the routing table (the table only, not the standing rules)
 and ask two questions:
 

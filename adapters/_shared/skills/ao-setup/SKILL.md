@@ -1,6 +1,6 @@
 ---
 name: ao-setup
-description: Interview the user about their harnesses, model subscriptions, priorities, and autonomy comfort, then generate their personal routing table and glossary under ~/.agent-orchestration. Use when the user asks to set up, configure, re-run, or update agent orchestration or model routing, or when no routing table exists at ~/.agent-orchestration/routing.md.
+description: Interview the user about their harnesses, model subscriptions, priorities, and autonomy comfort, then generate their personal routing table and glossary under ~/.agent-orchestration. Use when the user asks to set up, configure, re-run, or update agent orchestration or model routing, or when no routing table exists at ~/.agent-orchestration/routing.md. For an existing config that only needs a new table (a profile was added or edited, or config.yaml was edited), use the ao-refresh skill instead.
 ---
 
 # Setup
@@ -13,7 +13,8 @@ Read these three files before asking anything:
 1. `KIT_ROOT/core/interview/setup-interview.md` (the script; follow it step
    by step, steps 0 to 9, in order)
 2. `KIT_ROOT/core/interview/config-schema.md` (what you write)
-3. `KIT_ROOT/core/interview/routing-generator.md` (how you build the table)
+3. `KIT_ROOT/core/interview/routing-generator.md` (the table spec; the
+   generator script implements it)
 
 Then run the interview. For the option-style questions in steps 1 to 4, use
 your harness's question tool if it has one that allows several answers at
@@ -30,8 +31,13 @@ Rules that are easy to get wrong:
 - Write to `~/.agent-orchestration/` (create it). Never write into any
   harness config without the user saying yes to that specific change in
   step 8.
-- If `~/.agent-orchestration/routing.md` already exists, diff before
-  overwriting and show what would be lost.
+- In step 7, generate with the script, not by hand:
+  `python3 "KIT_ROOT/core/interview/generate.py" --kit-root "KIT_ROOT"`
+  with `--write`. It writes `routing.md`, `glossary.md` and
+  `routing.stamp`. If it exits 2 (no YAML parser), show its message, then
+  follow `KIT_ROOT/core/interview/routing-generator.md` by hand and say so.
+- If `~/.agent-orchestration/routing.md` already exists, run the script
+  with `--diff` first and show what would be lost.
 - Never touch `lessons.md`.
 - When step 8 wires a bridge, run the smoke test from the matching
   `KIT_ROOT/core/bridges/<id>.md` and report pass or fail; do not claim a

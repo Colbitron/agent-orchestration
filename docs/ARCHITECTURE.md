@@ -18,8 +18,12 @@ tools.
 3. **Thin adapters.** Each harness (Claude Code, Codex, Cursor, OpenCode, Pi,
    Gemini CLI, …) gets an adapter under `adapters/` that renders the core into
    that harness's native format. Adapters contain glue, not knowledge.
-4. **Maintainable by one person.** A new model means adding one profile file
-   and re-running the generator. A new harness means adding one adapter.
+4. **Maintainable by one person.** A new model means adding one profile
+   file. The generator (`core/interview/generate.py`) rebuilds each user's
+   table from their `config.yaml` plus the profiles and records what it read
+   in a stamp. The session-start hook compares the stamp to the kit and
+   flags a stale table, and refresh regenerates it without re-running the
+   interview. A new harness means adding one adapter.
 5. **Editable by hand.** Everything the interview generates is readable
    markdown or YAML that the user can tweak, and the improvement loop ("how do
    we prevent this next time?") appends to it over time.
@@ -29,9 +33,11 @@ tools.
 ```
 .claude-plugin/      plugin.json + marketplace.json: the repo root IS the
                      Claude Code plugin, so core/ ships with it
-skills/              Claude Code skills: setup, orchestrate, lesson, bridge-*
+skills/              Claude Code skills: setup, refresh, orchestrate, lesson,
+                     bridge-*
 agents/              Claude Code subagent definitions with pinned models
 hooks/               SessionStart hook that injects the user's routing table
+                     and flags it when routing.stamp is stale
 core/
   models/            one profile per model, YAML frontmatter + markdown body
     _schema.md       the profile schema and scoring rubric (read first)
@@ -39,7 +45,11 @@ core/
   strategies/        tool-agnostic orchestration guidance
   bridges/           how to invoke each harness/model from a shell, one-shot
   interview/         the setup interview, config schema, routing generator
+                     spec (routing-generator.md) and the script that
+                     implements it (generate.py)
 adapters/
+  _shared/           harness-neutral ao-* skills (ao-setup, ao-refresh, ...)
+                     and the AGENTS.md fragment
   codex/             AGENTS.md fragment + skills for Codex CLI
   ...                further harnesses
 research/            digests of the source videos and web research (evidence)
@@ -53,20 +63,38 @@ only way the skills can read `core/` after installation without copying it.
 ## Data flow
 
 ```
+                    setup interview (writes or updates config.yaml)
+                               │
+                               ▼
 core/models/*.md  +  ~/.agent-orchestration/config.yaml
         │                      │
         └──────────┬───────────┘
                    ▼
-        setup interview (run by whatever agent the user has)
+  core/interview/generate.py       (spec: core/interview/routing-generator.md)
+  run by refresh (no interview) or at the end of setup
                    │
                    ▼
-  ~/.agent-orchestration/routing.md     ← the user's generated routing table,
-  ~/.agent-orchestration/glossary.md       glossary, and standing rules
-                   │
+  ~/.agent-orchestration/routing.md     ← the user's routing table and
+                                           standing rules
+  ~/.agent-orchestration/glossary.md    ← what the user's words mean
+  ~/.agent-orchestration/routing.stamp  ← kit version, commit, tasks hash,
+                   │                       and every profile's as_of
                    ▼
   adapters load these each session (Claude Code: plugin hook or CLAUDE.md
-  import; Codex: AGENTS.md import; others: their equivalent)
+  import; Codex: AGENTS.md import; others: their equivalent). The hook
+  (elsewhere, the AGENTS.md fragment) compares routing.stamp to the kit's
+  profiles and names any changed or new ones, with "Run
+  /agent-orchestration:refresh to regenerate."
 ```
+
+Two paths lead to the generator. **Setup** is the interview: it writes
+`config.yaml` from the user's answers, then runs the script. **Refresh**
+is the non-interactive path: it keeps the user's answers, asks once about
+any profiles the config does not list yet, adds only the `models` lines
+the user accepts, then runs the script. Both preview with `--diff` before
+`--write` when a table already exists. Neither touches `lessons.md`.
+If the script cannot run (no YAML parser), the agent follows
+`routing-generator.md` by hand, and no stamp is written.
 
 The config directory is deliberately harness-neutral (`~/.agent-orchestration/`)
 so a user on two harnesses shares one routing table.
@@ -122,7 +150,7 @@ Each adapter must be able to:
 
 1. Load the user's generated `routing.md` and `glossary.md` into context at
    session start.
-2. Expose the setup interview as a user-invocable command.
+2. Expose the setup interview and refresh as user-invocable commands.
 3. Expose the bridge skills (call model X for review / implementation /
    computer use / investigation) in the harness's skill format.
 4. Expose subagent definitions where the harness supports them, with the

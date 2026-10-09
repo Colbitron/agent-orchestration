@@ -63,7 +63,8 @@ models:
   claude-fable-5-1:  {enabled: true,  cost: 3}
   claude-opus-5-5:   {enabled: true,  cost: 7}
   claude-sonnet-5-5: {enabled: true,  cost: 7}
-  claude-haiku-4-5:  {enabled: false, cost: 9}
+  claude-haiku-5-5:  {enabled: true,  cost: 9}
+  claude-haiku-4-5:  {enabled: false, cost: 9}   # superseded; keep disabled
   gpt-6-astra:       {enabled: false, cost: 1}
   gpt-6-1-sol:       {enabled: false, cost: 1}
 
@@ -89,6 +90,8 @@ autonomy:
     force_push: false
     deploy: false                  # prod stays human unless explicitly true
   staging_is_safe: false           # true → agent may freely exercise staging
+  may_notes:                       # optional: qualifier shown after a permission in "May:"
+    force_push: "only its own branches, never main"
 
 # Optional per-model effort overrides. Profiles carry the defaults.
 effort:
@@ -102,7 +105,19 @@ preferences:
   review_bots_note: ""
   machines: ""                     # e.g. "remote box 'leftbook' via tailscale"
 
-# Glossary overrides. Keys replace the defaults from core/tasks.md.
+# Optional: extra bullets appended verbatim, in order, to "Standing rules".
+standing_rules:
+  extra:
+    - "Fable: `high`; one bounded `xhigh` pass only when `high` failed."
+
+# Optional: one "- `<id>`: <note>" line per entry under "Bridges"; an entry
+# replaces the auto-detected line for the same bridge id. A harness entry may
+# also carry `smoke_tested: 2026-10-02`.
+bridges:
+  - {id: codex-cli, note: "smoke test passed 2026-10-02"}
+
+# Glossary overrides. Keys replace the defaults from core/tasks.md in place;
+# new keys are appended; a null value removes a default.
 glossary:
   taste: "UI/UX, code quality, API design, copy. For me, also: no clever abstractions."
 
