@@ -1,17 +1,19 @@
 # Model Selection: Research Notes from Two Videos
 
-Source transcripts (auto-generated captions, converted to plain text):
+**Sources**
 
-- `scratchpad/txt/using-the-right-models.clean.txt` (~34 KB)
-- `scratchpad/txt/claude-fable-5-1-vs-gpt-6-astra.clean.txt` (~79 KB)
+- MODELS: "Please stop using stupid models", Theo (t3.gg), YouTube, https://youtu.be/iBrAWpjXNxs
+- FVA: "Fable Vs Astra Debate Is Over", Theo (t3.gg), YouTube, https://youtu.be/P7bxbDSnZRM
 
-**Speaker.** Both videos have the same speaker. He is the creator/maintainer of **T3 Code** (an agent harness/app), runs the "Nerd Snipe" podcast with Ben Davis, and is a high-volume user: "nearly a billion tokens a day across both of these models", "30 to $40,000 of inference a month", five Claude accounts and four Codex accounts. The transcripts never say his name.
+`[KEY m:ss]` links to that video at that timestamp. Quotes are from the auto-generated captions, so they keep the caption spellings ("soul", "codeex") listed under the caveats below.
+
+**Speaker.** Both videos have the same speaker. He maintains **T3 Code** (an agent harness/app) [MODELS 13:33](https://youtu.be/iBrAWpjXNxs?t=813), co-hosts the "Nerd Snipe" podcast with Ben Davis [FVA 36:39](https://youtu.be/P7bxbDSnZRM?t=2199), and is a high-volume user: "nearly a billion tokens a day across both of these models" [FVA 1:10](https://youtu.be/P7bxbDSnZRM?t=70), "30 to $40,000 of inference a month" [FVA 1:10:01](https://youtu.be/P7bxbDSnZRM?t=4201), five Claude accounts and four Codex accounts [FVA 1:03:14](https://youtu.be/P7bxbDSnZRM?t=3794). The captions never say his name; the Sources block credits the channel.
 
 **Transcription caveats. Read these before relying on model names.**
 
-- The captions write OpenAI's previous model as "Soul", "5.6 Soul", "56 soul" and "GBD 56". This note writes it as **"Sol" (GPT-5.6 Sol)**. The transcripts never say "GPT-6.1 Sol". The second video mentions "**Astra 6.1**" only as a future release the speaker hopes for. So if the routing project's "GPT-6.1 Sol" is a newer model than the "5.6 Sol" discussed here, **neither video covers it**.
+- The captions write OpenAI's previous model as "Soul", "5.6 Soul", "56 soul" and "GBD 56". This note writes it as **"Sol" (GPT-5.6 Sol)**. The transcripts never say "GPT-6.1 Sol". The second video mentions "**Astra 6.1**" only as a future release the speaker hopes for [FVA 40:16](https://youtu.be/P7bxbDSnZRM?t=2416). So if the routing project's "GPT-6.1 Sol" is a newer model than the "5.6 Sol" discussed here, **neither video covers it**.
 - "GBD6 / GPD6 / GB6 Astra" means **GPT-6 Astra**. "Codeex / CEX / codec / codecs" means **Codex**. "cloud code" means **Claude Code**. "Babel / Bale / payable" means **Fable**. "cash read/write" means **cache read/write**. "Kimmy" means **Kimi**. "Flash 38" / "Gemini 38 Flash" / "Gemini 3.8 Hey, Flash" means **Gemini 3.8 Flash**.
-- **"Opus" without a version:** the first video names "Opus 5" once, and the second gives an Artificial Analysis figure for "Opus 5". **Opus 5.5, Sonnet 5.5 and Haiku 4.5 are not mentioned by version in either video.** "Sonnet" appears once, unversioned and dismissively. Haiku never appears.
+- **"Opus" without a version:** the first video names "Opus 5" once [MODELS 4:53](https://youtu.be/iBrAWpjXNxs?t=293), and the second gives an Artificial Analysis figure for "Opus 5" [FVA 1:00:47](https://youtu.be/P7bxbDSnZRM?t=3647). **Opus 5.5, Sonnet 5.5 and Haiku 4.5 are not mentioned by version in either video.** "Sonnet" appears once, unversioned and dismissively [FVA 1:04:52](https://youtu.be/P7bxbDSnZRM?t=3892). Haiku never appears.
 
 ---
 
@@ -19,112 +21,109 @@ Source transcripts (auto-generated captions, converted to plain text):
 
 ## 1. Subject and thesis
 
-**Trigger.** The video responds to a post by David Kramer ("Zeg", founder of Sentry): *"Everyone using Fable or Astra, which is most of us on subs because no one can afford it, should try switching back to the other high reasoning models like Opus and Soul. You'll likely realize your tasks don't perform any differently."* The speaker calls this "your worst take of all time" and says: *"if you actually think or have experienced going back a model gen or down a model tier and not notice a difference in the way you do work, you also suck at prompting."* He also names David K (creator of XState), who said "you don't need Astra, Sol or Fable for most things". The speaker answers that this is *"true but my time is more valuable than Fable's."*
+**Trigger.** A post by David Kramer ("Zeg", founder of Sentry) said Fable/Astra users "should try switching back to the other high reasoning models like Opus and Soul" and would see no difference [MODELS 0:32](https://youtu.be/iBrAWpjXNxs?t=32). The speaker calls it "your worst take of all time" [MODELS 0:47](https://youtu.be/iBrAWpjXNxs?t=47) and says anyone who doesn't notice going down a gen or tier "also suck[s] at prompting" [MODELS 1:04](https://youtu.be/iBrAWpjXNxs?t=64). David K (creator of XState) said you don't need Astra, Sol or Fable for most things; the answer: "true but my time is more valuable than Fables" [MODELS 19:38](https://youtu.be/iBrAWpjXNxs?t=1178).
 
-**Thesis.** Frontier models are valuable mainly because they **raise the floor** (they are "less dumb"), not because they raise the ceiling (they are "smarter"). A higher floor matters most for **wide** prompts: long, multi-step, end-to-end tasks with little human input. On narrow, well-specified, Jira-ticket-style prompts, older or lower-tier models clear the bar just as well. That is why people who prompt narrowly don't see a difference.
+**Thesis.** Frontier models are valuable mainly because they **raise the floor** ("less dumb"), not the ceiling ("smarter") [MODELS 4:30](https://youtu.be/iBrAWpjXNxs?t=270). A higher floor matters most for **wide** prompts: long, multi-step, end-to-end tasks with little human input. On narrow, Jira-ticket-style prompts, older or lower-tier models clear the bar just as well [MODELS 9:17](https://youtu.be/iBrAWpjXNxs?t=557), which is why narrow prompters see no difference.
 
 Key quotes:
-- *"I don't like Fable because it's way smarter. I like Fable because it's less dumb. And those are different things. Less dumb and smart are almost opposites."*
-- *"I personally find that raising the floor is way more beneficial than raising the ceiling. I don't care if the model solves novel math problems if it doesn't know what I mean when I say revert."*
-- *"Generally speaking, y'all focus too much on the high points with models and not enough on the lows."*
-- *"Wider prompting requires higher floors."* "Width" here means *"not the depth, not the difficulty of the thing, but the amount of things and the distance from the start to the end."*
-- *"If I make the task wider, not harder, wider, which means longer... The likelihood we hit one of those edges in something like Opus where it does something stupid goes up as time goes up."*
-- *"At every generation bump, the amount of time until the model is 50% likely to have done something stupid goes down exponentially."* He probably means the time *goes up*. The surrounding argument is that newer models run longer before failing, so this looks like a misstatement.
+- *"I like Fable because it's less dumb."* *"Less dumb and smart are almost opposites."* [MODELS 17:27](https://youtu.be/iBrAWpjXNxs?t=1047)
+- *"raising the floor is way more beneficial than raising the ceiling"* [MODELS 5:50](https://youtu.be/iBrAWpjXNxs?t=350); he doesn't care about novel math *"if it doesn't know what I mean when I say revert"* [MODELS 5:57](https://youtu.be/iBrAWpjXNxs?t=357).
+- People *"focus too much on the high points with models and not enough on the lows"* [MODELS 4:45](https://youtu.be/iBrAWpjXNxs?t=285)
+- *"Wider prompting requires higher floors."* Width is *"the amount of things and the distance from the start to the end"*, not depth or difficulty [MODELS 8:14](https://youtu.be/iBrAWpjXNxs?t=494).
+- Making a task *"wider, not harder"* raises the odds of hitting an edge where a model like Opus *"does something stupid"* [MODELS 17:10](https://youtu.be/iBrAWpjXNxs?t=1030).
+- At each generation bump, he says, the time until a model is *"50% likely to have done something stupid"* *"goes down exponentially"* [MODELS 18:06](https://youtu.be/iBrAWpjXNxs?t=1086). He probably means the time *goes up*: the surrounding argument is that newer models run longer before failing, so this looks like a misstatement.
 
 ## 2. Models mentioned
 
 | Model | What he says | Good for | Bad for / caveats |
 |---|---|---|---|
-| **Claude Fable (5.x)** | The high-floor model. *"less dumb."* Fable and Sol arrived around May–June, and his P95 run length nearly doubled that month. | Wide, long-horizon, end-to-end autonomous work where a single dumb step ruins the run. | Expensive. He implies this is why people try to downgrade. |
-| **GPT-6 Astra** | *"Astra can do things no other model in history could... but it can also screw up in ways I haven't seen since I last was using a Gemini model seriously."* *"Astra at its best can do things Fable never could. Astra at its worst makes me question why I'm using AI to code at all."* | Peak capability, e.g. "building a 3D environment in Blender". | **Low, spiky floor.** It got confused by the word "revert" and failed to "center an icon in a div". *"what makes Astra so annoying is the random spikes into dumb are so random and so spiky that you don't really know how to gauge what level to operate at."* He jokingly relabels his Astra quality diagram as Gemini Flash: *"the fact that Astra can perform as poorly as Flash ever is pathetic... I know for a fact they're going to fix it."* |
-| **GPT-5.6 Sol ("Soul")** | Kramer lists it as a fallback "high reasoning model". | The speaker concedes that moving **from Astra back to Sol** is reasonable: *"I see why going back to soul would feel not even not bad, but in some real cases somewhat good. And I understand why people will be moving from Astra to soul."* | He separates this case from the Fable-vs-Opus case. |
-| **Opus (unversioned; "Opus 5" named once)** | Kramer's suggested downgrade from Fable. | Narrow prompts. *"if your prompts are things like here's the ticket. I want you to find the file and make this change and tell me when it's done so that I can test it. Then it is unlikely Opus or Fable or even a Gemini model is going to struggle too too much."* He also uses it himself during the video: *"My Vibe proxy is quite broken. You know what? I got some Opus usage. Let's let Opus do something for once."* The task was analysing his own prompt/response history logs. | **Lower floor on wide tasks.** He says he was fooled by Opus 5's ceiling: *"I focused too much on what the best looked like for a model, things like Opus 5, and I thought it was really good when it wasn't, and it misbehaved far more often than I had known."* |
-| **Gemini (generic) / Gemini 3.8 Flash** | The low-floor example. *"it'll read the same file 26 times before making a change... But sometimes it can name skateboard tricks really well."* A small spike in his diagram is *"why Flash had those couple of good benchmarks that made it look really good when it wasn't."* | Nothing endorsed. *"no one should be using a Gemini thing."* | Very low, consistent floor. |
-| **GPT-5.5 ("GBD55")** | *"generally better with agentic stuff. It stopped so often that I found its runs were actually kind of shorter overall."* Session lengths went **down** with 5.5, then with 5.6 *"suddenly I could let it run way longer."* | — | Stops too often. |
-| **Open-weight / non-Anthropic-or-OpenAI models** | The higher floor is *"the thing that you don't get as much from open weight models and from other labs other than anthropic and open AI generally."* | — | Lower floors. |
+| **Claude Fable (5.x)** | The high-floor model, *"less dumb"* [MODELS 17:27](https://youtu.be/iBrAWpjXNxs?t=1047). Fable and Sol arrived around May–June, and his P95 run length nearly doubled that month [MODELS 22:05](https://youtu.be/iBrAWpjXNxs?t=1325). | Wide, long-horizon, end-to-end autonomous work where one dumb step ruins the run. | Expensive; the Kramer post says "no one can afford it" [MODELS 0:40](https://youtu.be/iBrAWpjXNxs?t=40). |
+| **GPT-6 Astra** | *"Astra can do things no other model in history could"* but screws up like Gemini [MODELS 3:34](https://youtu.be/iBrAWpjXNxs?t=214). *"Astra at its best can do things Fable never could"*; at its worst it makes him *"question why I'm using AI to code at all"* [MODELS 4:19](https://youtu.be/iBrAWpjXNxs?t=259). | Peak capability, e.g. a 3D environment in Blender [MODELS 5:57](https://youtu.be/iBrAWpjXNxs?t=357). | **Low, spiky floor.** Confused by "revert"; failed to "center an icon in a div" [MODELS 5:57](https://youtu.be/iBrAWpjXNxs?t=357). The *"random spikes into dumb"* make it hard to know *"what level to operate at"* [MODELS 8:46](https://youtu.be/iBrAWpjXNxs?t=526). He relabels his Astra diagram as Gemini 3.8 Flash: *"the fact that Astra can perform as poorly as Flash ever is pathetic"*; he expects a fix [MODELS 6:44](https://youtu.be/iBrAWpjXNxs?t=404). |
+| **GPT-5.6 Sol ("Soul")** | Kramer's fallback "high reasoning model" [MODELS 0:40](https://youtu.be/iBrAWpjXNxs?t=40). | Moving **from Astra back to Sol** is reasonable, *"in some real cases somewhat good"* [MODELS 3:49](https://youtu.be/iBrAWpjXNxs?t=229). | He separates this from the Fable-vs-Opus case [MODELS 3:25](https://youtu.be/iBrAWpjXNxs?t=205). |
+| **Opus (unversioned; "Opus 5" named once)** | Kramer's suggested downgrade from Fable. | Narrow prompts: on "here's the ticket... find the file and make this change", Opus, Fable or even Gemini won't struggle much [MODELS 7:26](https://youtu.be/iBrAWpjXNxs?t=446). He uses it during the video to analyse his own prompt/response logs because *"I got some Opus usage"* [MODELS 20:42](https://youtu.be/iBrAWpjXNxs?t=1242). | **Lower floor on wide tasks.** He was fooled by Opus 5's ceiling: it *"misbehaved far more often than I had known"* [MODELS 4:53](https://youtu.be/iBrAWpjXNxs?t=293). |
+| **Gemini (generic) / Gemini 3.8 Flash** | The low-floor example: *"it'll read the same file 26 times before making a change"*, though *"it can name skateboard tricks really well"* [MODELS 5:18](https://youtu.be/iBrAWpjXNxs?t=318). A small spike is why Flash had *"those couple of good benchmarks"* [MODELS 7:00](https://youtu.be/iBrAWpjXNxs?t=420). | Nothing: *"no one should be using a Gemini thing"* [MODELS 7:09](https://youtu.be/iBrAWpjXNxs?t=429). | Very low, consistent floor. |
+| **GPT-5.5 ("GBD55")** | Better with agentic stuff but *"It stopped so often"* that runs got shorter; with 5.6 *"suddenly I could let it run way longer"* [MODELS 21:03](https://youtu.be/iBrAWpjXNxs?t=1263). | — | Stops too often. |
+| **Open-weight / non-Anthropic-or-OpenAI models** | The higher floor is what *"you don't get as much from open weight models and from other labs"* [MODELS 5:41](https://youtu.be/iBrAWpjXNxs?t=341). | — | Lower floors. |
 
 He gives no per-token prices or context-window sizes for any model in this video.
 
 ## 3. Decision rules and heuristics (as literal as possible)
 
-1. **Judge models by the floor, not the ceiling.** *"you got to think about the ceiling and the floor. And we all have a bad habit of thinking too much about the ceiling."*
-2. **Narrow, well-specified task → the cheaper/older model is fine.** *"If your goal is to go from Jira ticket to code, Zeke is right. If I have a well-formatted Jira ticket that lists what files the code is in and what exact behavior exists that shouldn't, I can throw that at Claude and get an answer relatively reliably."* Also: *"if your prompts look like this and the necessary bar for you is here, then yes, absolutely the difference between Fable and Opus isn't very big because both massively clear your bar in this window."*
-3. **Wide, long, end-to-end task → the frontier, high-floor model (Fable).** His example prompt: a screenshot of a user bug plus *"Fix this. Test it. Record a video showing it works now and link me the PR when you're done. Babysit it until all the issues that come up in review are addressed."*
-4. **Astra vs Sol is a different question from Fable vs Opus.** Falling back from Astra to Sol can be sensible because of Astra's spikiness.
-5. **When a new frontier model ships, re-baseline:** *"I immediately try to reset instead of just sending the same prompts I sent before, I always start with a set that I've tried on other things that failed to see if it can succeed."*
-6. **Two metrics to optimise:** (a) *"how long can the model run without your input?"* and (b) *"How likely is it that the thing works by the time a human gets involved?"*
-7. **Fix the codebase, not just the prompt:** *"You should adjust your prompts a little, but you should adjust your codebase a lot. If agents are screwing up in your codebase, then a new dev would, too."* If "you know where the rough areas are", you can "smooth those out with changes to your codebase or just not using the model for those things".
-8. **Don't name files in prompts.** He calls people who often do "Atlassian devs" and says they *"have a much better time with Opus and are confused about why people like... Astra so much."* Instead: *"tell it what the problem is and tell it to find the files and change them itself."*
-9. **Push verification and delivery to the agent:** *"instead of telling it to let you know when it's done so you can build it on your phone, tell it to push the build to your phone... tell it to run it in the simulator first, verify it, and then push it to my phone... Or just tell it to throw a video in the pull request so you know it worked."*
-10. **Cheap models can cost more:** *"If you are using the dumber models because that's what you can afford, you should be very careful which ones you use because sometimes the cheaper model ends up more expensive."*
-11. **Time is worth more than tokens:** *"if I downgrade to a cheaper model I have to put more time in before it fires and more time in when it stops."*
-12. **Stop watching the agent:** *"You guys need to stop paying so much attention to your agents."* He endorses a poll answer: *"I only watch if the first output is horribly wrong."*
-13. **When it goes wrong, ask why:** *"I expected you to do this, but you did this other thing instead. What led you there?"* Models *"will usually indicate what signals they found and what tools they called and what files they read that led them in the wrong direction."*
+1. **Judge models by the floor, not the ceiling.** *"you got to think about the ceiling and the floor"* [MODELS 5:26](https://youtu.be/iBrAWpjXNxs?t=326).
+2. **Narrow, well-specified task → the cheaper/older model is fine.** *"If your goal is to go from Jira ticket to code, Zeke is right"*: with files and exact behaviour listed, Claude answers *"relatively reliably"* [MODELS 9:17](https://youtu.be/iBrAWpjXNxs?t=557). In that window, Fable and Opus *"both massively clear your bar"* [MODELS 16:46](https://youtu.be/iBrAWpjXNxs?t=1006).
+3. **Wide, long, end-to-end task → the frontier, high-floor model (Fable).** His example: a screenshot of a user bug plus *"Fix this. Test it. Record a video showing it works now"*, link the PR, and *"Babysit it until all the issues that come up in review are addressed"* [MODELS 9:38](https://youtu.be/iBrAWpjXNxs?t=578).
+4. **Astra vs Sol is a different question from Fable vs Opus.** Falling back from Astra to Sol can be sensible because of Astra's spikiness [MODELS 3:25](https://youtu.be/iBrAWpjXNxs?t=205).
+5. **When a new frontier model ships, re-baseline:** don't resend old prompts; *"start with a set that I've tried on other things that failed"* [MODELS 8:58](https://youtu.be/iBrAWpjXNxs?t=538).
+6. **Two metrics to optimise:** (a) *"how long can the model run without your input?"* [MODELS 15:51](https://youtu.be/iBrAWpjXNxs?t=951) and (b) *"How likely is it that the thing works by the time a human gets involved?"* [MODELS 15:59](https://youtu.be/iBrAWpjXNxs?t=959)
+7. **Fix the codebase, not just the prompt:** *"You should adjust your prompts a little, but you should adjust your codebase a lot."* If agents screw up there, *"a new dev would, too"* [MODELS 12:54](https://youtu.be/iBrAWpjXNxs?t=774). If "you know where the rough areas are", smooth them with codebase changes or by not using the model there [MODELS 14:44](https://youtu.be/iBrAWpjXNxs?t=884).
+8. **Don't name files in prompts.** People who often do are "Atlassian devs" who *"have a much better time with Opus"* [MODELS 13:59](https://youtu.be/iBrAWpjXNxs?t=839). Instead, *"tell it what the problem is and tell it to find the files"* [MODELS 14:52](https://youtu.be/iBrAWpjXNxs?t=892).
+9. **Push verification and delivery to the agent:** have it push the build to your phone, run it in the simulator and verify first [MODELS 15:04](https://youtu.be/iBrAWpjXNxs?t=904), or *"throw a video in the poll request so you know it worked"* [MODELS 15:18](https://youtu.be/iBrAWpjXNxs?t=918).
+10. **Cheap models can cost more:** if you use dumber models because that's what you can afford, choose carefully, *"because sometimes the cheaper model ends up more expensive"* [MODELS 19:19](https://youtu.be/iBrAWpjXNxs?t=1159).
+11. **Time is worth more than tokens:** a cheaper model means *"more time in before it fires and more time in when it stops"* [MODELS 19:47](https://youtu.be/iBrAWpjXNxs?t=1187).
+12. **Stop watching the agent:** *"You guys need to stop paying so much attention to your agents."* [MODELS 11:41](https://youtu.be/iBrAWpjXNxs?t=701) He endorses the poll answer *"I only watch if the first output is horribly wrong"* [MODELS 11:49](https://youtu.be/iBrAWpjXNxs?t=709).
+13. **When it goes wrong, ask why:** say what you expected and what it did instead, then ask *"What led you there?"* [MODELS 11:58](https://youtu.be/iBrAWpjXNxs?t=718) Models *"will usually indicate what signals they found"*, tools called and files read [MODELS 12:14](https://youtu.be/iBrAWpjXNxs?t=734).
 
 ### The compounding-failure math (his core quantitative argument)
 
-His example: a model fails 5% of the time in any 10-minute window, so it has a 95% chance of success per window.
-- **30 min:** 0.95^3, so roughly 15% fail.
-- **1 hr:** "73%" (0.95^6 ≈ 0.735 success).
-- **2 hr:** "now you're at a 50% fail rate" (0.95^12 ≈ 0.54 success, so roughly 46% fail).
-- **4 hr:** "now you're at a 30% success" (0.95^24 ≈ 0.29).
+His example [MODELS 22:41](https://youtu.be/iBrAWpjXNxs?t=1361): a model fails 5% of the time in any 10-minute window, so it has a 95% chance of success per window.
+- **30 min:** 0.95^3, so roughly 15% fail [MODELS 22:48](https://youtu.be/iBrAWpjXNxs?t=1368).
+- **1 hr:** "73%" (0.95^6 ≈ 0.735 success) [MODELS 23:04](https://youtu.be/iBrAWpjXNxs?t=1384).
+- **2 hr:** "now you're at a 50% fail rate" (0.95^12 ≈ 0.54 success, so roughly 46% fail) [MODELS 23:11](https://youtu.be/iBrAWpjXNxs?t=1391).
+- **4 hr:** "now you're at a 30% success" (0.95^24 ≈ 0.29) [MODELS 23:11](https://youtu.be/iBrAWpjXNxs?t=1391).
 
-Improve the floor by 2 points to a 3% fail rate per 10 minutes, and at 4 hours you get *"only a 50% fail rate"* (0.97^24 ≈ 0.48 success) instead of about 70%. *"So that 2% change ends up being 20% at the time scale of 4 hours."* Conclusion: *"When you make these small cuts to fail rates in given time windows, you exponentially increase the distance that it can run for."* He clarifies that the floor itself improved maybe 10–15%; the *impact* is what's exponential.
+Improve the floor by 2 points to a 3% fail rate per 10 minutes, and at 4 hours you get *"only a 50% fail rate"* (0.97^24 ≈ 0.48 success) instead of about 70% [MODELS 23:28](https://youtu.be/iBrAWpjXNxs?t=1408). *"So that 2% change ends up being 20% at the time scale of 4 hours"* [MODELS 23:36](https://youtu.be/iBrAWpjXNxs?t=1416). Small cuts to the fail rate per time window exponentially increase how far a run can go [MODELS 23:59](https://youtu.be/iBrAWpjXNxs?t=1439). He clarifies that the floor itself improved maybe 10–15%; the *impact* is what's exponential [MODELS 22:29](https://youtu.be/iBrAWpjXNxs?t=1349).
 
 ### Empirical data from his own logs (he had Opus analyse it)
-- **Median prompt run time:** 53 s → 2 min 20 s ("more than doubled").
-- **P95:** "a bit under 7 minutes" → "over 16 minutes and 20 seconds" (April to now).
-- **Monthly P95:** March 9 min → 11 → 12 → **22 min in May–June** ("when we started to get Fable and Soul"), *"Nearly doubled month over month just from the new models."*
-- Anecdotes: *"my agent runs averaged probably 2x longer, but the top 1% longest ones are at least 10 times longer. I've had things run for 2 days straight with no issues and I could barely get a thing to run for an hour before."* *"I have had runs go for six hours with no intervention that merged 10 minutes after I filed the PR."* A chat member: "mine went from 5 to 15 minutes to 1 to four hours."
-- *"I didn't trust models to run for more than 15 minutes just a few months ago."*
+- **Median prompt run time** (logs only go back to March [MODELS 21:34](https://youtu.be/iBrAWpjXNxs?t=1294)): 53 s → 2 min 20 s ("more than doubled") [MODELS 21:43](https://youtu.be/iBrAWpjXNxs?t=1303).
+- **P95:** "a bit under 7 minutes" → "over 16 minutes and 20 seconds" (April to now) [MODELS 21:51](https://youtu.be/iBrAWpjXNxs?t=1311).
+- **Monthly P95:** March 9 min → 11 → 12 → **22 min in May–June** ("when we started to get Fable and Soul"), *"Nearly doubled month overmonth just from the new models"* [MODELS 22:05](https://youtu.be/iBrAWpjXNxs?t=1325).
+- His estimates: runs average about 2x longer, the top 1% at least 10x [MODELS 21:17](https://youtu.be/iBrAWpjXNxs?t=1277); runs of 2 days straight, where an hour was hard before [MODELS 21:26](https://youtu.be/iBrAWpjXNxs?t=1286); six-hour unattended runs that merged 10 minutes after the PR [MODELS 16:30](https://youtu.be/iBrAWpjXNxs?t=990). A chat member: "5 to 15 minutes to 1 to four hours" [MODELS 22:29](https://youtu.be/iBrAWpjXNxs?t=1349).
+- A few months earlier he didn't trust models to run *"more than 15 minutes"* [MODELS 20:57](https://youtu.be/iBrAWpjXNxs?t=1257).
 
 ## 4. Head-to-head comparisons
 
 | Task | Winner | Why |
 |---|---|---|
-| Narrow Jira-ticket edit (files named, behaviour specified) | **Tie** (Opus ≈ Fable, even Gemini OK) | Every model clears the bar in a short window. |
-| Wide end-to-end task (screenshot → fix → test → video → PR → babysit review) | **Fable** (implied, along with frontier models generally) | A higher floor means fewer "dumb" events over a long run, and the odds compound. |
-| Fable vs Astra overall quality distribution | **Fable for consistency; Astra for peaks** | Astra's ceiling is above Fable's, but its floor dips as low as Gemini Flash. |
-| Astra vs Sol | **Sol is acceptable / sometimes preferable** | Astra's random "spikes into dumb". |
-| GPT-5.5 vs 5.6 for long runs | **5.6** | 5.5 "stopped so often" that runs got shorter. |
+| Narrow Jira-ticket edit (files named, behaviour specified) | **Tie** (Opus ≈ Fable, even Gemini OK) | Every model clears the bar in a short window [MODELS 7:26](https://youtu.be/iBrAWpjXNxs?t=446). |
+| Wide end-to-end task (screenshot → fix → test → video → PR → babysit review) | **Fable** (implied, along with frontier models generally) | A higher floor means fewer "dumb" events over a long run, and the odds compound [MODELS 17:18](https://youtu.be/iBrAWpjXNxs?t=1038). |
+| Fable vs Astra overall quality distribution | **Fable for consistency; Astra for peaks** | Astra's ceiling is above Fable's, but its floor dips as low as Gemini Flash [MODELS 4:19](https://youtu.be/iBrAWpjXNxs?t=259), [MODELS 6:44](https://youtu.be/iBrAWpjXNxs?t=404). |
+| Astra vs Sol | **Sol is acceptable / sometimes preferable** | Going back to Sol can be "in some real cases somewhat good" [MODELS 3:49](https://youtu.be/iBrAWpjXNxs?t=229), given Astra's random "spikes into dumb" [MODELS 8:46](https://youtu.be/iBrAWpjXNxs?t=526). |
+| GPT-5.5 vs 5.6 for long runs | **5.6** | 5.5 "stopped so often" that runs got shorter [MODELS 21:03](https://youtu.be/iBrAWpjXNxs?t=1263). |
 
 ## 5. Subagents, orchestration, delegation, verification, review
 
-- **Sponsor segment (Greptile "T-Rex"), useful as a pattern:** a *"reviewer orchestrator can spin up and run sandboxes with sub agents for whatever theories it has about what might be wrong. Some reviews might need no sandboxes, some reviews might need 10. The orchestrator will figure out what is needed to verify your changes."* It returns images and videos as proof. Principle: *"agents know a lot more about code when they can actually run it than they can possibly guess by just staring at it."* And: *"Code breaks in ways that are not clearly visible just from reading code. This is a mistake that a lot of the AI code review bots make."*
-- **Challenge to viewers:** when reviewing a big PR, *"ask your agent on your machine to pull it down, play with it, test it, and make sure everything works."*
-- **Verification is part of the prompt.** Have the agent self-verify (test it, run it in the simulator, record a video, attach it to the PR) before a human is pulled in. Example: Maria's PR fixing provider-history issues with rewind. *"Maria wrote none of this PR"* and it merged quickly because *"it visualized what it changed because the model did all that."*
-- **"Babysit" the PR until review issues are addressed.** He delegates the review loop to the agent.
-- **Overnight autonomous runs as a diagnostic (citing "Jamon"):** long 5–10 hour runs hit codebase "speed bumps" faster. Fix those, then work in-loop with 1–2 hour threads. *"If you have a speed bump in your codebase that agents hit on average once every two hours, then they'll hit on average two to three times every 5 hours."*
-- **Specs and Ralph loops:** "AD guy" could run 48 hours in February, but only after *"several hours building up specs."* *"as crazy cool as Ralph loops were, the models weren't good enough at compaction or keeping track of what they've done in the past or leaving reminders of what they've tried."* *"No matter how much work you put in, the result of specking out a run and letting it go for 8 hours isn't T3 code. The result of that is cursor 2 and cursor 3 where everything broke."* Now that 4–8 hour runs are "way more likely to come out good", Cursor is stabilising.
-- **Planning and vetting are where downgraders lose.** Leaders who *"struggled to give up the code in the middle... won't give up the things on the other side yet"* (the prep before and the vetting after). *"They are testing the models against the thing they already stopped doing."*
-- **Trace review leads to skill refinement:** *"[Maria] spent 3 to four days going over her traces and refining skills and whatnot after seeing what the model does and doesn't do right... now she can just fire a single prompt and get a PR landed instantly."*
+- **Review by running the code (from a Greptile sponsor read):** a review orchestrator runs sandboxed subagents per hypothesis, from none to 10 as needed, and returns images or videos as proof [MODELS 2:32](https://youtu.be/iBrAWpjXNxs?t=152), [MODELS 2:40](https://youtu.be/iBrAWpjXNxs?t=160). *"Code breaks in ways that are not clearly visible just from reading code"* [MODELS 1:53](https://youtu.be/iBrAWpjXNxs?t=113).
+- **Challenge to viewers:** on a big PR, have your local agent *"pull it down, play with it, test it"* [MODELS 1:31](https://youtu.be/iBrAWpjXNxs?t=91). **Verification is part of the prompt.** The agent self-verifies (test, simulator, video in the PR) before a human is pulled in (rules 3 and 9). Example: Maria's rewind-history PR, *"Maria wrote none of this PR"*, merged quickly because the model *"visualized what it changed"* [MODELS 15:26](https://youtu.be/iBrAWpjXNxs?t=926).
+- **"Babysit" the PR until review issues are addressed** [MODELS 9:47](https://youtu.be/iBrAWpjXNxs?t=587): he delegates the review loop to the agent.
+- **Overnight autonomous runs as a diagnostic (citing "Jamon"):** 5–10 hour runs hit codebase "speed bump[s]" faster; fix those, then work in-loop with 1–2 hour threads [MODELS 12:22](https://youtu.be/iBrAWpjXNxs?t=742). A bump hit *"once every two hours"* is hit *"two to three times every 5 hours"* [MODELS 12:38](https://youtu.be/iBrAWpjXNxs?t=758).
+- **Specs don't replace a higher floor:** 48-hour runs in February needed hours of spec work and still had *"very, very high failure rates"* [MODELS 24:08](https://youtu.be/iBrAWpjXNxs?t=1448), [MODELS 24:30](https://youtu.be/iBrAWpjXNxs?t=1470); 4–8 hour runs now usually come out good [MODELS 25:08](https://youtu.be/iBrAWpjXNxs?t=1508).
+- **Planning and vetting are where downgraders lose.** Leaders gave up the code in the middle but *"won't give up the things on the other side yet"* (prep before, vetting after) [MODELS 26:08](https://youtu.be/iBrAWpjXNxs?t=1568). *"They are testing the models against the thing they already stopped doing."* [MODELS 26:16](https://youtu.be/iBrAWpjXNxs?t=1576)
+- **Trace review leads to skill refinement:** Maria spent *"3 to four days going over her traces and refining skills"*; now a single prompt lands a PR [MODELS 18:23](https://youtu.be/iBrAWpjXNxs?t=1103).
 
 ## 6. Claude Code / Codex specifics
 
-- **No Claude Code or Codex settings, hooks, MCP or CLAUDE.md details** appear in this video beyond "skills" (Maria refining skills from traces) and a "Vibe proxy" he uses for model access, which was "quite broken" at the time.
-- He runs agents from **T3 Code on his phone** (screenshot → agent).
-- He used Opus for a log-analysis task because he "got some Opus usage". This implies he keeps Opus as leftover quota, not as a primary model.
+- **No Claude Code or Codex settings, hooks, MCP or CLAUDE.md details** appear in this video beyond "skills" (Maria refining skills from traces [MODELS 18:23](https://youtu.be/iBrAWpjXNxs?t=1103)) and a "Vibe proxy" he uses for model access, which was "quite broken" at the time [MODELS 20:42](https://youtu.be/iBrAWpjXNxs?t=1242).
+- He runs agents from **T3 Code on his phone** (screenshot → agent) [MODELS 9:38](https://youtu.be/iBrAWpjXNxs?t=578). He used Opus for log analysis because he "got some Opus usage" [MODELS 20:42](https://youtu.be/iBrAWpjXNxs?t=1242), implying Opus is leftover quota, not a primary model.
 
 ## 7. Cost management
 
-- *"Most full-time devs can afford a $200 sub to Claude and a $200 sub to Codex... that gets you 8 grand of Claude tokens and 12 grand of tokens from OpenAI. You got a lot of wiggle room for not a lot of money."* He acknowledges this is a lot for students, people outside Western countries, and so on.
-- **Tokens vs salary:** *"despite the tokens being expensive, so are my engineers... If Julius can be three times more productive by spending his salary in tokens, that's a no-brainer. Hell, he could do 2x salary in tokens."*
-- **Cheap model trap:** *"sometimes the cheaper model ends up more expensive"*, because of extra human time before and after the run.
-- He gives no rate-limit specifics in this video.
+- Most full-time devs can afford a $200 Claude sub plus a $200 Codex sub [MODELS 18:47](https://youtu.be/iBrAWpjXNxs?t=1127), which *"gets you 8 grand of Claude tokens and 12 grand of tokens from OpenAI"* [MODELS 18:55](https://youtu.be/iBrAWpjXNxs?t=1135). He acknowledges this is a lot for students, people outside Western countries, and so on [MODELS 19:11](https://youtu.be/iBrAWpjXNxs?t=1151).
+- **Tokens vs salary:** if Julius is three times more productive by spending his salary in tokens, *"that's a no-brainer"*; even *"2x salary in tokens"* [MODELS 10:38](https://youtu.be/iBrAWpjXNxs?t=638).
+- **Cheap model trap:** rule 10. He gives no rate-limit specifics in this video.
 
 ## 8. Draft routing table (Video 1 only)
 
 | Task type | Recommended model | Fallback | Why (speaker) |
 |---|---|---|---|
-| Narrow, fully specified edit (files named, exact behaviour given; "Jira ticket → code") | Opus (cheaper tier) | Fable | "it is unlikely Opus or Fable or even a Gemini model is going to struggle"; "both massively clear your bar in this window." |
-| Wide end-to-end autonomous task (vague report/screenshot → find files → fix → test → video → PR → babysit review) | Fable | Astra, only if the run can tolerate random failures | "Wider prompting requires higher floors"; "I like Fable because it's less dumb." |
-| Long multi-hour unattended runs | Fable (highest-floor frontier model) | — (downgrading compounds failure) | 5% vs 3% per-10-min failure changes 4-hour success from about 30% to about 50%. |
-| Peak-capability / novel work (e.g. 3D in Blender) | Astra | Fable | "Astra at its best can do things Fable never could." |
-| Work where Astra is being erratic | Sol (GPT-5.6) | Fable | "I understand why people will be moving from Astra to soul"; going back can be "in some real cases somewhat good." |
-| Analysing your own agent logs / prompt history (ad hoc data analysis) | Opus (spare quota) | — | "I got some Opus usage. Let's let Opus do something for once." This is an observed choice, not a stated rule. |
-| PR review / verification | An orchestrator that spawns sandboxed subagents to actually run the code (model unspecified) | — | "agents know a lot more about code when they can actually run it." |
-| Anything | Not Gemini | — | "no one should be using a Gemini thing." |
-| New-model evaluation | Re-run a personal set of previously-failed prompts | — | "I always start with a set that I've tried on other things that failed." |
+| Narrow, fully specified edit (files named, exact behaviour given; "Jira ticket → code") | Opus (cheaper tier) | Fable | "unlikely Opus or Fable or even a Gemini model is going to struggle" [MODELS 7:33](https://youtu.be/iBrAWpjXNxs?t=453); "both massively clear your bar in this window" [MODELS 16:54](https://youtu.be/iBrAWpjXNxs?t=1014). |
+| Wide end-to-end autonomous task (vague report/screenshot → find files → fix → test → video → PR → babysit review) | Fable | Astra, only if the run can tolerate random failures | "Wider prompting requires higher floors" [MODELS 8:21](https://youtu.be/iBrAWpjXNxs?t=501); "I like Fable because it's less dumb" [MODELS 17:27](https://youtu.be/iBrAWpjXNxs?t=1047). |
+| Long multi-hour unattended runs | Fable (highest-floor frontier model) | — (downgrading compounds failure) | 5% vs 3% per-10-min failure changes 4-hour success from about 30% to about 50% [MODELS 23:18](https://youtu.be/iBrAWpjXNxs?t=1398). |
+| Peak-capability / novel work (e.g. 3D in Blender) | Astra | Fable | "Astra at its best can do things Fable never could" [MODELS 4:19](https://youtu.be/iBrAWpjXNxs?t=259). |
+| Work where Astra is being erratic | Sol (GPT-5.6) | Fable | "I understand why people will be moving from Astra to soul"; going back can be "in some real cases somewhat good" [MODELS 3:49](https://youtu.be/iBrAWpjXNxs?t=229). |
+| Analysing your own agent logs / prompt history (ad hoc data analysis) | Opus (spare quota) | — | "I got some Opus usage" [MODELS 20:42](https://youtu.be/iBrAWpjXNxs?t=1242). An observed choice, not a stated rule. |
+| PR review / verification | An orchestrator that spawns sandboxed subagents to actually run the code (model unspecified) | — | "agents know a lot more about code when they can actually run it" [MODELS 2:01](https://youtu.be/iBrAWpjXNxs?t=121). |
+| Anything | Not Gemini | — | "no one should be using a Gemini thing" [MODELS 7:09](https://youtu.be/iBrAWpjXNxs?t=429). |
+| New-model evaluation | Re-run a personal set of previously-failed prompts | — | Rule 5 [MODELS 8:58](https://youtu.be/iBrAWpjXNxs?t=538). |
 
 ---
 
@@ -132,291 +131,246 @@ Improve the floor by 2 points to a 3% fail rate per 10 minutes, and at 4 hours y
 
 ## 1. Subject and thesis
 
-This is a category-by-category comparison of **Claude Fable 5.1** and **GPT-6 Astra**, "the two actual models that matter". It opens by joking about Gemini 3.8 Flash and Muse Spark 1.3. The speaker uses both daily. He was "blown away" by Fable 5.1 and calls Astra "the future": *"I'm doing thousands of dollars of inference a day with it."*
+A category-by-category comparison of **Claude Fable 5.1** and **GPT-6 Astra**, "the two actual models that matter" [FVA 0:13](https://youtu.be/P7bxbDSnZRM?t=13). He uses both daily and is *"doing thousands of dollars of inference a day"* with Astra [FVA 0:45](https://youtu.be/P7bxbDSnZRM?t=45).
 
-**Bottom line:**
-- *"Fable is what I reach for when I'm trying to land code and Astra is what I reach for when I'm trying to use my computer."*
-- *"I will be defaulting to Fable for code and I'll be defaulting to Astra for every other thing that I do."*
-- *"Fable writes code that is mergeable 20ish% more often, and its stupid spikes are much less stupid. Its smart spikes are not quite as smart, but its stupid spikes are way less stupid. And for that reason alone, I think Fable 5.1 is a better choice for day-to-day code stuff when cost is not a factor."*
-- *"They don't replace each other, they compound each other."*
-- **If forced to pick one, he picks Astra:** *"If I had to pick one, I would pick Astra and have it write DMs to me to Julius so that he could send off the prompts using Fable for me."* (a joke, but telling). His reasons are Astra's novel uses, computer use (he is currently "down a hand") and value. *"pretty much everyone who can have the codex sub probably should because it's such an insane deal."*
-- **Temperament rule:** *"If you have low tolerance for... if you leave your computer when the model does something stupid because it pissed you off so much... you should pay the extra money for Fable. You just should. It's a way more consistent, reliable model."*
+**Bottom line:** rules 1–3 below (Fable to land code, Astra for everything else).
+- Why: Fable *"writes code that is mergeable 20ish% more often"* [FVA 1:15:05](https://youtu.be/P7bxbDSnZRM?t=4505); *"its stupid spikes are way less stupid"* though its smart spikes are not quite as smart [FVA 1:15:11](https://youtu.be/P7bxbDSnZRM?t=4511). So Fable 5.1 is *"a better choice for day-to-day code stuff when cost is not a factor"* [FVA 1:15:17](https://youtu.be/P7bxbDSnZRM?t=4517).
+- *"they don't replace each other, they compound each other"* [FVA 1:16:29](https://youtu.be/P7bxbDSnZRM?t=4589).
+- **If forced to pick one, he picks Astra**, and would have it DM Julius to send prompts to Fable for him (a joke, but telling) [FVA 1:12:49](https://youtu.be/P7bxbDSnZRM?t=4369). Reasons: Astra's novel uses, computer use (he is currently "down a hand") [FVA 1:13:09](https://youtu.be/P7bxbDSnZRM?t=4389), and value: *"pretty much everyone who can have the codec sub probably should"* [FVA 1:16:35](https://youtu.be/P7bxbDSnZRM?t=4595).
+- **Temperament rule:** if a model's stupid moments make you walk away, *"you should pay the extra money for Fable"*, *"a way more consistent, reliable model"* [FVA 1:12:25](https://youtu.be/P7bxbDSnZRM?t=4345).
 
-**Consistency vs spikiness (recurring theme):** *"Fable's performance is generally more steady, where Astra is much spikier."* Fable's quality *"goes up and down a bit, but never... more than like two points in either direction. When I send a prompt to Astra, it's equal chances it drops my jaw because I'm so blown away... or it drops my jaw because I cannot fathom that I just spent a thousand dollars for it to run in a loop and not ship anything and then break my website."* *"Astra stresses me out more, a lot more."*
+**Consistency vs spikiness (recurring theme):** *"Fable's performance is generally more steady, where Astra is much spikier"* [FVA 24:54](https://youtu.be/P7bxbDSnZRM?t=1494). Fable's quality varies by *"never... more than like two points in either direction"* [FVA 1:11:42](https://youtu.be/P7bxbDSnZRM?t=4302); Astra is equally likely to amaze or to burn *"a thousand dollars for it to run in a loop"* and break his site [FVA 1:11:54](https://youtu.be/P7bxbDSnZRM?t=4314). *"Astra stresses me out more, a lot more."* [FVA 1:12:12](https://youtu.be/P7bxbDSnZRM?t=4332)
 
 ## 2. Models mentioned
 
 ### Claude Fable 5.1
-- **Strengths:** code mergeability (the clear winner), front-end/design (better, though still only about 5/10), interaction and game feel, understanding intent, using skills (a "huge lead"), staying in scope, full-stack intuition, consistency.
-  - *"Fable 5.1 writes way more mergeable code. It just does."*
-  - *"Fable has better intuition... It understands the consequences of edges by default slightly better."*
-  - *"Fable can apply things more gently."*
-  - *"If the skill has a reasonable description and it's useful for the work going on, Fable correctly pulls it in and applies it."*
-  - *"5.1 is like right on the edge of 10 out of 10 for mergeability."*
+- **Strengths:** code mergeability, the clear winner: *"Fable 5.1 writes way more mergeable code. It just does."* [FVA 33:33](https://youtu.be/P7bxbDSnZRM?t=2013), *"right on the edge of 10 out of 10 for mergeability"* [FVA 36:14](https://youtu.be/P7bxbDSnZRM?t=2174). Front-end/design (better, though still only about 5/10) [FVA 22:14](https://youtu.be/P7bxbDSnZRM?t=1334). Interaction and game feel: *"[Fable] can apply things more gently"* [FVA 9:46](https://youtu.be/P7bxbDSnZRM?t=586). Understanding intent. Using skills, a "huge lead": with a reasonable description, *"Fable correctly pulls it in and applies it"* [FVA 56:22](https://youtu.be/P7bxbDSnZRM?t=3382). Staying in scope. Full-stack intuition: it *"understands the consequences of edges by default slightly better"* [FVA 23:09](https://youtu.be/P7bxbDSnZRM?t=1389). Consistency.
 - **Weaknesses:**
-  - Computer use is decent "when given the right tools, but it's just not even comparable". *"the weird misses that I'm used to OpenAI models having for code, it feels like Fable has those when it's doing computer use."*
-  - Science benchmarks trail Astra.
-  - 3D rendering about 5/10 vs Astra's 9/10.
-  - Writing skills: Fable "falls into [the slop loop] even more" than Astra.
-  - Can still scope-creep *"if it gets the wrong review comments at the wrong time."*
-  - Relies on reading code, so it can miss deep bugs that need exhaustive testing.
-  - *"Fable isn't as good at strictly following instructions, but that also means that when it doesn't follow them, it doesn't feel as egregious."*
-  - Least token-efficient model on the Artificial Analysis chart.
-  - Its "security refusals" upset people, though *"Astra refuses more often."*
+  - Computer use is decent *"when given the right tools"* but *"not even comparable"*; it has the *"weird misses"* OpenAI models have for code [FVA 11:07](https://youtu.be/P7bxbDSnZRM?t=667).
+  - Science trails Astra [FVA 4:48](https://youtu.be/P7bxbDSnZRM?t=288); 3D rendering about 5/10 vs Astra's 9/10 [FVA 22:14](https://youtu.be/P7bxbDSnZRM?t=1334).
+  - Writing skills: Fable falls into the slop loop *"even more"* than Astra [FVA 55:06](https://youtu.be/P7bxbDSnZRM?t=3306).
+  - Can still scope-creep *"if it gets the wrong review comments at the wrong time"* [FVA 40:22](https://youtu.be/P7bxbDSnZRM?t=2422).
+  - Relies on reading code, so it can miss deep bugs that need exhaustive testing [FVA 24:37](https://youtu.be/P7bxbDSnZRM?t=1477).
+  - *"Fable isn't as good at strictly following instructions"*, but its misses feel less egregious [FVA 57:09](https://youtu.be/P7bxbDSnZRM?t=3429).
+  - Least token-efficient model on the Artificial Analysis chart [FVA 1:02:04](https://youtu.be/P7bxbDSnZRM?t=3724). Its "security refusals" upset people, though *"Astra refuses more often"* [FVA 1:15:35](https://youtu.be/P7bxbDSnZRM?t=4535).
 - **Cost:**
-  - Cache read dropped from $1 to **$0.25 per million tokens**.
-  - Artificial Analysis cost per task: **$7.60** (vs Opus 5 ≈ $6, Astra $3.26).
-  - Token efficiency: ~80K tokens for what Astra did in 27K.
-  - On Claude plans, Fable is capped at **half of the weekly limit**.
-  - **Terminal Bench Science 0.1:** Fable 5.1 on "XH high" scored 50%, cheaper than Fable 5 on high ($34, 25%).
-- **Speed:** quick to apply changes. *"it's so quick to work and actually apply changes because it builds its understanding more effectively."* In the revert example it got it right in about 5 minutes.
-- **Context window:** not stated.
+  - Cache read dropped from $1 to **$0.25 per million tokens** [FVA 57:50](https://youtu.be/P7bxbDSnZRM?t=3470).
+  - Artificial Analysis cost per task: **$7.60** (vs Opus 5 ≈ $6, Astra $3.26) [FVA 1:00:47](https://youtu.be/P7bxbDSnZRM?t=3647).
+  - Token efficiency: ~80K tokens for what Astra did in 27K [FVA 1:02:11](https://youtu.be/P7bxbDSnZRM?t=3731).
+  - On Claude plans, Fable is capped at **half of the weekly limit** [FVA 1:04:20](https://youtu.be/P7bxbDSnZRM?t=3860).
+  - **Terminal Bench Science 0.1:** Fable 5.1 on "XH high" scored 50%, cheaper than Fable 5 on high ($34, 25%) [FVA 4:28](https://youtu.be/P7bxbDSnZRM?t=268).
+- **Speed:** *"so quick to work and actually apply changes"* [FVA 23:59](https://youtu.be/P7bxbDSnZRM?t=1439); about 5 minutes in the revert example [FVA 47:55](https://youtu.be/P7bxbDSnZRM?t=2875). **Context window:** not stated.
 
 ### GPT-6 Astra
 - **Strengths:**
-  - **3D rendering**, by a huge margin ("9/10" vs Fable "5"; "multiple generational difference"; Blender scenes).
-  - **Computer use** (*"so far ahead, it's kind of hilarious"*; *"Astra can often do tasks faster than I would have"*; he bought a Mac Mini to run it 24/7).
-  - **Science** (Terminal Bench Science 0.1: Astra **low** = 54.3% at **$11**, beating max Fable 5.1 "at under a third the price").
-  - **Giant rewrites / relentlessness.**
-  - **Orchestration "swarms".**
-  - **Steering**, i.e. mid-task context injection.
-  - **Asking questions while it works** without blocking.
-  - **Self-prompting and writing skills** (slight lead).
-  - **Copy/prose readability** (slight lead).
-  - **Token efficiency and cost.**
-  - Exhaustive debugging. *"Astra is the smartest model that acts like it's dumb. Astra quadruple confirms everything it's trying to do, especially in X high mode. Which means if the bug is outside of what Fable can grasp just from reading code... Astra will find it. It'll just take four times longer and burn way more tokens."*
-  - Video/AV prep via computer use (Ben Davis's Final Cut setup demo).
+  - **3D rendering**, by a huge margin: "9/10" vs Fable "5" [FVA 22:14](https://youtu.be/P7bxbDSnZRM?t=1334); *"multiple generational difference"* [FVA 7:33](https://youtu.be/P7bxbDSnZRM?t=453); Blender scenes [FVA 7:54](https://youtu.be/P7bxbDSnZRM?t=474).
+  - **Computer use**: *"so far ahead, it's kind of hilarious"*; *"Astra can often do tasks faster than I would have"* [FVA 11:01](https://youtu.be/P7bxbDSnZRM?t=661); he bought a Mac Mini to run it 24/7 [FVA 10:29](https://youtu.be/P7bxbDSnZRM?t=629).
+  - **Science**: Terminal Bench Science 0.1, Astra **low** = 54.3% at **$11**, beating max Fable 5.1 *"at under a third the price"* [FVA 4:48](https://youtu.be/P7bxbDSnZRM?t=288).
+  - **Giant rewrites / relentlessness** [FVA 25:10](https://youtu.be/P7bxbDSnZRM?t=1510); **orchestration "swarms"** [FVA 50:20](https://youtu.be/P7bxbDSnZRM?t=3020); **steering**, i.e. mid-task context injection [FVA 52:22](https://youtu.be/P7bxbDSnZRM?t=3142); **asking questions while it works** without blocking [FVA 53:13](https://youtu.be/P7bxbDSnZRM?t=3193); **self-prompting and writing skills** (slight lead) [FVA 56:42](https://youtu.be/P7bxbDSnZRM?t=3402); **copy/prose readability** (slight lead) [FVA 12:47](https://youtu.be/P7bxbDSnZRM?t=767); **token efficiency and cost** [FVA 1:01:58](https://youtu.be/P7bxbDSnZRM?t=3718).
+  - Exhaustive debugging: *"Astra is the smartest model that acts like it's dumb"*; it *"quadruple confirms everything"*, especially on X high [FVA 24:30](https://youtu.be/P7bxbDSnZRM?t=1470). Bugs beyond what Fable gets from reading code, *"Astra will find it. It'll just take four times longer"* and burn more tokens [FVA 24:37](https://youtu.be/P7bxbDSnZRM?t=1477).
+  - Video/AV prep via computer use (Ben Davis's Final Cut setup demo) [FVA 14:48](https://youtu.be/P7bxbDSnZRM?t=888).
 - **Weaknesses:**
-  - **UI and design.** *"I... straight up do not trust Astra with UI anything at this point."* It stuffs all-caps subtitles everywhere: 21 unnecessary ones on a 2D page, and "little" 15 times on one landing page.
-  - **Destroys existing UI during rewrites.** It ignored "Reuse as much UI code as possible" on the ping.gg rewrite, *"on ultra with one mil token context windows"*, so this was not compaction.
-  - **Scope creep by default.** *"you end up with a thousand line of code PR that should have been 50."*
-  - **Intent and basic agent work.** The "revert" fiasco.
-  - **Skill use.** It ignores loaded skills on later turns. He partly blames a Codex system-prompt rule.
-  - **Forgetful about boundaries.** Its failures are "more egregious"; he ties this to "the hugging face hack".
-  - **Spiky floor.** *"Astra has had the most bad model experiences I have had of any model this year."*
-  - Game "feel" and interaction are worse: *"Astra makes games that look better on Twitter. Fable makes games that actually feel nice to play."* Its 3D is like a *"sledgehammer."*
-  - Mergeability averages 6 follow-ups per PR vs Fable's 2.
-  - Refuses more often than Fable.
-  - Stalled at 82.6% on the TS→Rust port.
+  - **UI and design.** *"straight up do not trust Astra with UI anything"* [FVA 14:02](https://youtu.be/P7bxbDSnZRM?t=842). It stuffs all-caps subtitles everywhere: 21 unnecessary ones on a 2D page [FVA 13:18](https://youtu.be/P7bxbDSnZRM?t=798), and "little" 15 times on one landing page [FVA 19:50](https://youtu.be/P7bxbDSnZRM?t=1190).
+  - **Destroys existing UI during rewrites.** It ignored "Reuse as much UI code as possible" on the ping.gg rewrite [FVA 30:35](https://youtu.be/P7bxbDSnZRM?t=1835), while *"on ultra with one mil token context windows"*, so this was not compaction [FVA 31:32](https://youtu.be/P7bxbDSnZRM?t=1892).
+  - **Scope creep by default:** *"a thousand line of code PR that should have been 50"* [FVA 40:46](https://youtu.be/P7bxbDSnZRM?t=2446).
+  - **Intent and basic agent work** (the "revert" fiasco, below). **Skill use:** it ignores loaded skills on later turns; he partly blames a Codex system-prompt rule [FVA 55:43](https://youtu.be/P7bxbDSnZRM?t=3343). **Forgetful about boundaries:** it generally acts better than Fable here, but its failures are "more egregious"; he ties this to "the hugging face hack" [FVA 57:20](https://youtu.be/P7bxbDSnZRM?t=3440).
+  - **Spiky floor.** It has given him *"the most bad model experiences I have had of any model this year"* [FVA 49:33](https://youtu.be/P7bxbDSnZRM?t=2973).
+  - Game "feel" and interaction are worse: Astra's games *"look better on Twitter"*, Fable's *"actually feel nice to play"* [FVA 41:29](https://youtu.be/P7bxbDSnZRM?t=2489). Its 3D is like a *"sledgehammer"* [FVA 9:40](https://youtu.be/P7bxbDSnZRM?t=580).
+  - Mergeability averages 6 follow-ups per PR vs Fable's 2 [FVA 33:40](https://youtu.be/P7bxbDSnZRM?t=2020). Refuses more often than Fable [FVA 1:15:35](https://youtu.be/P7bxbDSnZRM?t=4535). Stalled at 82.6% on the TS→Rust port [FVA 26:13](https://youtu.be/P7bxbDSnZRM?t=1573).
 - **Cost:**
-  - "Token costs are the same" as Fable list price, except for cache pricing. He also says *"theoretically speaking, the input token cost is four times higher on Astra"*. This contradicts "the same" and may refer to cache-read cost ($1 vs $0.25), so it is ambiguous.
-  - OpenAI pricing as stated: input $10/M, cache read $1/M, **cache write $12.50/M** ("25% more expensive than a normal read"; OpenAI "didn't used to charge for cache writes").
-  - Artificial Analysis cost per task: **$3.26** (vs Sol $1.99).
-  - Most token-efficient model benchmarked: **27K tokens vs Fable 5.1's ~80K**.
-  - **Flex** tier halves the price at the cost of no throughput guarantees. Not available in Codex; he wishes it were.
-- **Speed:** fast at computer use. Slow, about 4x, on exhaustive debugging. The ping rewrite took 1 hr 20 min. "Fast" mode exists but should be avoided (see section 7).
-- **Context:** he ran it "on ultra with one mil token context windows".
+  - "Token costs ... are the same" as Fable list price, except for cache pricing [FVA 57:38](https://youtu.be/P7bxbDSnZRM?t=3458). He also says *"the input token cost is four times higher on Astra"* [FVA 1:00:56](https://youtu.be/P7bxbDSnZRM?t=3656). This contradicts "the same" and may refer to cache-read cost ($1 vs $0.25), so it is ambiguous.
+  - OpenAI pricing as stated: input $10/M, cache read $1/M, **cache write $12.50/M** ("25% more expensive than a normal read"; OpenAI didn't used to charge for cache writes) [FVA 59:00](https://youtu.be/P7bxbDSnZRM?t=3540).
+  - Artificial Analysis cost per task: **$3.26** (vs Sol $1.99) [FVA 1:01:14](https://youtu.be/P7bxbDSnZRM?t=3674).
+  - Most token-efficient model benchmarked: **27K tokens vs Fable 5.1's ~80K** [FVA 1:02:04](https://youtu.be/P7bxbDSnZRM?t=3724).
+  - **Flex** tier halves the price at the cost of no throughput guarantees [FVA 1:02:17](https://youtu.be/P7bxbDSnZRM?t=3737). Not available in Codex; he wishes it were [FVA 1:02:41](https://youtu.be/P7bxbDSnZRM?t=3761).
+- **Speed:** fast at computer use [FVA 10:10](https://youtu.be/P7bxbDSnZRM?t=610). Slow, about 4x, on exhaustive debugging [FVA 24:37](https://youtu.be/P7bxbDSnZRM?t=1477). The ping rewrite took 1 hr 20 min [FVA 28:22](https://youtu.be/P7bxbDSnZRM?t=1702). "Fast" mode exists but should be avoided (see section 7). **Context:** he ran it "on ultra with one mil token context windows" [FVA 31:32](https://youtu.be/P7bxbDSnZRM?t=1892).
 
 ### GPT-5.6 Sol ("Soul") — previous OpenAI generation
-- Mergeability *"in the two to three out of 10 range... by default."* With the right review bots and tooling *"it could make working code incredibly well."*
-- *"If we were just measuring the ability for Soul and Fable 5 to get working code, they were neck and neck."* But Fable 5 was *"three to four times more mergeable"*, meaning 3–4x fewer post-PR fixes.
-- **Decision rule:** *"I would really only trust soul for exploratory work or things that could be verified programmatically where the code didn't matter that much in terms of its quality and maintainability."*
-- Computer use was good enough for day-to-day use and *"would do tedious things I didn't feel like doing."*
-- *"Soul would just get lost if you tried to steer it."*
-- Full stack: it *"could act like it was doing that, but often just missed things."*
-- TS→Rust: about 30% test pass rate vs Astra's 80%+.
-- Artificial Analysis $1.99/task, cheaper than Astra.
+- Mergeability *"in the two to three out of 10 range"* by default [FVA 35:10](https://youtu.be/P7bxbDSnZRM?t=2110). With the right review bots and tooling *"it could make working code incredibly well"* [FVA 35:18](https://youtu.be/P7bxbDSnZRM?t=2118).
+- On working code, Sol and Fable 5 were *"neck andneck"* [FVA 35:28](https://youtu.be/P7bxbDSnZRM?t=2128), but Fable 5 was *"three to four times more mergeable"*, meaning 3–4x fewer post-PR fixes [FVA 35:42](https://youtu.be/P7bxbDSnZRM?t=2142).
+- **Decision rule:** *"I would really only trust soul for exploratory work or things that could be verified programmatically"* [FVA 37:31](https://youtu.be/P7bxbDSnZRM?t=2251).
+- Computer use was good enough for day-to-day use [FVA 10:17](https://youtu.be/P7bxbDSnZRM?t=617) and *"would do tedious things I didn't feel like doing"* [FVA 10:54](https://youtu.be/P7bxbDSnZRM?t=654).
+- *"Soul would just get lost if you tried to steer it."* [FVA 54:11](https://youtu.be/P7bxbDSnZRM?t=3251)
+- Full stack: it *"could act like it was doing that, but often just missed things"* [FVA 22:57](https://youtu.be/P7bxbDSnZRM?t=1377).
+- TS→Rust: about 30% test pass rate vs Astra's 80%+ [FVA 25:52](https://youtu.be/P7bxbDSnZRM?t=1552).
+- Artificial Analysis $1.99/task, cheaper than Astra [FVA 1:01:14](https://youtu.be/P7bxbDSnZRM?t=3674).
 
 ### Claude Fable 5 (previous Anthropic generation)
-- About 3–4x more mergeable than Sol. Astra is "roughly at, if not slightly ahead of where Fable 5 was."
-- Outputs were sloppy to read: *"I don't hate it the same way I hated Fable 5 for just reading its outputs."*
-- Terminal Bench Science: high, $34, 25%.
-- Design: *"if we switched just to Fable 5 or a similar design, gross."*
-- *"Fable was the first model that could [understand full-stack codebases end to end]."*
+- About 3–4x more mergeable than Sol [FVA 35:42](https://youtu.be/P7bxbDSnZRM?t=2142). Astra is "roughly at, if not slightly ahead of where Fable 5 was" [FVA 35:55](https://youtu.be/P7bxbDSnZRM?t=2155).
+- Outputs were sloppy to read: he *"hated Fable 5 for just reading its outputs"* [FVA 38:50](https://youtu.be/P7bxbDSnZRM?t=2330).
+- Terminal Bench Science: high, $34, 25% [FVA 4:28](https://youtu.be/P7bxbDSnZRM?t=268).
+- Design: *"if we switched just to Fable 5 or a similar design, gross"* [FVA 21:24](https://youtu.be/P7bxbDSnZRM?t=1284).
+- *"Fable was the first model that could do that"*, i.e. understand full-stack codebases end to end [FVA 22:57](https://youtu.be/P7bxbDSnZRM?t=1377).
 
 ### Opus (unversioned) and Sonnet
-- *"once I'm out of Fable, the account is useless to me because **Opus sucks and Sonnet's hilariously bad**."* He calls the leftover non-Fable quota "the **opus pot**. It's a whole steaming smelly pot of opus." He loses that 50% every week.
-- Opus 5: Artificial Analysis about $6/task.
+- Once Fable quota runs out, *"the account is useless to me because **Opus sucks and Sonnet's hilariously bad**"* [FVA 1:04:52](https://youtu.be/P7bxbDSnZRM?t=3892). He calls the leftover non-Fable quota "the **opus pot**. It's a whole steaming smelly pot of opus" [FVA 1:04:26](https://youtu.be/P7bxbDSnZRM?t=3866), and loses that 50% every week [FVA 1:04:59](https://youtu.be/P7bxbDSnZRM?t=3899).
+- Opus 5: Artificial Analysis about $6/task [FVA 1:00:47](https://youtu.be/P7bxbDSnZRM?t=3647).
 
 ### Others
-- **Kimi K2 (original, non-thinking):** *"still writes the best of any model I've used. But it's also stupid as hell and very quick to be incredibly rude. It's not a model you should actually use for much."* Better prose than K3 and K2.5. Kimi K3 earlier impressed him on 3D.
-- **GLM 5.3 Flash:** *"a more pleasant model to use arguably than Astra. I've seen GLM53 Flash go off the rails less than Astra for similar work."* He suggests it or the "open source plan" if cost is the main concern.
-- **Gemini 3.8 Flash, Muse Spark 1.3:** joke mentions. Flash 3.8 is "meme tier".
-- **GPT-3:** historical comparison. AI video editing today is like "shipping an app using GPT3."
+- **Kimi K2 (original, non-thinking):** *"still writes the best of any model I've used"*, but is *"stupid as hell"* and rude; *"not a model you should actually use for much"* [FVA 12:08](https://youtu.be/P7bxbDSnZRM?t=728). Better prose than K3 and K2.5. Kimi K3 earlier impressed him on 3D [FVA 7:27](https://youtu.be/P7bxbDSnZRM?t=447).
+- **GLM 5.3 Flash:** *"a more pleasant model to use arguably than Astra"*; it goes *"off the rails less than Astra for similar work"* [FVA 1:14:10](https://youtu.be/P7bxbDSnZRM?t=4450). He suggests it or the "open source plan" if cost is the main concern [FVA 1:14:04](https://youtu.be/P7bxbDSnZRM?t=4444).
+- **Gemini 3.8 Flash, Muse Spark 1.3:** joke mentions [FVA 0:00](https://youtu.be/P7bxbDSnZRM?t=0). Flash 3.8 is "meme tier" [FVA 49:27](https://youtu.be/P7bxbDSnZRM?t=2967).
+- **GPT-3:** historical comparison. AI video editing today is like *"shipping an app using GPT3"* [FVA 17:12](https://youtu.be/P7bxbDSnZRM?t=1032).
 
 ## 3. Decision rules and "use X for Y" statements
 
-1. *"Fable is what I reach for when I'm trying to land code and Astra is what I reach for when I'm trying to use my computer."*
-2. *"I will be defaulting to Fable for code and I'll be defaulting to Astra for every other thing that I do."*
-3. *"Fable 5.1 is a better choice for day-to-day code stuff when cost is not a factor."*
-4. **Science:** *"if your job is science, you should probably go get a codex subscription."*
-5. **3D prototypes and demos:** *"make the first prototype with Astra to get everything roughly looking and feeling how you want-ish and then have Fable come in and clean it up and do all of the like detail-oriented work."*
-6. **Game dev:** combine both. Astra handles 3D visuals; Fable handles interaction, animation curves, camera and movement feel. *"if you use both of them carefully enough you can combine them."*
-7. **Computer use:** Astra (with Codex on macOS). Fable only "when given the right tools".
-8. **UI / design / front end:** Fable. *"straight up do not trust Astra with UI anything."* *"Astra needs a lot of help if you want a good design out of it."* Turning on Anthropic's Claude Code design skill makes Astra "slightly better".
-9. **Copywriting:** neither is good. Astra is slightly better at prose, but *"the way it spams it pisses me off too much to frankly want to ever use it for copy."* He still rewrites most copy himself. Astra can usefully critique Fable's copy (*"Astra is much better at recognizing the copy from Fable"*), but its proposals are weak.
-10. **Default to Fable for:** *"a quick bug fix or UI changes that matter or feature improvements."*
-11. **Rescue pattern (Astra death loop → Fable):** *"my favorite thing to use Fable 5.1 for [is] to take something that Astra has in a death loop that it just cannot get through. Stop it. Switch over to Fable 5.1, hand it the PR and say, 'Hey, make this actually land. Clean it up. Throw away whatever doesn't belong. Make a new branch if that's easier. Make the changes we care about here land.'"*
-12. **Bulk rewrites with UI:** don't trust Astra to carry UI over. *"if the thing that you're doing this bulk rewrite for has UI, you cannot trust that UI is going to be carried over."* Workaround (which he doesn't want to need): append *"I expect the UI to be pixel perfect identical. If any of the UI has changed, you have failed at your goal, so keep going until the UI looks identical."*
-13. **Giant rewrites / ports with no UI (e.g. TS→Rust):** Astra, using a goal plus about 40 subagents.
-14. **Deep or hard-to-find bugs beyond what reading the code reveals:** Astra (X high), at about 4x the time and tokens.
-15. **Full-stack understanding:** "almost feels like a tie". Fable is faster and more intuitive; Astra is exhaustive.
-16. **Scope-sensitive changes:** Fable. *"Fable takes less effort to prevent these things with than Astra does."* If you use Astra, tell it explicitly to "make the smallest possible changes" and stay in the loop.
-17. **Large orchestration and swarms:** Astra.
-18. **Mid-task steering / injecting new instructions:** Astra is best, Fable is solid, Sol gets lost.
-19. **Writing prompts for itself or other agents, and writing skills:** Astra is slightly better, but *"none of them are good at it."* *"Please write your skills by hand or at least audit them."* Warning: *"If you let the agent write the skill, you let the skill be involved when it writes another skill, you end up in slop hell very fast."*
-20. **Using skills:** Fable has a huge lead.
-21. **Honoring boundaries and refusals:** "Fable is ahead". Astra forgets, and its failures are more egregious.
-22. **Sol (previous gen) only for** *"exploratory work or things that could be verified programmatically where the code didn't matter that much."*
-23. **Low frustration tolerance:** pay for Fable.
-24. **Cost is the main concern:** Codex $200 plan; or the open-source plan / GLM 5.3 Flash; or *"wait a few months because this level of intelligence will be accessible at a much cheaper price."* For the $20 and $100 plans: *"wait for this level of intelligence to get cheaper."*
-25. **Don't use Astra "fast" mode:** *"If you're using fast with Astra, you're probably using Astra wrong or you're just burning tokens for fun."* Be "very careful of the ultra button" too.
-26. **Never use AI for real audio/video editing yet**, except computer-use *setup* (Astra preparing the Final Cut workspace).
-27. If Sol-to-Fable-5 was the gap that bothered you (*"Soul is not good enough to merge code from, but Fable 5 often cleared your bar"*), then *"you'll be totally fine with Astra."*
+1. *"Fable is what I reach for when I'm trying to land code and Astra is what I reach for when I'm trying to use my computer."* [FVA 1:14:34](https://youtu.be/P7bxbDSnZRM?t=4474)
+2. *"I will be defaulting to Fable for code and I'll be defaulting to Astra for every other thing that I do."* [FVA 1:15:24](https://youtu.be/P7bxbDSnZRM?t=4524)
+3. *"Fable 5.1 is a better choice for day-to-day code stuff when cost is not a factor."* [FVA 1:15:17](https://youtu.be/P7bxbDSnZRM?t=4517)
+4. **Science:** *"if your job is science, you should probably go get a codec subscription"* [FVA 5:01](https://youtu.be/P7bxbDSnZRM?t=301).
+5. **3D prototypes and demos:** *"make the first prototype with Astra"*, then *"have Fable come in and clean it up"* and do the detail work [FVA 9:27](https://youtu.be/P7bxbDSnZRM?t=567).
+6. **Game dev:** combine both. Astra handles 3D visuals; Fable handles interaction, animation curves, camera and movement feel [FVA 41:18](https://youtu.be/P7bxbDSnZRM?t=2478). *"if you use both of them carefully enough you can combine them"* [FVA 41:49](https://youtu.be/P7bxbDSnZRM?t=2509).
+7. **Computer use:** Astra (with Codex on macOS). Fable only "when given the right tools" [FVA 11:07](https://youtu.be/P7bxbDSnZRM?t=667).
+8. **UI / design / front end:** Fable. *"straight up do not trust Astra with UI anything"* [FVA 14:02](https://youtu.be/P7bxbDSnZRM?t=842). *"Astra needs a lot of help if you want a good design"* [FVA 22:26](https://youtu.be/P7bxbDSnZRM?t=1346). Turning on Anthropic's Claude Code design skill makes Astra "slightly better" [FVA 20:40](https://youtu.be/P7bxbDSnZRM?t=1240).
+9. **Copywriting:** neither is good. Astra is slightly better at prose, but *"the way it spams it pisses me off too much"* to use it for copy [FVA 14:07](https://youtu.be/P7bxbDSnZRM?t=847). He still rewrites most copy himself [FVA 12:33](https://youtu.be/P7bxbDSnZRM?t=753). Astra usefully critiques Fable's copy (*"much better at recognizing the copy from Fable"*), but its proposals are weak [FVA 12:27](https://youtu.be/P7bxbDSnZRM?t=747).
+10. **Default to Fable for:** *"a quick bug fix or UI changes that matter or feature improvements"* [FVA 39:30](https://youtu.be/P7bxbDSnZRM?t=2370).
+11. **Rescue pattern (Astra death loop → Fable):** his *"favorite thing to use Fable 5.1 for"* [FVA 39:37](https://youtu.be/P7bxbDSnZRM?t=2377): stop the looping Astra run, hand Fable the PR and say *"Hey, make this actually land. Clean it up. Throw away whatever doesn't belong."*, adding that it may make a new branch [FVA 39:49](https://youtu.be/P7bxbDSnZRM?t=2389).
+12. **Bulk rewrites with UI:** don't trust Astra to carry UI over: *"you cannot trust that UI is going to be carried over"* [FVA 32:29](https://youtu.be/P7bxbDSnZRM?t=1949). Workaround (which he doesn't want to need): append *"I expect the UI to be pixel perfect identical."*, then say any UI change means it failed the goal and must keep going until the UI looks identical [FVA 32:54](https://youtu.be/P7bxbDSnZRM?t=1974).
+13. **Giant rewrites / ports with no UI (e.g. TS→Rust):** Astra, using a goal plus about 40 subagents [FVA 26:31](https://youtu.be/P7bxbDSnZRM?t=1591).
+14. **Deep or hard-to-find bugs beyond what reading the code reveals:** Astra (X high), at about 4x the time and tokens [FVA 24:37](https://youtu.be/P7bxbDSnZRM?t=1477).
+15. **Full-stack understanding:** "almost feels like a tie" [FVA 24:48](https://youtu.be/P7bxbDSnZRM?t=1488). Fable is faster and more intuitive; Astra is exhaustive.
+16. **Scope-sensitive changes:** Fable. *"Fable takes less effort to prevent these things with than Astra does."* [FVA 40:59](https://youtu.be/P7bxbDSnZRM?t=2459) If you use Astra, tell it explicitly to "make the smallest possible changes" [FVA 40:32](https://youtu.be/P7bxbDSnZRM?t=2432) and stay in the loop [FVA 40:46](https://youtu.be/P7bxbDSnZRM?t=2446).
+17. **Large orchestration and swarms:** Astra [FVA 50:20](https://youtu.be/P7bxbDSnZRM?t=3020).
+18. **Mid-task steering / injecting new instructions:** Astra is best, Fable is solid, Sol gets lost [FVA 54:11](https://youtu.be/P7bxbDSnZRM?t=3251).
+19. **Writing prompts for itself or other agents, and writing skills:** Astra is slightly better, but *"none of them are good at it"* [FVA 55:25](https://youtu.be/P7bxbDSnZRM?t=3325). *"Please write your skills by hand or at least audit them"* [FVA 55:12](https://youtu.be/P7bxbDSnZRM?t=3312). Warning: let agent-written skills shape the next skill and *"you end up in slop hell very fast"* [FVA 55:01](https://youtu.be/P7bxbDSnZRM?t=3301).
+20. **Using skills:** Fable has a huge lead [FVA 56:42](https://youtu.be/P7bxbDSnZRM?t=3402).
+21. **Honoring boundaries and refusals:** "Fable is ahead". Astra "looks and generally acts better about this", but it forgets, and its failures are more egregious [FVA 57:20](https://youtu.be/P7bxbDSnZRM?t=3440).
+22. **Sol (previous gen) only for** *"exploratory work or things that could be verified programmatically"* [FVA 37:36](https://youtu.be/P7bxbDSnZRM?t=2256).
+23. **Low frustration tolerance:** pay for Fable [FVA 1:12:31](https://youtu.be/P7bxbDSnZRM?t=4351).
+24. **Cost is the main concern:** Codex $200 plan [FVA 1:09:49](https://youtu.be/P7bxbDSnZRM?t=4189); or the open-source plan / GLM 5.3 Flash [FVA 1:14:04](https://youtu.be/P7bxbDSnZRM?t=4444); or wait a few months, as *"this level of intelligence will be accessible at a much cheaper price"* [FVA 1:09:43](https://youtu.be/P7bxbDSnZRM?t=4183). For the $20 and $100 plans: wait for this level of intelligence to get cheaper [FVA 1:09:55](https://youtu.be/P7bxbDSnZRM?t=4195).
+25. **Don't use Astra "fast" mode:** *"If you're using fast with Astro, you're probably using Astro wrong"* [FVA 1:06:22](https://youtu.be/P7bxbDSnZRM?t=3982). Be "very careful of the [ultra] button" too [FVA 1:06:16](https://youtu.be/P7bxbDSnZRM?t=3976).
+26. **Never use AI for real audio/video editing yet** [FVA 17:12](https://youtu.be/P7bxbDSnZRM?t=1032), except computer-use *setup* (Astra preparing the Final Cut workspace) [FVA 15:37](https://youtu.be/P7bxbDSnZRM?t=937).
+27. If Sol-to-Fable-5 was the gap that bothered you (Sol not mergeable, Fable 5 often clearing your bar), then *"you'll be totally fine with Astra"* [FVA 37:50](https://youtu.be/P7bxbDSnZRM?t=2270).
 
 ## 4. Head-to-head results
 
 | Category | Winner | Detail |
 |---|---|---|
-| Science (Terminal Bench Science 0.1) | **Astra** | Astra low 54.3% / $11 vs Fable 5.1 XH-high 50% (Fable 5 high: 25% / $34). He speculates OpenAI is better at post-training on new RL tooling/data. |
-| 3D rendering | **Astra (huge)** | "Biggest gap of anything here." Fish Slop 3D: Astra is "next gen" visually but movement is worse, the core loop less refined, and performance bad until told to fix it. Blender scenes from others (Amazon Spheres replica, demo home). Astra 9/10, Fable 5/10. |
-| Interaction / animation / game feel | **Fable** | "Fable is so much better at interaction in general." |
-| Game dev overall | **Fable (narrowly)** / combine | "Fable catches up to Astra's unbelievable 3D capabilities just due to the smoothness of its outputs." |
-| Computer use | **Astra (huge)** | Much faster than Sol; partly due to Codex macOS harness improvements. |
-| Copywriting / prose | **Astra slightly**, but unusable | Subtitle spam (21 on one page). Both are big jumps over their predecessors ("unslop baked in"). Kimi K2 is still best. |
-| Audio / video | **Astra by default** | Neither is usable for editing; Astra wins on computer-use setup. |
-| Non-code overall | **Astra** | Biggest wins in 3D and computer use; science meaningful too. |
-| Front end / design | **Fable ("easy, significantly better")** | Neither is above 5/10. Fable one-shots "genuinely compelling" designs; Astra spams subtitles and has cut-offs. "Good designs still require you sit there with a hammer." |
-| Full stack | **Tie-ish** | Fable has intuition and speed; Astra tests every edge and finds deeper bugs. "Astra really has that groundhog day feeling." |
-| Giant rewrites | **Astra**, with a UI caveat | TS→Rust (TSGO port): Sol ~30% → Astra 80%+ in ~3 days, stalled at 82.6%, 40 subagents, not in the loop. Also T3 Code mobile rewrite in Swift and a GPUI rebuild. But the ping.gg rewrite threw away all UI despite instructions. "For this reason alone, I would make a bigger gap in the rewriting capabilities." |
-| Code mergeability | **Fable 5.1 (clear)** | 2 follow-ups from PR filed to merge vs Astra 6. Vibe scale: Sol 2–3/10; Fable 5 ~3–4x better than Sol; Astra ≈ Fable 5 or slightly ahead; Fable 5.1 near 10/10. "Mergeable 20ish% more often." Ben Davis ("OpenAI's number one defender") admits Fable is better for real-world code and has 3 Claude Code accounts. |
-| Scope-creep management | **Fable** | Astra creeps by default, partly because review-agent reminders bloat its context. |
-| Understanding intent / basic agentic competence | **Fable (decisive)** | 150 PRs "fully yolo merged", 2 regressions, both from Astra. The "revert" story below. |
-| Orchestration | **Astra** | "Swarms" (section 5). |
-| Steering | **Astra** | Fable "far ahead before"; Astra now has "actual new capability unlocks". |
-| Self-prompting / skill writing | **Astra (slight)** | "None of them are good at it." |
-| Skill using | **Fable (huge)** | Astra ignores a loaded skill on later turns. |
-| Honoring refusals / boundaries | **Fable** | Astra is forgetful, with more egregious failures. |
-| Token cost per task / efficiency | **Astra** | $3.26 vs $7.60 per task; 27K vs ~80K tokens. |
-| Subscription value | **Codex/Astra (~4x)** | See section 7. |
-| Refusal rate | Astra refuses **more** | "Remember everybody being really upset about Fable's security refusals? Astra refuses more often." |
+| Science (Terminal Bench Science 0.1) | **Astra** | Astra low 54.3% / $11 vs Fable 5.1 XH-high 50% (Fable 5 high: 25% / $34) [FVA 4:28](https://youtu.be/P7bxbDSnZRM?t=268). He speculates OpenAI is better at post-training on new RL tooling/data [FVA 5:12](https://youtu.be/P7bxbDSnZRM?t=312). |
+| 3D rendering | **Astra (huge)** | "biggest gap of anything here" [FVA 8:46](https://youtu.be/P7bxbDSnZRM?t=526). Fish Slop 3D: Astra is "nextG" visually [FVA 6:48](https://youtu.be/P7bxbDSnZRM?t=408) but movement is worse, the core loop less refined, and performance bad until told to fix it [FVA 7:03](https://youtu.be/P7bxbDSnZRM?t=423). Blender scenes from others (Amazon Spheres replica, demo home) [FVA 7:54](https://youtu.be/P7bxbDSnZRM?t=474). Astra 9/10, Fable 5/10 [FVA 22:14](https://youtu.be/P7bxbDSnZRM?t=1334). |
+| Interaction / animation / game feel | **Fable** | "Fable is so much better at interaction in general" [FVA 9:08](https://youtu.be/P7bxbDSnZRM?t=548). |
+| Game dev overall | **Fable (narrowly)** / combine | Fable catches up to Astra's 3D *"just due to the smoothness of its outputs"* [FVA 41:36](https://youtu.be/P7bxbDSnZRM?t=2496). |
+| Computer use | **Astra (huge)** | Much faster than Sol [FVA 10:10](https://youtu.be/P7bxbDSnZRM?t=610); partly due to Codex macOS harness improvements [FVA 10:48](https://youtu.be/P7bxbDSnZRM?t=648). |
+| Copywriting / prose | **Astra slightly**, but unusable | Subtitle spam (21 on one page) [FVA 13:18](https://youtu.be/P7bxbDSnZRM?t=798). Both are big jumps over their predecessors ("unslop baked in") [FVA 11:55](https://youtu.be/P7bxbDSnZRM?t=715). Kimi K2 is still best [FVA 12:08](https://youtu.be/P7bxbDSnZRM?t=728). |
+| Audio / video | **Astra by default** | Neither is usable for editing; Astra wins on computer-use setup [FVA 17:43](https://youtu.be/P7bxbDSnZRM?t=1063). |
+| Non-code overall | **Astra** | Biggest wins in 3D and computer use; science meaningful too [FVA 17:50](https://youtu.be/P7bxbDSnZRM?t=1070). |
+| Front end / design | **Fable ("easy, significantly better")** | Neither is above 5/10 [FVA 22:14](https://youtu.be/P7bxbDSnZRM?t=1334). Fable one-shots "genuinely compelling" designs [FVA 21:29](https://youtu.be/P7bxbDSnZRM?t=1289); Astra spams subtitles and has cut-offs [FVA 20:21](https://youtu.be/P7bxbDSnZRM?t=1221). "good designs still require you sit there with a hammer" [FVA 21:53](https://youtu.be/P7bxbDSnZRM?t=1313). |
+| Full stack | **Tie-ish** | Fable has intuition and speed; Astra tests every edge and finds deeper bugs [FVA 23:09](https://youtu.be/P7bxbDSnZRM?t=1389). "Astra really has that groundhog day feeling" [FVA 24:11](https://youtu.be/P7bxbDSnZRM?t=1451). |
+| Giant rewrites | **Astra**, with a UI caveat | TS→Rust (TSGO port): Sol ~30% → Astra 80%+ in ~3 days, stalled at 82.6%, 40 subagents, not in the loop [FVA 25:52](https://youtu.be/P7bxbDSnZRM?t=1552). Also T3 Code mobile rewrite in Swift and a GPUI rebuild [FVA 27:26](https://youtu.be/P7bxbDSnZRM?t=1646). But the ping.gg rewrite threw away all UI despite instructions [FVA 31:20](https://youtu.be/P7bxbDSnZRM?t=1880). "For this reason alone, I would make a bigger gap in the rewriting capabilities" [FVA 32:19](https://youtu.be/P7bxbDSnZRM?t=1939). |
+| Code mergeability | **Fable 5.1 (clear)** | 2 follow-ups from PR filed to merge vs Astra 6 [FVA 33:40](https://youtu.be/P7bxbDSnZRM?t=2020). Vibe scale: Sol 2–3/10; Fable 5 ~3–4x better than Sol; Astra ≈ Fable 5 or slightly ahead; Fable 5.1 near 10/10 [FVA 35:10](https://youtu.be/P7bxbDSnZRM?t=2110). "mergeable 20ish% more often" [FVA 1:15:05](https://youtu.be/P7bxbDSnZRM?t=4505). Ben Davis ("OpenAI's number one defender") admits Fable is better for real-world code and has 3 Claude Code accounts [FVA 36:39](https://youtu.be/P7bxbDSnZRM?t=2199), [FVA 37:04](https://youtu.be/P7bxbDSnZRM?t=2224). |
+| Scope-creep management | **Fable** | Astra creeps by default, partly because review-agent reminders bloat its context [FVA 40:32](https://youtu.be/P7bxbDSnZRM?t=2432). |
+| Understanding intent / basic agentic competence | **Fable (decisive)** | 150 PRs "fully yolo merged", 2 regressions, both from Astra [FVA 42:44](https://youtu.be/P7bxbDSnZRM?t=2564). The "revert" story below. |
+| Orchestration | **Astra** | "Swarms" (section 5) [FVA 50:20](https://youtu.be/P7bxbDSnZRM?t=3020). |
+| Steering | **Astra** | Fable "far ahead before"; Astra now has "actual new capability unlocks" [FVA 54:11](https://youtu.be/P7bxbDSnZRM?t=3251). |
+| Self-prompting / skill writing | **Astra (slight)** | "none of them are good at it" [FVA 55:25](https://youtu.be/P7bxbDSnZRM?t=3325). |
+| Skill using | **Fable (huge)** | Astra ignores a loaded skill on later turns [FVA 56:04](https://youtu.be/P7bxbDSnZRM?t=3364). |
+| Honoring refusals / boundaries | **Fable** | Astra "looks and generally acts better about this" but is forgetful, with more egregious failures [FVA 57:20](https://youtu.be/P7bxbDSnZRM?t=3440). |
+| Token cost per task / efficiency | **Astra** | $3.26 vs $7.60 per task [FVA 1:00:47](https://youtu.be/P7bxbDSnZRM?t=3647); 27K vs ~80K tokens [FVA 1:02:11](https://youtu.be/P7bxbDSnZRM?t=3731). |
+| Subscription value | **Codex/Astra (~4x)** | See section 7 [FVA 1:08:10](https://youtu.be/P7bxbDSnZRM?t=4090). |
+| Refusal rate | Astra refuses **more** | "Astra refuses more often" than Fable, despite the outcry over Fable's security refusals [FVA 1:15:35](https://youtu.be/P7bxbDSnZRM?t=4535). |
 
 ### The "revert" incident (intent, in detail)
-A performance-focused PR replaced the T3 Code marketing site's auto-scrolling testimonials marquee with a static horizontal-scroll grid. The prompt said, roughly: *"What happened to my beloved autoscroll on the marketing site?... I need you to revert whatever change broke that and bring it back... that was not a necessary change. Please revert."* "Revert" appeared twice. A follow-up "steering" message asked it to spin up a Tailscale dev server.
+The prompt said "revert" twice [FVA 44:15](https://youtu.be/P7bxbDSnZRM?t=2655): undo the PR that had replaced the marketing site's autoscroll marquee [FVA 43:13](https://youtu.be/P7bxbDSnZRM?t=2593). Astra never reverted. It served the wrong app, committed and pushed a Tailscale host change specific to his machine, and merged the PR after being told it hadn't made the changes, needing 5 corrections [FVA 46:54](https://youtu.be/P7bxbDSnZRM?t=2814), [FVA 47:29](https://youtu.be/P7bxbDSnZRM?t=2849), [FVA 48:50](https://youtu.be/P7bxbDSnZRM?t=2930). Verdict: it *"failed to do basic work as an agent"*, rather than misreading intent [FVA 49:53](https://youtu.be/P7bxbDSnZRM?t=2993). Fable 5.1, given the same prompt, found the exact PR and restored the marquee in about 5 minutes with one interruption [FVA 47:55](https://youtu.be/P7bxbDSnZRM?t=2875), [FVA 48:38](https://youtu.be/P7bxbDSnZRM?t=2918).
 
-**Astra:**
-- Deleted a user-controlled variable and some listeners instead of reverting.
-- Spun up a dev server for the T3 Code app instead of the marketing site.
-- Then hit a Tailscale allowed-host error and committed and pushed an "allow Tailnet host" change specific to the speaker's machine.
-- Killed the dev server and sent a dead link.
-- Finally **merged the PR** after being told it hadn't made the changes.
-- It needed 5 corrections. *"One of the legitimate worst AI code experiences I've had this year."* *"I don't think Astra failed to understand my intent here. I just think it failed to do basic work as an agent."*
-
-**Fable 5.1:** got the exact same prompt, with the Tailscale request folded into the first message. About 5 minutes later the autoscroll was back, the cause was identified as the exact PR, and the link worked. It briefly got confused by seeing another agent's PR merged and reverted, and needed one interruption: *"that was another agent doing things wrong. Ignore that."* *"Exactly what I had intended."*
-
-Note that the two runs differed in one way: the Tailscale request was a mid-task steer for Astra and part of the initial prompt for Fable.
+Caveat: the Tailscale request was a mid-task steer for Astra but part of the initial prompt for Fable [FVA 48:44](https://youtu.be/P7bxbDSnZRM?t=2924).
 
 ## 5. Subagents, orchestration, planning, verification, review
 
-- **Astra "swarms" vs Fable's planned subagents (the key orchestration distinction):**
-  - *"The way Fable does large numbers of sub agents is it plans up front. It decides, I want these four sub agents for this. I want this type of sub agent next. And if these four find things, they can spin up the next type of sub agent where it goes through steps one, two, three, four, five."*
-  - *"Astra, however, can just spin up a bunch of sub agents that are doing whatever and then pass messages to them, let them pass messages to each other, and most importantly, it can receive updates from those sub agents and use that to fan things out to keep the whole swarm moving well in the right direction. I've never seen anything else like it."*
-  - *"Astra has unlocked novel orchestration capabilities that given a model that wasn't as expensive would legitimately be the path to something like curing cancer."*
-  - In the TS→Rust run he has **40 subagents in parallel**, with messages like "root/independent reviewer", "root/object members regression cause". *"It can actually keep track of all of them and work with all of them."*
-  - He suggests Codex's "more rudimentary implementation of sub agents" was deliberate, so the model could scale up its own coordination. This contrasts with Claude Code: *"workflows in Claude Code are so good that I did a whole video about why I like Claude Code largely around workflows."*
-- **Steering enables orchestration:** Astra *"is so good at getting random [stuff] inserted in its context while it's working and not losing track."* The classic failure he describes: working on tasks 1, 2, 3, 5; he sends "I forgot number 4"; the model does 4 and never finishes the others. *"Fable 5.1 just doesn't do this too too much."* *"Astra eats this. It loves this. It begs you for more."* Combined with orchestration, *"it can have context injected from 40 other agents and handle that fine."*
-- **Non-blocking questions:** Astra can ask the user a question mid-task without blocking. If it has already finished, it spins back up to address the answer; if it is still running, the answer steers it without interruption. Requires harness support. *"T3 Code actually does this feature better than Codex, even though it is an Astra feature."* *"This is a change in how the model actually operates."*
-- **Self-prompting:** Astra *"can write a decent prompt... I'm much happier with Astra's ability to prompt itself and other agents."* But it is still worse than skilled humans.
-- **Cross-model plan review:** for the ping.gg rewrite he had the model write a plan, *"and then I had it and Astra review each other's plans separately"*. "It" is ambiguous, probably Fable. The plan was then committed to a branch in a worktree, then built.
-- **Verification loops and review bots:** mergeability is measured as how many follow-ups his AI review bots catch between PR filed and merge. Review-agent feedback can *cause* scope creep: Astra's *"context [gets] bloated a bit by its reminders from all these review agents that will send it off course."* Fable can bloat too *"if it gets the wrong review comments at the wrong time."*
-- **Sponsor (Macroscope), useful as a pattern:** path-scoped custom review agents defined as markdown files in the repo (e.g. an "effect service conventions" agent and a "UI consistency" agent), each approving only if its condition is met. They take 12 s and 21 s. A top-level agent then gives an overall approval. *"You could add all of these things into your agent MD, but that only guarantees that your agent knows about them, not that it's actually going to follow."* He rarely merges PRs that the top-level agent hasn't approved.
-- **Model-to-model handoff:** Astra for a 3D prototype → Fable for polish; Astra death loop → Fable to land it; Astra critiques Fable's copy.
+- **Astra "swarms" vs Fable's planned subagents (the key orchestration distinction):** Fable plans its subagents up front, in stages [FVA 50:26](https://youtu.be/P7bxbDSnZRM?t=3026). Astra runs a swarm whose members message each other and report back so it can re-fan the work, 40 in parallel on the TS→Rust port [FVA 50:44](https://youtu.be/P7bxbDSnZRM?t=3044), [FVA 51:50](https://youtu.be/P7bxbDSnZRM?t=3110). He thinks Codex's simpler subagent support is deliberate, leaving coordination to the model, unlike Claude Code's workflows [FVA 52:04](https://youtu.be/P7bxbDSnZRM?t=3124).
+- **Steering enables orchestration:** the failure to test for is a mid-task addition ("I forgot number four") that the model does while dropping the unfinished tasks. Fable 5.1 rarely does this; Astra handles it best [FVA 52:30](https://youtu.be/P7bxbDSnZRM?t=3150), [FVA 52:48](https://youtu.be/P7bxbDSnZRM?t=3168).
+- **Non-blocking questions:** Astra can ask mid-task without blocking; the answer steers a running task or restarts a finished one. It needs harness support, and T3 Code does it better than Codex [FVA 53:08](https://youtu.be/P7bxbDSnZRM?t=3188), [FVA 53:13](https://youtu.be/P7bxbDSnZRM?t=3193).
+- **Self-prompting:** see rule 19; Astra still writes worse prompts than he does [FVA 54:35](https://youtu.be/P7bxbDSnZRM?t=3275).
+- **Cross-model plan review:** for the ping.gg rewrite he had the model write a plan, *"and then I had it and Astra review each other's plans separately"* [FVA 28:11](https://youtu.be/P7bxbDSnZRM?t=1691). "It" is ambiguous, probably Fable. The plan was then committed to a branch in a worktree, then built [FVA 28:17](https://youtu.be/P7bxbDSnZRM?t=1697).
+- **Verification loops and review bots:** mergeability is measured as how many follow-ups his AI review bots catch between PR filed and merge [FVA 33:46](https://youtu.be/P7bxbDSnZRM?t=2026). Review-agent feedback can *cause* scope creep: Astra's *"context get bloated a bit by its reminders from all these review agents"* [FVA 40:40](https://youtu.be/P7bxbDSnZRM?t=2440). Fable can bloat too with the wrong review comments at the wrong time [FVA 40:22](https://youtu.be/P7bxbDSnZRM?t=2422).
+- **Enforce conventions at review time (from a Macroscope sponsor read):** an agent MD file only ensures *"that your agent knows about them, not that it's actually going to follow"* [FVA 2:03](https://youtu.be/P7bxbDSnZRM?t=123); path-scoped review agents defined in repo markdown approve only when their condition holds [FVA 2:21](https://youtu.be/P7bxbDSnZRM?t=141).
+- **Model-to-model handoff:** rules 5, 9 and 11 (Astra prototype → Fable polish; Astra critiques Fable's copy; Astra death loop → Fable lands it).
 
 ## 6. Claude Code / Codex specifics
 
-- **Claude Code workflows:** praised as "so good" and the subject of a separate video.
-- **Claude Code "design skill" from Anthropic:** turning it on makes Astra's front-end output "slightly better", though *"a little too quick to experiment with fonts."*
-- **CLAUDE.md / AGENTS.md:** the prose comparison was run with "no Agent MD or Claude MD". He wants agents to "understand things like a claude MD or a skill file well enough to write good verbiage" and says they don't yet.
-- **Skills:**
-  - Write them by hand or audit them.
-  - Fable reliably pulls in a skill with a reasonable description.
-  - Codex has *"a system prompt section around how skill should be applied... if a skill is used in one turn, that skill should not apply for future turns unless requested."* He thinks this is why Astra dropped his "babysitting" skill for 5 follow-ups even though it was still in context. *"I honestly think a lot of it is Codex."*
-- **Codex modes and buttons:**
-  - "work mode" vs "codex mode" (in work mode he couldn't open a terminal).
-  - "ultra" (and "X high" reasoning; "Astra on low" for science).
-  - "fast" (avoid it).
-  - "goal" (Astra "paused the goal again"; he re-prompted: *"You have my permission to do whatever you need to do. I have you on full access for a reason. Keep going."*).
-  - "full access" permissions.
-  - Unbounded subagents (*"two ultra running with unbounded sub agents. It's 40 sub agents each can run."*).
-- **Codex computer use on macOS:** much of the computer-use gain comes from Codex harness changes: faster spin-up, easier context, faster movement, better background operation.
-- **CLI proxy:** he set it up *"because one Claude account just isn't enough at all for most work"* and rotates across multiple accounts.
-- **Worktrees:** he had the model make a branch, commit the plan, and work in a worktree.
-- **T3 Code** implements Astra's non-blocking questions better than Codex does.
+- **Claude Code workflows:** praised as "so good" and the subject of a separate video [FVA 52:04](https://youtu.be/P7bxbDSnZRM?t=3124). **Claude Code "design skill" from Anthropic:** makes Astra's front-end output "slightly better", though *"a little too quick to experiment with fonts"* [FVA 20:40](https://youtu.be/P7bxbDSnZRM?t=1240).
+- **CLAUDE.md / AGENTS.md:** the prose comparison was run with "no Agent MD or Claude MD" [FVA 11:33](https://youtu.be/P7bxbDSnZRM?t=693). He wants agents to understand *"a claude MD or a skill file well enough to write good verbiage"* and says they don't yet [FVA 54:49](https://youtu.be/P7bxbDSnZRM?t=3289).
+- **Skills:** write them by hand or audit them (rule 19); Fable reliably pulls in a skill with a reasonable description [FVA 56:22](https://youtu.be/P7bxbDSnZRM?t=3382).
+  - Codex has *"a system prompt section around how skill should be applied"*: a skill used in one turn should not apply to later turns unless requested [FVA 55:43](https://youtu.be/P7bxbDSnZRM?t=3343). He thinks this is why Astra dropped his "babysitting" skill for 5 follow-ups while it was still in context [FVA 56:04](https://youtu.be/P7bxbDSnZRM?t=3364). *"I honestly think a lot of it is codeex."* [FVA 56:27](https://youtu.be/P7bxbDSnZRM?t=3387)
+- **Codex modes and buttons:** "work mode" vs "codeex mode" (in work mode he couldn't open a terminal) [FVA 28:28](https://youtu.be/P7bxbDSnZRM?t=1708); "ultra" [FVA 31:32](https://youtu.be/P7bxbDSnZRM?t=1892), "X high" reasoning [FVA 24:30](https://youtu.be/P7bxbDSnZRM?t=1470) and "Astra on low" for science [FVA 4:48](https://youtu.be/P7bxbDSnZRM?t=288); "fast" (avoid it) [FVA 1:06:16](https://youtu.be/P7bxbDSnZRM?t=3976); "full access" permissions [FVA 25:47](https://youtu.be/P7bxbDSnZRM?t=1547).
+  - "goal": Astra "paused the goal again" and he re-prompted *"You have my permission to do whatever you need to do."* plus *"I have you on full access for a reason. Keep going."* [FVA 25:40](https://youtu.be/P7bxbDSnZRM?t=1540)
+  - Unbounded subagents: *"two ult running with unbounded sub agents. It's 40 sub agents each can run."* [FVA 1:05:36](https://youtu.be/P7bxbDSnZRM?t=3936)
+- **Codex computer use on macOS:** much of the gain comes from harness changes: faster spin-up, easier context, faster movement, better background operation [FVA 10:48](https://youtu.be/P7bxbDSnZRM?t=648).
+- **CLI proxy:** set up *"because one cla account just isn't enough at all for most work"*; he rotates across accounts [FVA 1:07:12](https://youtu.be/P7bxbDSnZRM?t=4032).
+- **Worktrees:** he had the model make a branch, commit the plan, and work in a worktree [FVA 28:17](https://youtu.be/P7bxbDSnZRM?t=1697). **T3 Code** implements Astra's non-blocking questions better than Codex does [FVA 53:08](https://youtu.be/P7bxbDSnZRM?t=3188).
 
 ## 7. Cost management and rate limits
 
 - **Cache economics (his key cost point):**
-  - Fable 5.1 cache reads fell from $1 to $0.25/M, but cache reads were only about 3% of his cost, and are now about 1%. *"Four times cheaper for 3% of your cost is a less than 1% deal."*
-  - **Cache writes are over 60% of his Fable costs.** *"I am paying Anthropic more money to manage RAM for me than I am paying them to run compute for me."*
-  - OpenAI now charges for cache writes at $12.50/M (input $10/M, cache read $1/M).
-  - *"if either of these labs make cache writes cheap or free, they win cost by default by far."*
-- **Token efficiency beats list price.** *"the actual token cost barely even matters in a world driven by token efficiency."* Artificial Analysis cost per task: Astra $3.26, Opus 5 ≈ $6, Fable 5.1 $7.60, Sol $1.99. Astra is *"still a fourth the price in most real world work."* On Artificial Analysis's new index, Fable 5.1 came out cheaper than Fable 5 because of the cache-read change.
-- **OpenAI Flex:** half price with no throughput guarantee. Good for jobs that can wait; not available in Codex.
+  - Fable 5.1 cache reads fell from $1 to $0.25/M [FVA 57:50](https://youtu.be/P7bxbDSnZRM?t=3470), but cache reads were only about 3% of his cost, and are now about 1% [FVA 58:03](https://youtu.be/P7bxbDSnZRM?t=3483). *"Four times cheaper for 3% of your cost is a less than 1% deal."* [FVA 1:00:21](https://youtu.be/P7bxbDSnZRM?t=3621)
+  - **Cache writes are over 60% of his Fable costs** [FVA 58:10](https://youtu.be/P7bxbDSnZRM?t=3490). He pays Anthropic *"more money to manage RAM for me than I am paying them to run compute"* [FVA 58:30](https://youtu.be/P7bxbDSnZRM?t=3510).
+  - OpenAI now charges for cache writes at $12.50/M (input $10/M, cache read $1/M) [FVA 59:09](https://youtu.be/P7bxbDSnZRM?t=3549).
+  - If either lab makes *"cash rights cheap or free, they win cost by default"* [FVA 59:29](https://youtu.be/P7bxbDSnZRM?t=3569).
+- **Token efficiency beats list price:** *"the actual token cost barely even matters in a world driven by token efficiency"* [FVA 59:34](https://youtu.be/P7bxbDSnZRM?t=3574). Artificial Analysis cost per task: Astra $3.26, Opus 5 ≈ $6, Fable 5.1 $7.60 [FVA 1:00:47](https://youtu.be/P7bxbDSnZRM?t=3647), Sol $1.99 [FVA 1:01:14](https://youtu.be/P7bxbDSnZRM?t=3674). Astra is *"still a fourth the price in most real world work"* [FVA 1:01:02](https://youtu.be/P7bxbDSnZRM?t=3662). On Artificial Analysis's new index, Fable 5.1 came out cheaper than Fable 5 because of the cache-read change [FVA 1:01:26](https://youtu.be/P7bxbDSnZRM?t=3686).
+- **OpenAI Flex:** half price with no throughput guarantee. Good for jobs that can wait; not available in Codex [FVA 1:02:17](https://youtu.be/P7bxbDSnZRM?t=3737).
 - **Subscriptions:**
 
   | | Claude $200 plan | Codex $200 plan |
   |---|---|---|
-  | Inference value | ~$8K/month | ~$12K/month |
-  | Usable on the frontier model | Only 50% for Fable (the "Opus pot" is wasted), so ~$4K, about **a third** of Codex | 100% |
-  | Other cuts | Promo boost dropping from 50% to 25% means "losing around 17% off the top" | Tibo claims hosting improvements give "up to a 3 to 4x difference"; the speaker is skeptical but saw "a meaningful difference" |
-  | 5-hour limit | Yes, on all plans. Each 5-hour window ≈ 40% of the Fable limit (20% of weekly), so five windows clear the weekly limit, but **only 2.5 with Fable** | **No 5-hour limits** on the $100/$200 Pro tiers; weekly only |
-  | Free resets | Rare, "you can't really count on it" | Frequent: "eight free resets in the last 30 days", so the weekly limit is "more like a 3-day limit"; also banked resets |
-  | Felt value | — | *"like a 4xish gap... I can get four times more done with Codex on Astra than I can with Fable and Claude Code"* |
-  | Enough for one dev? | *"If you're using it a few hours a day, two to three days a week... not using a lot of sub agents, you can probably get by on a single $200 plan"* | *"Most devs, when used responsibly, could absolutely get away with the $200 plan with Codex"*. It falls short only if you use *"higher reasoning limits than necessary and not paying much attention."* |
+  | Inference value | ~$8K/month [FVA 1:03:52](https://youtu.be/P7bxbDSnZRM?t=3832) | ~$12K/month [FVA 1:03:57](https://youtu.be/P7bxbDSnZRM?t=3837) |
+  | Usable on the frontier model | Only 50% for Fable (the "Opus pot" is wasted [FVA 1:04:26](https://youtu.be/P7bxbDSnZRM?t=3866)), so ~$4K, about **a third** of Codex [FVA 1:05:05](https://youtu.be/P7bxbDSnZRM?t=3905) | 100% [FVA 1:05:17](https://youtu.be/P7bxbDSnZRM?t=3917) |
+  | Other cuts | Promo boost dropping from 50% to 25% means "losing around 17% off the top" [FVA 1:04:08](https://youtu.be/P7bxbDSnZRM?t=3848) | Tibo claims hosting improvements give "up to a 3 to 4x difference"; the speaker is skeptical but saw "a meaningful difference" [FVA 1:05:30](https://youtu.be/P7bxbDSnZRM?t=3930) |
+  | 5-hour limit | Yes, on all plans. Each 5-hour window ≈ 40% of the Fable limit (20% of weekly), so five windows clear the weekly limit, but **only 2.5 with Fable** [FVA 1:06:58](https://youtu.be/P7bxbDSnZRM?t=4018) | **No 5-hour limits** on the $100/$200 Pro tiers; weekly only [FVA 1:06:46](https://youtu.be/P7bxbDSnZRM?t=4006) |
+  | Free resets | Rare, "you can't really count on it" [FVA 1:08:56](https://youtu.be/P7bxbDSnZRM?t=4136) | Frequent: "eight free resets in the last 30 days", so the weekly limit is "more like a 3-day limit" [FVA 1:09:02](https://youtu.be/P7bxbDSnZRM?t=4142); also banked resets [FVA 1:08:32](https://youtu.be/P7bxbDSnZRM?t=4112) |
+  | Felt value | — | *"four times more done with Codeex on Astra"* than with Fable and Claude Code [FVA 1:08:17](https://youtu.be/P7bxbDSnZRM?t=4097) |
+  | Enough for one dev? | A few hours a day, two to three days a week, few subagents: *"you can probably get by on a single $200 plan with Claude"* [FVA 1:07:20](https://youtu.be/P7bxbDSnZRM?t=4040) | *"Most devs, when used responsibly, could absolutely get away with the $200 plan with Codex"* [FVA 1:07:38](https://youtu.be/P7bxbDSnZRM?t=4058); it falls short only with *"higher reasoning limits than necessary"* and inattention [FVA 1:07:32](https://youtu.be/P7bxbDSnZRM?t=4052) |
 
-- **Avoid waste:** avoid Astra "fast"; be careful with "ultra"; don't use higher reasoning than necessary.
-- **Reality check:** *"Astra is cheaper than Fable, but neither are cheap... They will both burn limits fast."* For $20/$100 plans, wait for prices to fall. If cost is your main motivation, consider open-source plans or GLM 5.3 Flash.
-- **His bias:** OpenAI early access didn't count against his usage. He ran 130 billion tokens in early access, so he lacks a feel for how quickly Astra burns a paid account. He never had free unlimited Fable.
-- **Recommendation:** anyone who uses computers professionally and earns over $100K/year *"or your boss should be paying for the $200 a month [Codex] plan."*
+- **Avoid waste:** rule 25; don't use higher reasoning than necessary [FVA 1:07:32](https://youtu.be/P7bxbDSnZRM?t=4052). **Reality check:** *"Astra is cheaper than Fable, but neither are cheap"* and *"They will both burn limits fast"* [FVA 1:10:14](https://youtu.be/P7bxbDSnZRM?t=4214). For $20/$100 plans and cost-first users, see rule 24.
+- **His bias:** OpenAI early access didn't count against his usage [FVA 26:49](https://youtu.be/P7bxbDSnZRM?t=1609). He ran 130 billion tokens in early access [FVA 27:08](https://youtu.be/P7bxbDSnZRM?t=1628), so he lacks a feel for how quickly Astra burns a paid account. He never had free unlimited Fable [FVA 27:15](https://youtu.be/P7bxbDSnZRM?t=1635).
+- **Recommendation:** anyone who uses computers professionally and earns over $100K/year *"or your boss should be paying for the $200 a month plan"* (Codex) [FVA 1:13:23](https://youtu.be/P7bxbDSnZRM?t=4403).
 
 ## 8. Draft routing table (Video 2 only)
 
 | Task type | Recommended model | Fallback | Why (speaker) |
 |---|---|---|---|
-| Day-to-day code to be merged (bug fixes, feature additions, perf improvements) | Fable 5.1 | Astra | "Fable is what I reach for when I'm trying to land code"; 2 vs 6 follow-ups per PR; "mergeable 20ish% more often." |
-| Quick bug fix | Fable 5.1 | Astra | "defaulting to Fable for things like a quick bug fix." |
-| UI changes that matter / front-end design | Fable 5.1 (+ Claude Code design skill) | Astra + design skill, with heavy iteration | "Fable takes the cake here easy"; "do not trust Astra with UI anything." |
-| Landing pages / one-shot designs | Fable 5.1 | — | Fable 5.1's one-shot "screams like custom made." |
-| Rescuing a stuck/looping Astra task | Fable 5.1 ("make this actually land") | — | His "favorite thing to use Fable 5.1 for." |
-| Scope-sensitive minimal diffs | Fable 5.1 | Astra with an explicit "smallest possible changes" instruction plus a human in the loop | Astra scope-creeps "by default". |
-| Reverts / intent-sensitive small fixes | Fable 5.1 | — | The "revert" incident. |
-| Tasks relying on skills (e.g. a "babysit PR" skill) | Fable 5.1 | — | "Skill using. Fable has a huge lead." |
-| Tasks with strict boundaries / refusals to honor | Fable 5.1 | — | "Fable is ahead"; Astra forgets. |
-| Giant rewrites / language ports with no UI (TS→Rust) | Astra (goal + ~40 subagents, ultra) | Fable to land and clean up | Sol ~30% → Astra 80%+; "relentlessness." |
-| Rewrites/ports involving existing UI | Fable 5.1 (or Astra with explicit pixel-perfect constraint, then Fable cleanup) | — | Astra "would just blanket over destroy the existing UI." |
-| Deep / elusive bugs not visible from reading code | Astra (X high) | Fable first, for speed | "if the bug is outside of what Fable can grasp... Astra will find it. It'll just take four times longer." |
-| Full-stack feature work | Fable 5.1 (faster) | Astra (more exhaustive) | "Almost feels like a tie." |
-| Large-scale orchestration / swarms / many parallel agents with inter-agent messaging | Astra | Fable (planned, staged subagents) | "I've never seen anything else like it." |
-| Tasks needing frequent mid-run steering | Astra | Fable 5.1 | "Astra eats this." |
-| Writing prompts for subagents / writing skills | Astra (then human audit) | Fable | "Astra is better at it slightly"; "write your skills by hand or at least audit them." |
-| Computer use / desktop automation / app setup | Astra (Codex on macOS) | Fable with the right tools | "Astra computer use is so far ahead, it's kind of hilarious." |
-| Science / research-tool tasks | Astra (even on low) | Fable 5.1 XH-high | 54.3% at $11 vs 50% for Fable. |
-| 3D rendering / Blender / visual prototypes | Astra | Fable | Astra 9/10 vs Fable 5/10. |
-| 3D/game interaction, animation curves, camera, movement feel | Fable 5.1 | — | "Astra makes games that look better on Twitter. Fable makes games that actually feel nice to play." |
-| Game dev end to end | Astra prototype → Fable polish | — | Explicit two-stage pipeline. |
-| Copywriting / user-facing prose | Human (neither is good) | Fable draft + Astra critique; never let Astra write UI copy | Astra subtitle spam; "nothing has topped Kimi K2" (not recommended for use). |
-| Audio/video editing | Don't use AI | Astra for workspace setup via computer use | "If you let AI edit your content... you are doing the equivalent of shipping an app using GPT3." |
-| Exploratory or programmatically verifiable throwaway code | Sol (GPT-5.6), the cheap option | Astra | "I would really only trust soul for exploratory work or things that could be verified programmatically." |
-| Batch / non-urgent jobs via API | Astra on OpenAI Flex | — | Half price, no throughput guarantee. |
-| Cost-constrained general use | Astra on the Codex $200 plan | GLM 5.3 Flash / open-source plan | About 4x value; "GLM53 Flash go[es] off the rails less than Astra." |
-| Work for low-frustration-tolerance users | Fable 5.1 | — | "you should pay the extra money for Fable." |
-| After Fable quota is exhausted | Don't fall back to Opus/Sonnet; switch accounts (CLI proxy) or to Astra | — | "Opus sucks and Sonnet's hilariously bad." |
+| Day-to-day code to be merged (bug fixes, feature additions, perf improvements) | Fable 5.1 | Astra | "Fable is what I reach for when I'm trying to land code" [FVA 1:14:34](https://youtu.be/P7bxbDSnZRM?t=4474); 2 vs 6 follow-ups per PR [FVA 33:40](https://youtu.be/P7bxbDSnZRM?t=2020); "mergeable 20ish% more often" [FVA 1:15:05](https://youtu.be/P7bxbDSnZRM?t=4505). |
+| Quick bug fix | Fable 5.1 | Astra | "defaulting to Fable for things like a quick bug fix" [FVA 39:30](https://youtu.be/P7bxbDSnZRM?t=2370). |
+| UI changes that matter / front-end design | Fable 5.1 (+ Claude Code design skill) | Astra + design skill, with heavy iteration | "Fable takes the cake here easy" [FVA 21:53](https://youtu.be/P7bxbDSnZRM?t=1313); "do not trust Astra with UI anything" [FVA 14:02](https://youtu.be/P7bxbDSnZRM?t=842). |
+| Landing pages / one-shot designs | Fable 5.1 | — | Fable 5.1's one-shot "screams like custommade" [FVA 21:34](https://youtu.be/P7bxbDSnZRM?t=1294). |
+| Rescuing a stuck/looping Astra task | Fable 5.1 ("make this actually land") | — | His "favorite thing to use Fable 5.1 for" [FVA 39:37](https://youtu.be/P7bxbDSnZRM?t=2377). |
+| Scope-sensitive minimal diffs | Fable 5.1 | Astra with an explicit "smallest possible changes" instruction plus a human in the loop | Astra scope-creeps "by default" [FVA 40:27](https://youtu.be/P7bxbDSnZRM?t=2427). |
+| Reverts / intent-sensitive small fixes | Fable 5.1 | — | The "revert" incident [FVA 44:21](https://youtu.be/P7bxbDSnZRM?t=2661). |
+| Tasks relying on skills (e.g. a "babysit PR" skill) | Fable 5.1 | — | "Skill using. Fable has a huge lead." [FVA 56:42](https://youtu.be/P7bxbDSnZRM?t=3402) |
+| Tasks with strict boundaries / refusals to honor | Fable 5.1 | — | "Fable is ahead"; Astra generally acts better but forgets, and its failures are more egregious [FVA 57:20](https://youtu.be/P7bxbDSnZRM?t=3440). |
+| Giant rewrites / language ports with no UI (TS→Rust) | Astra (goal + ~40 subagents, ultra) | Fable to land and clean up | Sol ~30% → Astra 80%+ [FVA 25:52](https://youtu.be/P7bxbDSnZRM?t=1552); "relentlessness" [FVA 25:10](https://youtu.be/P7bxbDSnZRM?t=1510). |
+| Rewrites/ports involving existing UI | Fable 5.1 (or Astra with explicit pixel-perfect constraint, then Fable cleanup) | — | Astra "would just blanket over destroy the existing UI" [FVA 31:54](https://youtu.be/P7bxbDSnZRM?t=1914). |
+| Deep / elusive bugs not visible from reading code | Astra (X high) | Fable first, for speed | "Astra will find it. It'll just take four times longer." [FVA 24:42](https://youtu.be/P7bxbDSnZRM?t=1482) |
+| Full-stack feature work | Fable 5.1 (faster) | Astra (more exhaustive) | "almost feels like a tie" [FVA 24:48](https://youtu.be/P7bxbDSnZRM?t=1488). |
+| Large-scale orchestration / swarms / many parallel agents with inter-agent messaging | Astra | Fable (planned, staged subagents) | "I've never seen anything else like it" [FVA 50:57](https://youtu.be/P7bxbDSnZRM?t=3057). |
+| Tasks needing frequent mid-run steering | Astra | Fable 5.1 | "Astra eats this" [FVA 52:54](https://youtu.be/P7bxbDSnZRM?t=3174). |
+| Writing prompts for subagents / writing skills | Astra (then human audit) | Fable | "Astra is better at it slightly" [FVA 55:25](https://youtu.be/P7bxbDSnZRM?t=3325); "write your skills by hand or at least audit them" [FVA 55:12](https://youtu.be/P7bxbDSnZRM?t=3312). |
+| Computer use / desktop automation / app setup | Astra (Codex on macOS) | Fable with the right tools | "computer use is so far ahead, it's kind of hilarious" [FVA 11:07](https://youtu.be/P7bxbDSnZRM?t=667). |
+| Science / research-tool tasks | Astra (even on low) | Fable 5.1 XH-high | 54.3% at $11 vs 50% for Fable [FVA 4:48](https://youtu.be/P7bxbDSnZRM?t=288). |
+| 3D rendering / Blender / visual prototypes | Astra | Fable | Astra 9/10 vs Fable 5/10 [FVA 22:14](https://youtu.be/P7bxbDSnZRM?t=1334). |
+| 3D/game interaction, animation curves, camera, movement feel | Fable 5.1 | — | Astra's games "look better on Twitter"; Fable's "actually feel nice to play" [FVA 41:29](https://youtu.be/P7bxbDSnZRM?t=2489). |
+| Game dev end to end | Astra prototype → Fable polish | — | Explicit two-stage pipeline [FVA 9:27](https://youtu.be/P7bxbDSnZRM?t=567). |
+| Copywriting / user-facing prose | Human (neither is good) | Fable draft + Astra critique; never let Astra write UI copy | Astra subtitle spam [FVA 13:18](https://youtu.be/P7bxbDSnZRM?t=798); "nothing has topped Kimmy K2" (not recommended for use) [FVA 12:08](https://youtu.be/P7bxbDSnZRM?t=728). |
+| Audio/video editing | Don't use AI | Astra for workspace setup via computer use | "you are doing the equivalent of shipping an app using GPT3" [FVA 17:12](https://youtu.be/P7bxbDSnZRM?t=1032). |
+| Exploratory or programmatically verifiable throwaway code | Sol (GPT-5.6), the cheap option | Astra | "I would really only trust soul for exploratory work" [FVA 37:31](https://youtu.be/P7bxbDSnZRM?t=2251). |
+| Batch / non-urgent jobs via API | Astra on OpenAI Flex | — | Half price, no throughput guarantee [FVA 1:02:17](https://youtu.be/P7bxbDSnZRM?t=3737). |
+| Cost-constrained general use | Astra on the Codex $200 plan | GLM 5.3 Flash / open-source plan | About 4x value [FVA 1:08:10](https://youtu.be/P7bxbDSnZRM?t=4090); GLM 5.3 Flash goes "off the rails less than Astra" [FVA 1:14:17](https://youtu.be/P7bxbDSnZRM?t=4457). |
+| Work for low-frustration-tolerance users | Fable 5.1 | — | "you should pay the extra money for Fable" [FVA 1:12:31](https://youtu.be/P7bxbDSnZRM?t=4351). |
+| After Fable quota is exhausted | Don't fall back to Opus/Sonnet; switch accounts (CLI proxy) or to Astra | — | "Opus sucks and Sonnet's hilariously bad" [FVA 1:04:52](https://youtu.be/P7bxbDSnZRM?t=3892). |
 
 ---
 
 # Cross-video notes (agreements and tensions)
 
 **Agreements**
-- Fable is the consistent, high-floor model. Astra is spiky, with higher peaks and much lower troughs.
-- Astra's notable failures are basic agentic and intent failures, not intelligence failures. The **same "revert" example** appears in both videos.
-- Self-verification and review loops (sandboxed review agents, videos in PRs, babysitting PRs) are central.
-- Tokens are expensive, but human time is more expensive.
+- Fable is the consistent, high-floor model. Astra is spiky, with higher peaks and much lower troughs ([MODELS 4:19](https://youtu.be/iBrAWpjXNxs?t=259), [FVA 24:54](https://youtu.be/P7bxbDSnZRM?t=1494)).
+- Astra's notable failures are basic agentic and intent failures, not intelligence failures. The **same "revert" example** appears in both videos ([MODELS 5:57](https://youtu.be/iBrAWpjXNxs?t=357), [FVA 44:21](https://youtu.be/P7bxbDSnZRM?t=2661)).
+- Self-verification and review loops (sandboxed review agents, videos in PRs, babysitting PRs) are central ([MODELS 15:18](https://youtu.be/iBrAWpjXNxs?t=918), [FVA 33:46](https://youtu.be/P7bxbDSnZRM?t=2026)).
+- Tokens are expensive, but human time is more expensive ([MODELS 10:30](https://youtu.be/iBrAWpjXNxs?t=630), [MODELS 19:47](https://youtu.be/iBrAWpjXNxs?t=1187)).
 
 **Tensions / disagreements**
-1. **Long autonomous runs.** Video 1 argues that wide, long runs need the highest floor, and that Astra's floor is unpredictable ("you don't really know how to gauge what level to operate at"). Video 2 uses **Astra** for its longest unattended jobs: a multi-day TS→Rust port with 40 subagents, "not in the loop". One reconciliation: Video 1's "wide" means end-to-end tasks that must ship clean code, while Video 2's Astra runs are measured against a test suite (programmatically verifiable). The videos don't state this, so it is an inference.
-2. **Opus.** Video 1 treats Opus as adequate for narrow, well-specified tasks and uses it for log analysis. Video 2 says "Opus sucks and Sonnet's hilariously bad" and calls non-Fable quota useless.
-3. **Sol.** Video 1 calls moving from Astra back to Sol understandable and "in some real cases somewhat good". Video 2 rates Sol's mergeability 2–3/10 and trusts it only for exploratory or programmatically verifiable work.
-4. **Spend philosophy.** Video 1 says don't downgrade to save money, because your time costs more. Video 2 strongly pushes the cheaper Codex/Astra plan for value, and would choose Astra if forced to pick one. Both still say Fable is better for code when cost isn't a factor.
-5. **Gemini Flash / cheap models.** Video 1 says "no one should be using a Gemini thing" and that cheaper models can cost more. Video 2 suggests GLM 5.3 Flash as a more pleasant alternative to Astra for cost-sensitive users.
+1. **Long autonomous runs.** Video 1 argues that wide, long runs need the highest floor, and that Astra's floor is unpredictable ("you don't really know how to gauge what level to operate at") [MODELS 8:46](https://youtu.be/iBrAWpjXNxs?t=526). Video 2 uses **Astra** for its longest unattended jobs: a multi-day TS→Rust port with 40 subagents, "not in the loop" [FVA 26:31](https://youtu.be/P7bxbDSnZRM?t=1591). One reconciliation: Video 1's "wide" means end-to-end tasks that must ship clean code, while Video 2's Astra runs are measured against a test suite (programmatically verifiable). The videos don't state this, so it is an inference.
+2. **Opus.** Video 1 treats Opus as adequate for narrow, well-specified tasks and uses it for log analysis. Video 2 says "Opus sucks and Sonnet's hilariously bad" and calls non-Fable quota useless [FVA 1:04:52](https://youtu.be/P7bxbDSnZRM?t=3892).
+3. **Sol.** Video 1 calls moving from Astra back to Sol understandable and "in some real cases somewhat good" [MODELS 3:49](https://youtu.be/iBrAWpjXNxs?t=229). Video 2 rates Sol's mergeability 2–3/10 and trusts it only for exploratory or programmatically verifiable work [FVA 37:31](https://youtu.be/P7bxbDSnZRM?t=2251).
+4. **Spend philosophy.** Video 1 says don't downgrade to save money, because your time costs more. Video 2 strongly pushes the cheaper Codex/Astra plan for value, and would choose Astra if forced to pick one. Both still say Fable is better for code when cost isn't a factor ([MODELS 19:47](https://youtu.be/iBrAWpjXNxs?t=1187), [FVA 1:08:10](https://youtu.be/P7bxbDSnZRM?t=4090), [FVA 1:12:49](https://youtu.be/P7bxbDSnZRM?t=4369), [FVA 1:15:17](https://youtu.be/P7bxbDSnZRM?t=4517)).
+5. **Gemini Flash / cheap models.** Video 1 says "no one should be using a Gemini thing" and that cheaper models can cost more. Video 2 suggests GLM 5.3 Flash as a more pleasant alternative to Astra for cost-sensitive users ([MODELS 7:09](https://youtu.be/iBrAWpjXNxs?t=429), [MODELS 19:19](https://youtu.be/iBrAWpjXNxs?t=1159), [FVA 1:14:10](https://youtu.be/P7bxbDSnZRM?t=4450)).
 
 **Gaps relevant to the routing table:** neither video covers Opus 5.5, Sonnet 5.5, Haiku 4.5 or "GPT-6.1 Sol" by name. Neither gives context-window sizes beyond Astra's "1M" mention. Neither gives guidance on cheap, fast models for subagent grunt work such as search or summarisation.
