@@ -21,7 +21,7 @@ personal CLAUDE.md with:
 ## Install (Claude Code)
 
 ```bash
-claude plugin marketplace add <github-user>/agent-orchestration
+claude plugin marketplace add Colbitron/agent-orchestration
 claude plugin install agent-orchestration@agent-orchestration
 ```
 

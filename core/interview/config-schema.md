@@ -22,7 +22,7 @@ and Codex has one config and one routing table.
 ```yaml
 version: 1
 user:
-  name: Colby                      # used only for prose in generated files
+  name: Ada                        # used only for prose in generated files
   updated: 2026-10-02              # set by the interview each run
 
 # Which agent tools the user actually drives. The first `primary: true` entry

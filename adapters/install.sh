@@ -189,7 +189,7 @@ case "$HARNESS" in
     # §1 and README.md "Install (Claude Code)": the repo root is the plugin.
     say 'Claude Code uses the plugin at the repo root, not this installer. Run:'
     say ''
-    say '  claude plugin marketplace add <github-user>/agent-orchestration'
+    say '  claude plugin marketplace add Colbitron/agent-orchestration'
     say '  claude plugin install agent-orchestration@agent-orchestration'
     say ''
     say 'Then, in any session:  /agent-orchestration:setup'

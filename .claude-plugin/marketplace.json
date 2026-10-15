@@ -1,6 +1,6 @@
 {
   "name": "agent-orchestration",
-  "owner": { "name": "Colby" },
+  "owner": { "name": "Colby Hill", "url": "https://github.com/Colbitron" },
   "description": "Marketplace for the agent-orchestration kit.",
   "plugins": [
     {
