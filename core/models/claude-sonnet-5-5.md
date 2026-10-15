@@ -88,17 +88,15 @@ and more wall clock, so there it costs about the same as Opus for weaker work.
   automated judging panel), Sonnet scored slightly above Opus at about half the
   price, in about 5 minutes; Opus took "almost twice as long". "The cost per
   point here is insane. It is like the best value I've seen in this bench by
-  far" (`research/claude-releases.md § Video 3: Claude Sonnet 5.5 › 2. Strengths
-  (with evidence)`). Astra still produced "by far the best plan".
+  far" ([SON55 23:46](https://youtu.be/8WbW_n95wc4?t=1426)). Astra still produced "by far the best plan".
 - **Designed to be called by other models.** "If you give Opus or Fable a big
   task and they want to analyze the codebase before starting, they can now call
   on Sonnet to do that and get results that they're more than happy with. This
-  is huge" (`research/claude-releases.md § Video 3 › 6. Subagents,
-  orchestration, delegation and verification`).
+  is huge" ([SON55 24:16](https://youtu.be/8WbW_n95wc4?t=1456)).
 - **Reads thread context faithfully.** Given an ambiguous prompt in the wrong
   thread, it answered within that thread's frame instead of guessing: "I was
   about to crash out about it not understanding my intent but it totally does"
-  (`research/claude-releases.md § Video 3 › 2. Strengths`).
+  ([SON55 26:05](https://youtu.be/8WbW_n95wc4?t=1565)).
 - **Fewer dumb spikes than Astra.** The speaker "would take Sonnet over Astra for
   my day-to-day code work" but "would just use Opus" (same section). It feels
   like "slightly dumber, way faster versions of Fable".
@@ -118,28 +116,24 @@ and more wall clock, so there it costs about the same as Opus for weaker work.
   cache reads cost $0.20/M, the same as Opus, and made up "like 50 plus" percent
   of Sonnet's agentic cost (about 20% for Opus, under 5% for Fable). On that
   pricing, "Sonnet consistently comes out as if not more expensive than opus
-  does" on like-for-like code tasks (`research/claude-releases.md § Video 3 ›
-  3. Weaknesses, pitfalls and misconceptions`). Anthropic has since cut Sonnet's
+  does" on like-for-like code tasks ([SON55 10:50](https://youtu.be/8WbW_n95wc4?t=650)). Anthropic has since cut Sonnet's
   cache reads to $0.10/M, so it is now half Opus's price on every line item.
   Token hunger (next bullet) still eats much of that: like-for-like it should
   land at about Opus's cost rather than above it (inference; no like-for-like
   run since the cut). On AA it cost roughly the same as Fable 5.1, mostly
   because of max; AA has since repriced it and it "shifted quite a bit to the
-  left" on Theo's chart (`transcripts/claude/releases/claude-haiku-5-5.html`
-  19:14-19:30).
+  left" on Theo's chart ([H55 19:14-19:30](https://youtu.be/38_6C0dkKmU?t=1154)).
 - **Token-hungry.** Cursor Bench: 271,920 tokens per task, the most ever
   recorded (Opus 218K), "more than 5x" Sol and Astra. In Fish Slop it used more
   than 3.5x Opus's input tokens. About 360K tokens read per request vs about 110K
-  for 6.1 Sol (`research/gpt-releases.md § Video 2: GPT-6.1 Sol › 2. Strengths,
-  with evidence`).
+  for 6.1 Sol ([SOL61 19:16](https://youtu.be/vu8X3YroB-w?t=1156)).
 - **Slower wall clock despite faster tokens.** Fish Slop: 43 min vs 36 min for
   Opus (39 vs 27 min generating). "It's faster, but actually slower because of
   the token differences."
 - **Weak front end.** "A bit opinionated", "rough", "hideous", "boring", "awful"
   animations, scroll bugs; worse than Opus and "significantly worse" than Fable.
   Anthropic's "sharp eye for design" claim is disputed. 6.1 Sol's UI was worse
-  still (`research/gpt-releases.md § Video 2 › 7. Comparisons with Claude
-  models`).
+  still ([SOL61 22:28](https://youtu.be/vu8X3YroB-w?t=1348)).
 - **Medium is weak.** "Medium is a lot stronger with Opus than it is with
   Sonnet"; Frontier Code shows "pretty big drops" at medium and low.
 - **Max and low.** Max is the most expensive setting and xhigh beat it on
@@ -150,12 +144,12 @@ and more wall clock, so there it costs about the same as Opus for weaker work.
   5.5 at every single level" on the AA Intelligence Index.
 - **Less thorough than OpenAI auditors.** On the speaker's audits, "neither
   [Sonnet nor Opus] were anywhere near as thorough" as 6.1 Sol
-  (`research/gpt-releases.md § Video 2 › 2. Strengths, with evidence`).
+  ([SOL61 13:48](https://youtu.be/vu8X3YroB-w?t=828)).
 - **Topic changes.** Because it reads the thread's frame faithfully, a new topic
   in a long-running thread must be flagged explicitly.
 - **May be displaced.** After 6.1 Sol shipped: "I have almost no reason to use
   Sonnet anymore because this will effectively take its place"
-  (`research/gpt-releases.md § Video 2 › 1. Subject and thesis`).
+  ([SOL61 29:35](https://youtu.be/vu8X3YroB-w?t=1775)).
 
 ## How to prompt it
 
@@ -194,8 +188,7 @@ validated on Fable or Opus, not on Sonnet):
   > it. Report it as a follow-up in your summary.
 
 - Ask it to mark claims it could not confirm, with the reason (Theo's review
-  guidance in `research/claude-supplemental.md § Video 1: Getting the most out
-  of Opus 5.5 › 5. Subagents ...`).
+  guidance in [OPUSG 24:45](https://youtu.be/ejjBbaq9RmY?t=1485)).
 - Leave out "think hard" and "show your reasoning" (general Claude 5.x guidance
   from the same video).
 
@@ -241,7 +234,7 @@ Handoff patterns:
   as "all of Haiku for the cheap and most of Opus for the less cheap". Sonnet
   "offers nothing now. Maybe just barely on high", and "you can avoid Sonnet
   entirely and just use Opus and Haiku"
-  (`transcripts/claude/releases/claude-haiku-5-5.html` 37:22-37:45). This is
+  ([H55 37:22-37:45](https://youtu.be/38_6C0dkKmU?t=2242)). This is
   his reading of aggregate benchmark data, not a task test. The kit keeps
   Sonnet as the analysis subagent above: Haiku does not replace judgment work,
   and analysis that needs judgment stays with Sonnet or Opus.
@@ -275,27 +268,25 @@ Handoff patterns:
 
 ## Evidence
 
-- `research/claude-releases.md § Video 3: Claude Sonnet 5.5` (all sections) and
-  `§ Cross-video synthesis (for the routing table)`.
-- `research/claude-releases.md § Video 2: Claude Opus 5.5 › 4. Pricing, speed,
-  context and limits` (Sonnet 5.5 announced as "coming weeks").
-- `research/gpt-releases.md § Video 2: GPT-6.1 Sol` sections 1, 2 and 7 (token
+- SON55: "OpenAI should be scared of this one", Theo (t3.gg), YouTube, https://youtu.be/8WbW_n95wc4
+- OPUS55: "My new favorite model.", Theo (t3.gg), YouTube, https://youtu.be/jgGyX7MPPVg (Sonnet 5.5 announced as "coming weeks").
+- SOL61: "OpenAI fights back", Theo (t3.gg), YouTube, https://youtu.be/vu8X3YroB-w (token
   comparison, audit costs, "almost no reason to use Sonnet anymore").
-- `research/model-selection.md § Video 2: "Claude Fable 5.1 vs GPT-6 Astra" › 2.
-  Models mentioned` says "Sonnet's hilariously bad", but this is unversioned and
+- FVA: "Fable Vs Astra Debate Is Over", Theo (t3.gg), YouTube, https://youtu.be/P7bxbDSnZRM says "Sonnet's hilariously bad", but this is unversioned and
   predates Sonnet 5.5; not used for scores.
-- `research/claude-supplemental.md` does not cover Sonnet; prompting snippets
-  above are carried over from its Opus and Fable videos and marked as such.
+- OPUSG: "Getting the most out of Opus 5.5", Theo (t3.gg), YouTube, https://youtu.be/ejjBbaq9RmY
+- FABG: "So I was using Fable wrong...", Theo (t3.gg), YouTube, https://youtu.be/-XWSJM-Ue-o
+  Neither covers Sonnet; prompting snippets
+  above are carried over from these Opus and Fable videos and marked as such.
 - API id and 1M context come from the bundled Claude API reference (model table
   cached 2026-09-25), not from `research/`. Data retention / ZDR for Sonnet is
   not covered in research.
 - Cache-read price of $0.10/M: Anthropic pricing page, fetched 2026-10-08
   ("Cache hits and refreshes on Claude Opus 5.5 and Claude Sonnet 5.5 are
   priced at 0.05x the base input price"). Opus 5.5 stays at $0.20/M.
-- `transcripts/claude/releases/claude-haiku-5-5.html` (Theo's Haiku 5.5 launch
-  video, about 2026-10-07): cache-read cut at 4:36, AA repricing at
-  19:07-19:30, Pareto-line view at 37:22-37:45. Digested as
-  `research/claude-releases.md § V4.4` and `§ V4.8`.
+- H55: "finally a good small model", Theo (t3.gg), YouTube, https://youtu.be/38_6C0dkKmU (Theo's Haiku 5.5 launch
+  video, about 2026-10-07): cache-read cut at [H55 4:36](https://youtu.be/38_6C0dkKmU?t=276), AA repricing at
+  [H55 19:07-19:30](https://youtu.be/38_6C0dkKmU?t=1147), Pareto-line view at [H55 37:22-37:45](https://youtu.be/38_6C0dkKmU?t=2242).
 - Release month: not stated (`released: null`).
 - Confidence is medium: one dedicated video plus comparisons in the Sol video,
   with conflicting cost data; no Anthropic prompt guide for Sonnet in research.

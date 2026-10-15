@@ -6,7 +6,7 @@ family: grok
 status: current
 released: 2026-09                # 2026-09-21
 as_of: 2026-10-02
-confidence: medium               # ID, price, context from xAI docs; review results from Theo's transcripts; speed sources conflict
+confidence: medium               # ID, price, context from xAI docs; review results from Theo's videos; speed sources conflict
 
 api_ids: [grok-4.7]              # no aliases
 access:
@@ -79,25 +79,21 @@ Code" audit, behind 6.1 Sol and Astra. Use it for a review or audit opinion from
 a lab other than Anthropic and OpenAI, and as an arena competitor on hard bugs.
 It is very token-hungry, so it is not a cheap or bulk model despite its list
 price. This profile comes mostly from vendor docs and aggregators, plus two
-review results from Theo's transcripts, not hands-on testing; test it on your own
+review results from Theo's videos, not hands-on testing; test it on your own
 tasks before trusting it.
 
 ## Strengths
 
 - **Review.** On Theo's informal review bench it had 8 supported findings and
-  "came second overall, which surprised him" (`research/claude-supplemental.md §
-  Video 1 › 5. Subagents, orchestration, delegation, verification, review, model
-  choice`). "Consider using Grok for your reviews, too" (same section). It does
+  "came second overall, which surprised him" ([OPUSG 23:28](https://youtu.be/ejjBbaq9RmY?t=1408)).
+  "Consider using Grok for your reviews, too" ([OPUSG 24:36](https://youtu.be/ejjBbaq9RmY?t=1476)). It does
   better than Opus and Fable at finding improvements, "likely helped by
-  Cursor/Bugbot review data" (`research/claude-releases.md § Video 2: Claude Opus
-  5.5 › 3. Weaknesses, pitfalls and misconceptions`).
+  Cursor/Bugbot review data" ([OPUS55 21:33](https://youtu.be/jgGyX7MPPVg?t=1293)).
 - **Audit bench.** 80.7 on "find opportunities to improve T3 Code" vs 87.4 for 6.1
-  Sol and 83.8 for Astra (`research/gpt-releases.md § Deep code review, auditing,
-  and investigation: his main use`).
+  Sol and 83.8 for Astra ([SOL61 14:12](https://youtu.be/vu8X3YroB-w?t=852)).
 - **Decomposition planning.** Grok 4.7 "once outperformed Fable on an earlier
   version of" Theo's PR-decomposition bench; it is not ranked on the current
-  version (`research/claude-releases.md § Video 3: Claude Sonnet 5.5 › 6.
-  Subagents, orchestration, delegation and verification`).
+  version ([SON55 21:56](https://youtu.be/8WbW_n95wc4?t=1316)).
 - **Coding agent index.** AA Coding Agent Index 56 in Grok Build, 4th behind Fable
   5.1, GPT-6 Astra and Opus 5 (`research/model-gaps.md § 3a. Grok 4.7`).
 - **Other benches.** AA Intelligence Index 46; DeepSWE about 71–73%;
@@ -121,13 +117,13 @@ tasks before trusting it.
   WinBuzzer; unverified).
 - **Precision vs Claude.** OpenAI models "and even Grok 4.7 find more issues";
   Claude models find fewer but well-vetted ones
-  (`research/claude-supplemental.md § 7. Model comparisons`). Expect some noise;
+  ([OPUSG 24:05](https://youtu.be/ejjBbaq9RmY?t=1445)). Expect some noise;
   have a Claude model or the implementer filter findings.
 - **Speed is unclear.** AA's leaderboard shows 79 tok/s at xhigh; AA's launch
   article says about 188. Conflict, unverified.
 - **Lower floor expected.** Theo: the higher floor "is the thing that you don't
   get as much from ... other labs other than anthropic and open AI generally"
-  (`research/model-selection.md § Video 1 › 2. Models mentioned`). General, not
+  ([MODELS 5:41](https://youtu.be/iBrAWpjXNxs?t=341)). General, not
   measured on 4.7.
 
 ## How to prompt it
@@ -137,7 +133,7 @@ every reviewer in the kit:
 
 - Name the review target (diff, branch, PR) and the question.
 - Ask it to mark what it could not confirm, and give it a way to verify (tests,
-  a running app) (`research/claude-supplemental.md § Video 1 › 5`).
+  a running app) ([OPUSG 24:41](https://youtu.be/ejjBbaq9RmY?t=1481)).
 - Make "nothing found" a valid answer.
 - Cap effort at `high` and bound the scope, to limit token use.
 - Headless: `grok -p "<task>" -m grok-4.7 --output-format streaming-json`. API is
@@ -191,15 +187,11 @@ Handoff patterns:
   the CLI; grok-build-0.1 is a separate model; "SpaceXAI" branding),
   `§ At-a-glance comparison`, `§ 3a. Grok 4.7`, `§ 3b. Grok Build (agent CLI) and
   grok-build-0.1 (model)`, `§ Suggested routing-table shortlist`.
-- `research/claude-supplemental.md § Video 1 › 5. Subagents, orchestration,
-  delegation, verification, review, model choice` (review bench, "Grok second")
-  and `§ 7. Model comparisons`.
-- `research/gpt-releases.md § Deep code review, auditing, and investigation: his
-  main use` (80.7).
-- `research/claude-releases.md § Video 2: Claude Opus 5.5 › 3. Weaknesses,
-  pitfalls and misconceptions` (Grok above Opus/Fable on the audit bench) and
-  `§ Video 3: Claude Sonnet 5.5 › 6. Subagents, orchestration, delegation and
-  verification` (decomposition bench).
+- [OPUSG 23:28](https://youtu.be/ejjBbaq9RmY?t=1408) (review bench, "Grok second")
+  and [OPUSG 24:05](https://youtu.be/ejjBbaq9RmY?t=1445).
+- [SOL61 14:12](https://youtu.be/vu8X3YroB-w?t=852) (80.7).
+- [OPUS55 21:33](https://youtu.be/jgGyX7MPPVg?t=1293) (Grok above Opus/Fable on the audit bench) and
+  [SON55 21:56](https://youtu.be/8WbW_n95wc4?t=1316) (decomposition bench).
 - URLs: [xAI Grok 4.7 docs](https://docs.x.ai/developers/grok-4-7),
   [xAI models and pricing](https://docs.x.ai/docs/models),
   [AA: Benchmarking Grok 4.7](https://artificialanalysis.ai/articles/benchmarking-grok-4-7),

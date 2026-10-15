@@ -102,7 +102,7 @@ trusting it.
 - **Price may be promotional** and is not confirmed on a Xiaomi page.
 - **First-party API id unknown**; OpenRouter is the confirmed route.
 - **Lower floor expected** outside Anthropic/OpenAI
-  (`research/model-selection.md § Video 1 › 2. Models mentioned`).
+  ([MODELS 5:41](https://youtu.be/iBrAWpjXNxs?t=341)).
 
 ## How to prompt it
 
@@ -162,7 +162,7 @@ Handoff patterns:
   Open-weights models for OpenCode / Pi › How to run them from a terminal`,
   `§ 4a. Xiaomi MiMo-V2.6-Pro (and V2.6-Flash)`, `§ Suggested routing-table
   shortlist` (mid / second-opinion tier, "cheapest AA-46").
-- `research/model-selection.md § Video 1 › 2. Models mentioned` (open-weight
+- [MODELS 5:41](https://youtu.be/iBrAWpjXNxs?t=341) (open-weight
   floors; general, not about MiMo).
 - URLs: [VentureBeat](https://venturebeat.com/technology/better-than-deepseek-xiaomis-mimo-v2-6-pro-debuts-as-the-top-open-weights-model-in-the-world-alongside-cheaper-v2-6-flash),
   [AA open-weights page](https://artificialanalysis.ai/models/open-source),

@@ -4,7 +4,7 @@ name: GPT-6 Luna
 vendor: openai
 family: gpt
 status: current
-released: 2026-09                # about 2026-09-22, alongside GPT-6 Sol (from transcripts)
+released: 2026-09                # about 2026-09-22, alongside GPT-6 Sol (from Theo's GPT-6.1 Sol video)
 as_of: 2026-10-08
 confidence: low                  # web research only; one aggregator number; Theo: 6.0 Sol and Luna "weren't that good"
 
@@ -100,16 +100,15 @@ good".
 - **Low index.** 38 vs 50 for 6.1 Sol and 54 for Opus 5.5. Expect it to miss on
   anything that needs judgment.
 - **Theo's verdict.** OpenAI "rushed out" GPT-6 Sol and GPT-6 Luna, which "weren't
-  that good", so he made no videos about them (`research/gpt-releases.md § Video
-  2: GPT-6.1 Sol › 1. Subject and thesis`). This is one line, not an evaluation.
+  that good", so he made no videos about them ([SOL61 0:11](https://youtu.be/vu8X3YroB-w?t=11)). This is one line, not an evaluation.
 - **Cheap per token is not cheap per task on hard work.** OpenRouter's cost
   router sent most traffic to a cheap model, took 104 steps vs 19 for Astra low,
-  and cost more (`research/gpt-releases.md § Critique of naive cost routers`).
+  and cost more ([SOL61 19:42](https://youtu.be/vu8X3YroB-w?t=1182)).
   That test did not use Luna, but the risk applies to any low-index model.
 - **Behind Haiku 5.5 on Anthropic's launch benchmarks.** Terminal-Bench 4.0: Luna
   16.4% vs Haiku 5.5 39.2%. OSWorld 2.1: Luna 48.9% vs Haiku 5.5 72.4% partial
-  credit. These are Anthropic's numbers, unverified (`research/claude-releases.md
-  § V4.2`).
+  credit. These are Anthropic's numbers, unverified ([H55 9:18](https://youtu.be/38_6C0dkKmU?t=558);
+  [H55 9:55](https://youtu.be/38_6C0dkKmU?t=595)).
 - **Unknowns.** Cache-read price, speed, Codex availability and computer-use
   support are not confirmed.
 - **Family traits (inferred).** Sol and Astra have weak UI taste and write filler
@@ -147,7 +146,7 @@ Against Haiku 5.5:
 - Theo's Haiku video places Luna as "cheaper always, dumber always" than Haiku
   5.5 on Artificial Analysis cost vs intelligence. His cross-vendor value line
   runs Luna, then GPT-6.1 Sol, then Opus 5.5. In an Anthropic-only environment,
-  Haiku 5.5 now fills Luna's slot (`research/claude-releases.md § V4.8`).
+  Haiku 5.5 now fills Luna's slot ([H55 16:00](https://youtu.be/38_6C0dkKmU?t=960); [H55 17:09](https://youtu.be/38_6C0dkKmU?t=1029)).
 
 Handoff patterns:
 - **Luna gathers, Opus/Sol ship.** Luna reads and extracts; Sol or Opus decides
@@ -184,18 +183,18 @@ Handoff patterns:
   its own"), `§ At-a-glance comparison`, `§ 5. OpenAI Sol naming: GPT-5.6 Sol vs
   GPT-6.1 Sol (plus GPT-6 Luna)`, and `§ Suggested routing-table shortlist`
   (cheap/bulk tier).
-- `research/gpt-releases.md § Video 2: GPT-6.1 Sol › 1. Subject and thesis`
-  ("weren't that good") and `§ Critique of naive cost routers`.
-- `research/claude-releases.md § V4.2` (Anthropic's Haiku 5.5 launch benchmarks
-  vs Luna) and `§ V4.8` (Luna "cheaper always, dumber always" than Haiku 5.5;
+- [SOL61 0:11](https://youtu.be/vu8X3YroB-w?t=11)
+  ("weren't that good") and [SOL61 19:42](https://youtu.be/vu8X3YroB-w?t=1182).
+- [H55 9:18](https://youtu.be/38_6C0dkKmU?t=558); [H55 9:55](https://youtu.be/38_6C0dkKmU?t=595) (Anthropic's Haiku 5.5 launch benchmarks
+  vs Luna) and [H55 16:00](https://youtu.be/38_6C0dkKmU?t=960); [H55 17:09](https://youtu.be/38_6C0dkKmU?t=1029) (Luna "cheaper always, dumber always" than Haiku 5.5;
   cross-vendor value line).
-- `research/claude-releases.md` transcription notes ("Luna" = OpenAI cheap model
+- [OPUS55 3:29](https://youtu.be/jgGyX7MPPVg?t=209) ("Luna" = OpenAI cheap model
   released alongside GPT-6 Sol).
 - URLs: [OpenAI models](https://developers.openai.com/api/docs/models),
   [AA leaderboard](https://artificialanalysis.ai/leaderboards/models),
   [Codex non-interactive docs](https://learn.chatgpt.com/docs/non-interactive-mode).
 - **Unverified:** cached-input price; speed; AA figures (single aggregator);
-  release date (from transcripts); effort level list beyond "none through max";
+  release date (from the video, not a vendor page); effort level list beyond "none through max";
   availability in Codex, Cursor and ChatGPT plans; computer-use support.
 
 ### Score rationale

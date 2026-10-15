@@ -96,47 +96,42 @@ without a Claude gate.
   downloaded about 150 pages of medical records through slow dashboards in
   15 minutes and drives Excel with the real mouse and keyboard. "If you care a
   lot about computer use, there is nothing even close."
-  (`research/gpt-releases.md § Computer use: the headline strength`;
-  `research/model-selection.md § 4. Head-to-head results`)
+  ([ASTRA 11:43](https://youtu.be/XFWpf0wLbh0?t=703);
+  [FVA 11:07](https://youtu.be/P7bxbDSnZRM?t=667))
 - **3D, Blender, CAD.** BenchCAD 96% for under $2, vs Fable's best of 84% at
   over $11. The speaker rates its 3D rendering 9/10 against Fable's 5/10, "the
   biggest gap of anything here."
-  (`research/gpt-releases.md § 3D, Blender, and game graphics`;
-  `research/model-selection.md § 4. Head-to-head results`)
+  ([ASTRA 14:44](https://youtu.be/XFWpf0wLbh0?t=884);
+  [FVA 8:46](https://youtu.be/P7bxbDSnZRM?t=526))
 - **Swarm orchestration and steering.** Unlike Fable's planned, staged
   subagents, Astra spins up subagents that message each other and fans out
   based on their updates. It tracked 40 parallel subagents on the TS-to-Rust
   port. Mid-task context injection doesn't derail it ("Astra eats this"). It
   can ask non-blocking questions while it keeps working, if the harness
-  supports that. (`research/model-selection.md § 5. Subagents, orchestration,
-  planning, verification, review`)
+  supports that. ([FVA 50:44](https://youtu.be/P7bxbDSnZRM?t=3044))
 - **Delegation from very short prompts.** The Lakebed performance overhaul was
   one thread and two prompts ("Spit out some sub agents and go do it"). It
   built its own stress-test and audit tools, cut sync latency from up to 800 ms
   to under 30 ms, and Fable 5.1 judged the changes "entirely sound".
-  (`research/gpt-releases.md § Swarms, sub-agents, and self-prompting (important
-  for orchestration)`)
+  ([ASTRA 33:58](https://youtu.be/XFWpf0wLbh0?t=2038))
 - **Thoroughness.** "Astra is still the most thorough" (Opus 5.5 video). It
   produced "by far the best plan" on the giant-PR decomposition bench. On deep
   bugs: "Astra quadruple confirms everything... if the bug is outside of what
   Fable can grasp just from reading code... Astra will find it. It'll just take
-  four times longer." (`research/claude-releases.md § 3. Weaknesses, pitfalls
-  and misconceptions` (Video 2); `research/claude-releases.md § 2. Strengths
-  (with evidence)` (Video 3); `research/model-selection.md § GPT-6 Astra`)
+  four times longer." ([OPUS55 25:54](https://youtu.be/jgGyX7MPPVg?t=1554); [SON55 22:52](https://youtu.be/8WbW_n95wc4?t=1372);
+  [FVA 24:30](https://youtu.be/P7bxbDSnZRM?t=1470))
 - **Long sessions and compaction.** It honours context over long runs and
   compacts "in a way that continues to honor what it was doing."
-  (`research/gpt-releases.md § Long-horizon work, context retention, and
-  compaction`)
+  ([ASTRA 11:12](https://youtu.be/XFWpf0wLbh0?t=672))
 - **Science, math, security benchmarks.** Terminal Bench Science: Astra low
   54% for $11 vs Fable 5.1 medium 36% for $15. ExploitBench 100% even on low.
-  DeepSWE 74.1% on xhigh. (`research/gpt-releases.md § Benchmarks cited from
-  OpenAI's post`)
+  DeepSWE 74.1% on xhigh. ([ASTRA 8:39](https://youtu.be/XFWpf0wLbh0?t=519))
 - **Token efficiency.** About 27K tokens per Artificial Analysis task vs about
   80K for Fable 5.1; $3.26 per task vs $7.60.
-  (`research/model-selection.md § 7. Cost management and rate limits`)
+  ([FVA 1:02:11](https://youtu.be/P7bxbDSnZRM?t=3731))
 - **Fleet and infra judgment.** "Aster is the only one that hasn't really made
   too many of those dumb mistakes" when managing his agent machines.
-  (`research/gpt-releases.md § Judgment in fleet and infrastructure management`)
+  ([SOL61 16:55](https://youtu.be/vu8X3YroB-w?t=1015))
 
 ## Weaknesses and failure modes
 
@@ -145,9 +140,8 @@ without a Claude gate.
   failed to "center an icon in a div". Its floor reportedly dips to Gemini
   Flash level. "Astra has had the most bad model experiences I have had of any
   model this year." By the Sol 6.1 video the speaker had churned off it and
-  kept Codex only for computer use. (`research/model-selection.md § 2. Models
-  mentioned` (Video 1); `research/gpt-releases.md § Reliability and low
-  spikiness: the key improvement over Astra`)
+  kept Codex only for computer use. ([MODELS 4:19](https://youtu.be/iBrAWpjXNxs?t=259);
+  [SOL61 10:44](https://youtu.be/vu8X3YroB-w?t=644))
 - **Says it will fix things, then doesn't. The orchestrator must verify git
   and PR state and not trust the report.** Asked whether review comments were
   worth addressing, it said "I would address both before merging" and changed
@@ -157,49 +151,47 @@ without a Claude gate.
   sent a dead link, and merged the PR after being told it hadn't made the
   change. After any Astra run the orchestrator should check the remote branch,
   `gh pr checks`, and unresolved review threads itself.
-  (`research/gpt-releases.md § Instruction-following failures and passivity:
-  the "babysit" story`; `research/model-selection.md § The "revert" incident
-  (intent, in detail)`)
+  ([ASTRA 37:18](https://youtu.be/XFWpf0wLbh0?t=2238);
+  [FVA 44:03](https://youtu.be/P7bxbDSnZRM?t=2643))
 - **Review-comment loops and death loops.** "It does tend to get trapped if it
   gets enough review comments and it struggles to get out of those loops."
   Review-bot reminders bloat its context and push it off course. One prompt
   cost "a thousand dollars for it to run in a loop and not ship anything and
-  then break my website." (`research/gpt-releases.md § Over-engineering and
-  review loops`; `research/model-selection.md § 1. Subject and thesis` (Video 2))
+  then break my website." ([ASTRA 39:39](https://youtu.be/XFWpf0wLbh0?t=2379);
+  [FVA 1:12:01](https://youtu.be/P7bxbDSnZRM?t=4321))
 - **Scope creep and over-engineering by default.** "You end up with a thousand
   line of code PR that should have been 50." About 6 follow-ups per PR vs
-  Fable's 2. (`research/model-selection.md § GPT-6 Astra`)
+  Fable's 2. ([FVA 40:46](https://youtu.be/P7bxbDSnZRM?t=2446))
 - **Drops skills on later turns.** It ignored a loaded babysit skill for 5
   follow-ups. The speaker blames a Codex system-prompt rule that a skill used
   in one turn should not apply to later turns unless requested.
-  (`research/model-selection.md § 6. Claude Code / Codex specifics`)
+  ([FVA 55:43](https://youtu.be/P7bxbDSnZRM?t=3343))
 - **Destroys existing UI during rewrites.** It ignored "Reuse as much UI code
   as possible" on the ping.gg rewrite, with a 1M context, so this was not
-  compaction. (`research/model-selection.md § GPT-6 Astra`)
+  compaction. ([FVA 30:40](https://youtu.be/P7bxbDSnZRM?t=1840))
 - **Frontend and copy.** It added over 20 useless all-caps subtitles to a 2D
   page and used "little" 15 times on one landing page. "I straight up do not
   trust Astra with UI anything." It is about Fable 5 tier on marketing pages,
-  "but it makes dumber mistakes". (`research/gpt-releases.md § Frontend and UI
-  design: still worse than Anthropic`; `research/model-selection.md § GPT-6
-  Astra`)
+  "but it makes dumber mistakes". ([ASTRA 27:19](https://youtu.be/XFWpf0wLbh0?t=1639);
+  [FVA 14:02](https://youtu.be/P7bxbDSnZRM?t=842))
 - **Game feel.** Movement "sucked and was janky". "Astra makes games that look
   better on Twitter. Fable makes games that actually feel nice to play."
-  (`research/gpt-releases.md § Game feel, controls, and taste`)
+  ([ASTRA 17:15](https://youtu.be/XFWpf0wLbh0?t=1035))
 - **Slow.** "This model, I'll be frank, can be slow." About 30 TPS on
   OpenRouter; exhaustive debugging takes about 4x longer than Fable.
-  (`research/gpt-releases.md § Speed` (Video 1);
-  `research/claude-releases.md § 2. Strengths (with evidence)` (Video 3))
+  ([ASTRA 3:51](https://youtu.be/XFWpf0wLbh0?t=231);
+  [SON55 18:15](https://youtu.be/8WbW_n95wc4?t=1095))
 - **Boundaries and refusals.** Its boundary failures are "more egregious" than
   Fable's, and it refuses more often. OpenAI's own safety numbers point the
   other way (0% honeypot falls, 2.4% computer-use misalignment). Treat as
   unresolved and keep destructive actions gated.
-  (`research/model-selection.md § GPT-6 Astra`; `research/gpt-releases.md §
-  Benchmarks cited from OpenAI's post`)
+  ([FVA 57:26](https://youtu.be/P7bxbDSnZRM?t=3446);
+  [ASTRA 11:31](https://youtu.be/XFWpf0wLbh0?t=691))
 - **Not good at:** video editing ("all cringe and bad") or slide visual
-  quality. (`research/gpt-releases.md § Slides and video editing`)
+  quality. ([ASTRA 35:01](https://youtu.be/XFWpf0wLbh0?t=2101))
 - **Harness dependence.** Async questions, Gmail/Notion plugins and much of the
   computer-use speed come from Codex. A bare API call may not reproduce them.
-  (`research/gpt-releases.md § 8. Using it inside or alongside Claude Code`)
+  ([ASTRA 18:22](https://youtu.be/XFWpf0wLbh0?t=1102))
 
 ## How to prompt it
 
@@ -207,8 +199,7 @@ without a Claude gate.
   Codex as though it is Claude, which it is not. The prompt should be much
   simpler." Don't port Claude-style essays, think-hard lines or long negative
   lists into Codex prompts. State the task, the target and the done state.
-  (`transcripts/general/agent-orchestration-inspiration.html` ~21:40, no
-  research digest yet)
+  ([INSP 21:40](https://youtu.be/8GRmLR__OGQ?t=1300))
 - **Give it everything it needs up front, then delegate broadly.** Tools
   (Blender CLI, computer use, plugins), access, and the goal. It does its best
   work from a short delegation such as:
@@ -316,36 +307,35 @@ without a Claude gate.
 
 ## Evidence
 
-- `research/gpt-releases.md § Video 1: GPT-6 Astra` (all subsections): launch
+- ASTRA: "It's Here.", Theo (t3.gg), YouTube, https://youtu.be/XFWpf0wLbh0: launch
   review, about $330K of the speaker's inference. Early access; he was asked
   not to use it on open-source code, so coding examples are from private
   projects.
-- `research/gpt-releases.md § Reliability and low spikiness: the key
-  improvement over Astra` and `§ Cross-video synthesis (for the routing table)`:
+- [SOL61 10:44](https://youtu.be/vu8X3YroB-w?t=644) and
+  [SOL61 16:55](https://youtu.be/vu8X3YroB-w?t=1015):
   the later re-assessment ("effectively churned", "I am entirely done using
   Astra after this model"). **This supersedes the launch verdict for daily
   coding.**
-- `research/model-selection.md § Video 1` (floor and spikiness, revert,
-  center-an-icon) and `§ Video 2: "Claude Fable 5.1 vs GPT-6 Astra"` (category
+- MODELS: "Please stop using stupid models", Theo (t3.gg), YouTube, https://youtu.be/iBrAWpjXNxs (floor and spikiness, revert,
+  center-an-icon) and FVA: "Fable Vs Astra Debate Is Over", Theo (t3.gg), YouTube, https://youtu.be/P7bxbDSnZRM (category
   head-to-head, swarms, revert incident, skill-dropping, cost and subscription
   tables).
-- `research/claude-supplemental.md § 5. Subagents, orchestration, delegation,
-  verification, review, model choice` (both videos): cross-family review,
+- [OPUSG 22:37](https://youtu.be/ejjBbaq9RmY?t=1357);
+  [FABG 25:15](https://youtu.be/-XWSJM-Ue-o?t=1515): cross-family review,
   Fable calling Codex for computer use, Astra "a slightly better reviewer than
-  Fable", review bench (Astra 8 supported findings). `§ 4. Pitfalls and
-  misconceptions corrected` (Video 2): Astra loops and burns usage at the
+  Fable", review bench (Astra 8 supported findings). [FABG 4:27](https://youtu.be/-XWSJM-Ue-o?t=267):
+  Astra loops and burns usage at the
   extremes.
-- `research/claude-releases.md § 3. Weaknesses, pitfalls and misconceptions`
-  (Video 2: "Astra is still the most thorough"; OpenAI caps context at 272K
-  and models trust compaction) and `§ 2. Strengths (with evidence)` (Video 3:
-  best decomposition plan, about 30 TPS).
-- `transcripts/general/agent-orchestration-inspiration.html` ~15:00–15:53 ("cost
+- [OPUS55 25:54](https://youtu.be/jgGyX7MPPVg?t=1554); [OPUS55 34:06](https://youtu.be/jgGyX7MPPVg?t=2046)
+  ("Astra is still the most thorough"; OpenAI caps context at 272K
+  and models trust compaction) and [SON55 22:52](https://youtu.be/8WbW_n95wc4?t=1372); [SON55 18:15](https://youtu.be/8WbW_n95wc4?t=1095)
+  (best decomposition plan, about 30 TPS).
+- [INSP 15:00–15:53](https://youtu.be/8GRmLR__OGQ?t=900) ("cost
   in quotes of nine", Codex usage "basically infinite"; said of GPT-5.5) and
-  ~21:40–22:18 (prompt Codex more simply; "if Codex finds nothing, say that
-  clearly"). No research digest exists for this transcript yet.
+  [INSP 21:40–22:18](https://youtu.be/8GRmLR__OGQ?t=1300) (prompt Codex more simply; "if Codex finds nothing, say that
+  clearly").
 - **Unverified:** Cursor access. The Opus 5.5 video says "OpenAI has banned
-  Cursor from using their models" (`research/claude-releases.md § 2. Strengths
-  (with evidence)`, Video 2). `cursor` stays in `harnesses` until confirmed.
+  Cursor from using their models" ([OPUS55 7:18](https://youtu.be/jgGyX7MPPVg?t=438)). `cursor` stays in `harnesses` until confirmed.
 - **Unverified or ambiguous:** FrontierMath figures (97.6 vs 100 contradiction);
   the "input four times higher" remark; the ~370K Codex window is the speaker's
   belief; ExploitBench high-cheaper-than-low may be a table error; OpenAI said

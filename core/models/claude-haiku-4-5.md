@@ -105,7 +105,7 @@ hands-on testing. It is kept for reference; 4.5 can be retired from 2026-10-15.
 - **No effort control.** Only an extended-thinking token budget.
 - **Theo's rule.** "Never use haiku. Just don't at this point. It's not useful
   for anything real, especially with [GPT-5.5] being effectively free"
-  (`transcripts/general/agent-orchestration-inspiration.html` ~19:00; quoted in
+  ([INSP 19:00](https://youtu.be/8GRmLR__OGQ?t=1140); quoted in
   `core/strategies/cost-model.md § 11`). That was said of Haiku before the 2026
   cheap tiers, and nothing since has improved its relative position.
 - **About to be retired.** Retirement "not sooner than October 15, 2026". A
@@ -158,8 +158,7 @@ trivial, checkable chore must run fast.
   batch $0.50 / $2.50.
 - AA cost per task about $0.28. Cheap per token is not cheap per completed task:
   a low-index model that needs retries or a stronger model's cleanup costs more
-  than a capable model that finishes (`research/gpt-releases.md § Critique of
-  naive cost routers`).
+  than a capable model that finishes ([SOL61 20:25](https://youtu.be/vu8X3YroB-w?t=1225)).
 - On a Claude subscription its quota use is not documented in the research.
 - **Alias caveat:** `--model haiku` resolves to the current Haiku. When Haiku 5.5
   ships, the alias should move to it; pin `claude-haiku-4-5-20251001` only if you
@@ -182,9 +181,9 @@ trivial, checkable chore must run fast.
   [Mike Krieger on X](https://x.com/mikeyk/status/2102441803253535060),
   [cellcog](https://cellcog.ai/blog/claude-haiku-5-5-release-date/),
   [docsbot](https://docsbot.ai/models/claude-haiku-5-5).
-- `transcripts/general/agent-orchestration-inspiration.html` ~19:00 (Theo's
+- INSP: "A proper guide to Fable 5", Theo (t3.gg), YouTube, https://youtu.be/8GRmLR__OGQ, at [INSP 19:00](https://youtu.be/8GRmLR__OGQ?t=1140) (Theo's
   "never use haiku" rule) and `core/strategies/cost-model.md § 11`.
-- `research/claude-releases.md` (Haiku 5.5 "coming in the next few weeks"; none
+- SON55: "OpenAI should be scared of this one", Theo (t3.gg), YouTube, https://youtu.be/8WbW_n95wc4 ([SON55 4:00](https://youtu.be/8WbW_n95wc4?t=240): Haiku 5.5 "coming in the next few weeks"; none
   of the videos evaluates Haiku 4.5).
 - **Unverified:** current subscription-plan gating (launch announcement only);
   AA figures are from one aggregator; SWE-bench 73.3% is a vendor number from

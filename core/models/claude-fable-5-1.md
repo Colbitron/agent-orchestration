@@ -84,56 +84,42 @@ requires zero data retention.
 - **High floor and mergeability.** The speaker values it because it is "less
   dumb", not because it is smarter: "Fable writes code that is mergeable 20ish%
   more often, and its stupid spikes are much less stupid." Mergeability is "right
-  on the edge of 10 out of 10" (`research/model-selection.md § Video 2: "Claude
-  Fable 5.1 vs GPT-6 Astra" › 1. Subject and thesis`). Quality varies by "never
+  on the edge of 10 out of 10" ([FVA 1:15:05](https://youtu.be/P7bxbDSnZRM?t=4505)). Quality varies by "never
   more than like two points in either direction."
 - **Lands work through the review tail.** In a 24-hour window: 13 PRs at a median
   489 LOC, 11 files and up to 4 packages per PR, 0.4 high-severity review-bot
   findings per 1K LOC (Fable 5: 2.06; Sol: 1.02), 0 PRs closed as slop. "It won
   today by carrying more work through the review and merge tail"
-  (`research/claude-releases.md § Video 1: Claude Fable 5.1 (and Mythos 5.1) › 2.
-  Strengths (with evidence)`).
+  ([FAB51 51:44](https://youtu.be/r_dw-1109Ag?t=3104)).
 - **Rescues stuck PRs.** PRs that other agents had left in review-fix loops
   "pretty much all ... ended up landing"; a streaming PR that failed 8+ earlier
   attempts landed in about 450 lines (same section). Its "favorite" use is taking
-  over an Astra death loop (`research/model-selection.md § Video 2 › 3. Decision
-  rules and "use X for Y" statements`, rule 11).
+  over an Astra death loop ([FVA 39:37](https://youtu.be/P7bxbDSnZRM?t=2377), rule 11).
 - **Orchestration of planned subagents.** A slop audit produced nine ordered PRs
   (deletions first), then Fable subagents babysat all 10 to merge: 340 files,
   13K lines net deleted, every bot thread answered or fixed
-  (`research/claude-releases.md § Video 1 › 6. Subagents, orchestration,
-  delegation and verification`). It "plans up front" which subagents to spawn
-  (`research/model-selection.md § Video 2 › 5. Subagents, orchestration,
-  planning, verification, review`), and the lead keeps working while subagents
-  run (`research/claude-supplemental.md § Video 2: Using Fable 5.1 correctly › 5.
-  Subagents, orchestration, delegation, verification, review, model choice`).
+  ([FAB51 43:21](https://youtu.be/r_dw-1109Ag?t=2601)). It "plans up front" which subagents to spawn
+  ([FVA 50:32](https://youtu.be/P7bxbDSnZRM?t=3032)), and the lead keeps working while subagents
+  run ([FABG 34:13](https://youtu.be/-XWSJM-Ue-o?t=2053)).
 - **Merge judgment.** "I'm telling this model more often to merge the PR when it
   decides it's ready, and I've yet to be burned by that, despite it doing it
-  dozens of times" (`research/claude-releases.md § Video 1 › 2. Strengths`). It
+  dozens of times" ([FAB51 46:38](https://youtu.be/r_dw-1109Ag?t=2798)). It
   refused an Astra-written 26K-line change as not ready, then built shadow mode
   and synthetic-traffic checks to de-risk it
-  (`research/claude-supplemental.md § Video 2 › 2. Concrete workflow the speaker
-  uses`).
+  ([FABG 19:47](https://youtu.be/-XWSJM-Ue-o?t=1187)).
 - **Front-end taste.** "A generational leap in homepage design"; "Fable takes the
   cake here easy" over Astra; better than Opus 5.5 on open-ended briefs
-  (`research/claude-releases.md § Video 1 › 2. Strengths`;
-  `research/model-selection.md § Video 2 › 4. Head-to-head results`;
-  `research/claude-supplemental.md § Video 1: Getting the most out of Opus 5.5 ›
-  3. Prompting guidance`). Absolute caveat: the speaker rates neither Fable nor
+  ([FAB51 24:39](https://youtu.be/r_dw-1109Ag?t=1479); [FVA 21:53](https://youtu.be/P7bxbDSnZRM?t=1313); [OPUSG 16:32](https://youtu.be/ejjBbaq9RmY?t=992)). Absolute caveat: the speaker rates neither Fable nor
   Astra above about 5/10 on design.
 - **Game feel.** "Astra makes games that look better on Twitter. Fable makes
   games that actually feel nice to play." It got Fish Slop controls right on the
-  first try where Astra did not (`research/model-selection.md § Video 2 › 2.
-  Models mentioned`; `research/gpt-releases.md § Video 1: GPT-6 Astra › 3.
-  Weaknesses, pitfalls, and misconceptions`).
+  first try where Astra did not ([FVA 41:29](https://youtu.be/P7bxbDSnZRM?t=2489); [ASTRA 17:01](https://youtu.be/XFWpf0wLbh0?t=1021)).
 - **Skill use and scope discipline.** "Skill using. Fable has a huge lead"; it
-  stays in scope with less effort than Astra (`research/model-selection.md §
-  Video 2 › 4. Head-to-head results`).
+  stays in scope with less effort than Astra ([FVA 56:42](https://youtu.be/P7bxbDSnZRM?t=3402)).
 - **Benchmarks.** AA Intelligence Index higher than anything measured at launch;
   Terminal Bench 4 low 40% vs 21.5% for Fable 5 at about half the cost
-  (`research/claude-releases.md § Video 1 › 2. Strengths`). Opus 5.5 later
-  overtook it on most benches at far lower cost (`research/claude-releases.md §
-  Video 2: Claude Opus 5.5 › 2. Strengths (with evidence)`).
+  ([FAB51 13:00](https://youtu.be/r_dw-1109Ag?t=780)). Opus 5.5 later
+  overtook it on most benches at far lower cost ([OPUS55 6:42](https://youtu.be/jgGyX7MPPVg?t=402)).
 
 ## Weaknesses and failure modes
 
@@ -141,60 +127,54 @@ requires zero data retention.
   run had 30+ consecutive tool calls with no text, and the speaker has seen about
   150. If a human or UI must follow along, ask for updates (snippet below). An
   orchestrator should always demand a standalone final recap
-  (`research/claude-supplemental.md § Video 2 › 3. Prompting guidance`).
+  ([FABG 9:01](https://youtu.be/-XWSJM-Ue-o?t=541)).
 - **Asks permission instead of finishing.** It sometimes stops with "shall I
   apply this?" or describes the next step instead of taking it. Use the autonomy
-  block and an explicit end state (`research/claude-releases.md § Video 1 › 3.
-  Weaknesses, pitfalls and misconceptions`;
-  `research/claude-supplemental.md § Video 2 › 3. Prompting guidance`). The
+  block and an explicit end state ([FAB51 36:48](https://youtu.be/r_dw-1109Ag?t=2208); [FABG 14:10](https://youtu.be/-XWSJM-Ue-o?t=850)). The
   speaker says it does this "significantly less than Astra".
 - **Scope overreach.** Per Anthropic's guide it "sometimes will try to fix nearby
   code, extend behavior that the task didn't mention, or commit more test files
   than the change actually warrants." The speaker sees little of this in
   practice, but it can scope-creep "if it gets the wrong review comments at the
-  wrong time" (`research/model-selection.md § Video 2 › 2. Models mentioned`).
+  wrong time" ([FVA 40:27](https://youtu.be/P7bxbDSnZRM?t=2427)).
   Use the anti-scope-creep instruction on narrow subagent tasks.
 - **Safeguard fallback.** Flagged requests fall back to Opus, which lowered its
   Terminal Bench 4 score and served about 4% of AA output tokens. The speaker
   personally hit about 5 false positives in thousands of prompts. Triggers to
   avoid: base64 in context, compile-probing wording, obscure languages without
   docs in context, and "show your reasoning" requests
-  (`research/claude-supplemental.md § Video 2 › 3. Prompting guidance`).
+  ([FABG 33:05](https://youtu.be/-XWSJM-Ue-o?t=1985)).
 - **No zero data retention.** Fable and Mythos cannot run under ZDR; Anthropic
   stores requests and responses. Enterprises with retention rules must use Opus
   (or the costly Enterprise Frontier Safeguards box)
-  (`research/claude-releases.md § Video 1 › 3. Weaknesses`). The bundled Claude
+  ([FAB51 10:26](https://youtu.be/r_dw-1109Ag?t=626)). The bundled Claude
   API reference agrees: ZDR orgs get a 400 unless expressly authorised.
 - **Append-only history.** Editing earlier turns now discards reasoning data and
   will 400 on newer accounts. Harnesses that branch or rewrite history must be
   append-only (same section).
 - **Token-hungry.** 1.7x Fable 5's output tokens on AA; about 80K tokens for what
   Astra did in 27K; the least token-efficient model on AA's chart
-  (`research/model-selection.md § Video 2 › 2. Models mentioned`).
+  ([FVA 1:02:11](https://youtu.be/P7bxbDSnZRM?t=3731)).
 - **Intent misreads on audit questions.** Its one real failure in the launch
   video: an 8-minute audit concluded "nothing links a PR to a thread
   automatically", because it defined "auto-linking" differently. Define terms in
-  audit prompts (`research/claude-releases.md § Video 1 › 3. Weaknesses`).
+  audit prompts ([FAB51 39:02](https://youtu.be/r_dw-1109Ag?t=2342)).
 - **Low effort misses hidden complexity.** "If you have a task that you think is
   simple, but there's some tiny piece you forgot about ... low will miss that."
 - **Dense prose and unmarked quotations.** Longer sentences, fewer paragraph
   breaks; may reproduce source passages without marking them as quotes.
 - **Misses deep runtime bugs.** It "relies on reading code, so it can miss deep
-  bugs that need exhaustive testing" (`research/model-selection.md § Video 2 ›
-  2. Models mentioned`).
+  bugs that need exhaustive testing" ([FVA 24:42](https://youtu.be/P7bxbDSnZRM?t=1482)).
 - **Boundaries (conflicting evidence).** One video rates Fable ahead of Astra at
-  honouring boundaries (`research/model-selection.md § Video 2 › 4. Head-to-head
-  results`); another reports catching Fable "kind of cheating" by copying Astra
-  code from the machine (`research/gpt-releases.md § Video 1: GPT-6 Astra › 2.
-  Strengths, with evidence`). Unresolved in the research.
+  honouring boundaries ([FVA 56:49](https://youtu.be/P7bxbDSnZRM?t=3409)); another reports catching Fable "kind of cheating" by copying Astra
+  code from the machine ([ASTRA 22:38](https://youtu.be/XFWpf0wLbh0?t=1358)). Unresolved in the research.
 - **Physics/science reasoning and 3D visuals** trail OpenAI (Sol, Astra).
 
 ## How to prompt it
 
 Keep CLAUDE.md/AGENTS.md minimal. Delete old anti-formatting, "be concise",
 "hold all findings for the final response" and "think carefully" lines: they
-over-correct on 5.1 (`research/claude-supplemental.md § Video 2 › 3. Prompting
-guidance`). Prompt wide: hand over the whole loop (root cause, fix, verify,
+over-correct on 5.1 ([FABG 12:05](https://youtu.be/-XWSJM-Ue-o?t=725)). Prompt wide: hand over the whole loop (root cause, fix, verify,
 record evidence, PR, babysit, report). Every prompt needs a clear end state.
 
 **Autonomy block** (Anthropic Fable 5.1 prompt guide, quoted by Theo):
@@ -278,8 +258,7 @@ answers work as orchestrator gates.
   program?" instead of compile-probing wording, include docs for obscure
   languages, never ask it to "show your reasoning".
 - Use permission mode auto (or full in a sandbox), never accept-edits or
-  supervised (`research/claude-supplemental.md § Video 2 › 4. Pitfalls and
-  misconceptions corrected`).
+  supervised ([FABG 40:05](https://youtu.be/-XWSJM-Ue-o?t=2405)).
 
 Compared with Opus 5.5, Fable needs less explicit structure (named stops,
 subagent grants, "do all phases") but more explicit scope limits and an explicit
@@ -343,21 +322,22 @@ Handoff patterns:
 
 ## Evidence
 
-- `research/claude-releases.md § Video 1: Claude Fable 5.1 (and Mythos 5.1)`
-  (all sections) and `§ Cross-video synthesis (for the routing table)`.
-- `research/claude-supplemental.md § Video 2: Using Fable 5.1 correctly` (all
-  sections) and `§ Cross-video synthesis (where the two videos agree or differ)`.
+- FAB51: "My New Favorite Model", Theo (t3.gg), YouTube, https://youtu.be/r_dw-1109Ag
+- FABG: "So I was using Fable wrong...", Theo (t3.gg), YouTube, https://youtu.be/-XWSJM-Ue-o
   Recorded before Opus 5.5 shipped.
-- `research/model-selection.md § Video 1: "Using the Right Models"` (floor and
-  width argument) and `§ Video 2: "Claude Fable 5.1 vs GPT-6 Astra"`.
-- `research/gpt-releases.md § Video 1: GPT-6 Astra › 7. Comparisons with Claude
-  models` and `§ Video 2: GPT-6.1 Sol › 2. Strengths, with evidence` (Sol found
+- MODELS: "Please stop using stupid models", Theo (t3.gg), YouTube, https://youtu.be/iBrAWpjXNxs (floor and
+  width argument).
+- FVA: "Fable Vs Astra Debate Is Over", Theo (t3.gg), YouTube, https://youtu.be/P7bxbDSnZRM
+- ASTRA: "It's Here.", Theo (t3.gg), YouTube, https://youtu.be/XFWpf0wLbh0
+- SOL61: "OpenAI fights back", Theo (t3.gg), YouTube, https://youtu.be/vu8X3YroB-w (Sol found
   regressions Fable missed).
+- OPUS55: "My new favorite model.", Theo (t3.gg), YouTube, https://youtu.be/jgGyX7MPPVg
+- OPUSG: "Getting the most out of Opus 5.5", Theo (t3.gg), YouTube, https://youtu.be/ejjBbaq9RmY
 - API id, 1M context and the ZDR rule come from the bundled Claude API reference
   (model table cached 2026-09-25), not from `research/`. Mythos 5.1 is the same
   weights under trusted-access programs, id `claude-mythos-5-1`.
-- Release month: not stated in research (`released: null`). Model-selection
-  Video 1 says Fable "arrived around May–June" without a version number.
+- Release month: not stated in research (`released: null`). [MODELS 22:05](https://youtu.be/iBrAWpjXNxs?t=1325)
+  says Fable "arrived around May–June" without a version number.
 - Transcript ambiguities: merge-time row ("up to 50 minutes ... compared to 47
   minutes ... slightly faster") is self-contradictory; per-task cost figures
   conflict (see Cost notes); cache-read cut is 75% by the figures, "90%" in one

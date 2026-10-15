@@ -107,15 +107,14 @@ aggregators, not hands-on testing; test it on your own tasks before trusting it.
   vs 19 steps and 4.6 minutes for Astra low, and cost more than Astra low; 6.1
   Sol at low got the same score for 1/8 the price. "A model that cannot reason,
   that is given a prompt and no context, cannot make a good decision around how
-  hard the problem is" (`research/gpt-releases.md § Critique of naive cost
-  routers`). The router's choices are not a clean test of the model, but they
+  hard the problem is" ([SOL61 19:56](https://youtu.be/vu8X3YroB-w?t=1196)). The router's choices are not a clean test of the model, but they
   show that this model is cheap per token, not per hard agentic task.
 - **Inputs.** No audio, video or PDF.
 - **Peak pricing.** 2x during 01:00–04:00 and 06:00–10:00 UTC on weekdays.
 - **Jurisdiction.** Possible data-jurisdiction and policy concerns for some
   organisations; check before sending proprietary code to the first-party API.
 - **Lower floor expected** for labs outside Anthropic/OpenAI
-  (`research/model-selection.md § Video 1 › 2. Models mentioned`).
+  ([MODELS 5:41](https://youtu.be/iBrAWpjXNxs?t=341)).
 
 ## How to prompt it
 
@@ -177,9 +176,9 @@ Handoff patterns:
   stale; V4.1 Flash is current), `§ At-a-glance comparison`, `§ 4. Open-weights
   models for OpenCode / Pi › How to run them from a terminal`, `§ 4c. DeepSeek
   V4.1 Flash (and V4 Pro)`, `§ Suggested routing-table shortlist`.
-- `research/gpt-releases.md § Critique of naive cost routers` (60% of router
+- [SOL61 20:13](https://youtu.be/vu8X3YroB-w?t=1213) (60% of router
   traffic, 104 steps).
-- `research/model-selection.md § Video 1 › 2. Models mentioned` (open-weight
+- [MODELS 5:41](https://youtu.be/iBrAWpjXNxs?t=341) (open-weight
   floors).
 - URLs: [DeepSeek pricing docs](https://api-docs.deepseek.com/quick_start/pricing),
   [BuildFastWithAI review](https://blog.buildfastwithai.com/deepseek-v4-1-flash-review),

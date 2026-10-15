@@ -90,12 +90,10 @@ remarks on it are dismissive ("meme tier").
   free API tier (same section).
 - **Short-to-medium terminal coding (vendor-run).** Terminal-bench 2.1 89.4% (Opus
   5: 89.1%), DeepSWE v1.1 73.7% (Opus 5: 74.0%), SWE-Bench Pro 61.6%. Theo's Astra
-  video also cites 73.8% on DeepSWE (`research/gpt-releases.md § Benchmarks cited
-  from OpenAI's post`).
+  video also cites 73.8% on DeepSWE ([ASTRA 20:38](https://youtu.be/XFWpf0wLbh0?t=1238)).
 - **Multimodal input.** Text, image, video, audio and PDF; good at chart reading.
 - **Token-lean on one bench.** Cursor Bench: 162K tokens per task vs 218K for
-  Opus 5.5 and 272K for Sonnet 5.5 (`research/claude-releases.md § Video 3 › 3.
-  Weaknesses, pitfalls and misconceptions`).
+  Opus 5.5 and 272K for Sonnet 5.5 ([SON55 17:41](https://youtu.be/8WbW_n95wc4?t=1061)).
 - **Harness.** Gemini CLI is scriptable (`gemini -p ... -m gemini-3.8-flash
   --output-format json`), has subagents (codebase investigator, browser,
   research), plan mode, MCP and Google Search grounding.
@@ -109,8 +107,8 @@ remarks on it are dismissive ("meme tier").
   change ... But sometimes it can name skateboard tricks really well." A spike
   in his diagram is "why Flash had those couple of good benchmarks that made it
   look really good when it wasn't." "No one should be using a Gemini thing"
-  (`research/model-selection.md § Video 1 › 2. Models mentioned`). "Meme tier"
-  (`§ Video 2 › 2. Models mentioned › Others`). These are asides, not tests.
+  ([MODELS 5:18](https://youtu.be/iBrAWpjXNxs?t=318); [MODELS 7:00](https://youtu.be/iBrAWpjXNxs?t=420); [MODELS 7:09](https://youtu.be/iBrAWpjXNxs?t=429)). "Meme tier"
+  ([FVA 49:27](https://youtu.be/P7bxbDSnZRM?t=2967)). These are asides, not tests.
 - **64K output cap.** Smaller than Claude/GPT (128K) and DeepSeek (384K); it
   cannot regenerate a large file in one response.
 - **More turns.** In a DataCamp hands-on test it took 4 turns where DeepSeek V4.1
@@ -187,11 +185,10 @@ Handoff patterns:
   3.5 Pro never shipped; 3.1 Pro still preview and below 3.8 Flash; Gemini 4
   Argon restricted), `§ At-a-glance comparison`, `§ 2a. Gemini 3.8 Flash`, and
   `§ Suggested routing-table shortlist`.
-- `research/model-selection.md § Video 1 › 2. Models mentioned` and `§ Video 2 ›
-  2. Models mentioned › Others`, `§ Cross-video notes` (Theo's low-floor remarks).
-- `research/claude-releases.md § Video 3 › 3. Weaknesses, pitfalls and
-  misconceptions` (Cursor Bench 162K tokens per task).
-- `research/gpt-releases.md § Benchmarks cited from OpenAI's post` (DeepSWE
+- [MODELS 5:18](https://youtu.be/iBrAWpjXNxs?t=318) and [FVA 49:27](https://youtu.be/P7bxbDSnZRM?t=2967),
+  [MODELS 7:09](https://youtu.be/iBrAWpjXNxs?t=429) (Theo's low-floor remarks).
+- [SON55 17:41](https://youtu.be/8WbW_n95wc4?t=1061) (Cursor Bench 162K tokens per task).
+- [ASTRA 20:38](https://youtu.be/XFWpf0wLbh0?t=1238) (DeepSWE
   73.8%).
 - URLs: [Gemini models](https://ai.google.dev/gemini-api/docs/models),
   [gemini-3.8-flash model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash),

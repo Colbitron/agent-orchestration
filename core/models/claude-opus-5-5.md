@@ -85,34 +85,26 @@ model), or computer use. It needs explicit structure to run long: named stops,
 - **Default driver.** "I think Opus is probably the right default for the vast
   majority of stuff"; Anthropic says it "performs at the level of Fable 5.1 on
   most work and it costs 40% less to run than Opus 5"
-  (`research/claude-releases.md § Video 2: Claude Opus 5.5 › 1. Subject and
-  overall thesis`). By the Sonnet video the speaker "hasn't chosen Fable for any
-  tasks for over a week" (`research/claude-releases.md § Video 3: Claude Sonnet
-  5.5 › 1. Subject and overall thesis`).
+  ([OPUS55 26:00](https://youtu.be/jgGyX7MPPVg?t=1560)). By the Sonnet video the speaker "hasn't chosen Fable for any
+  tasks for over a week" ([SON55 0:07](https://youtu.be/8WbW_n95wc4?t=7)).
 - **Benchmarks at low cost.** Terminal Bench 4: medium beats Fable 5.1 max at
   $2.94 vs $20. Cursor Bench: medium beats Fable max. AA: it "swept" the Pareto
   frontier in the 50+ range; medium costs about $1.34 per task
-  (`research/claude-releases.md § Video 2 › 2. Strengths (with evidence)`). The
+  ([OPUS55 6:42](https://youtu.be/jgGyX7MPPVg?t=402)). The
   speaker thinks these benches flatter it.
 - **Long unattended rewrites.** It restarted the TS-to-Rust port after months of
   stalled Astra/Sol work and "get it working in a day", for about "a grand in
   like a night with just two subscriptions": "for unattended long like heavy
   rewrite type stuff, Anthropic is just comically far ahead right now"
-  (`research/gpt-releases.md § Video 2: GPT-6.1 Sol › 3. Weaknesses and
-  pitfalls`). It also deleted about 1.6M lines of legacy slop when told to
-  (`research/claude-releases.md § Video 3 › 6. Subagents, orchestration,
-  delegation and verification`).
+  ([SOL61 16:19](https://youtu.be/vu8X3YroB-w?t=979)). It also deleted about 1.6M lines of legacy slop when told to
+  ([SON55 26:10](https://youtu.be/8WbW_n95wc4?t=1570)).
 - **Communication and writing.** "My favorite change by far": it "puts the most
   important information up front". The speaker deleted his unslop instructions
   and won't re-add them. Reports state "what they did, what they found, and what
-  it needs from you in plain language" (`research/claude-releases.md § Video 2 ›
-  2. Strengths`; `research/claude-supplemental.md § Video 1: Getting the most out
-  of Opus 5.5 › 5. Subagents, orchestration, delegation, verification, review,
-  model choice`).
+  it needs from you in plain language" ([OPUS55 5:17](https://youtu.be/jgGyX7MPPVg?t=317); [OPUSG 21:31](https://youtu.be/ejjBbaq9RmY?t=1291)).
 - **PR quality.** About 5 PRs: high-severity issue rate similar to Fable 5.1,
   slightly more nitpicks, "slightly higher overall quality, especially if you
-  care about the quality of the prose" (`research/claude-releases.md § Video 2 ›
-  2. Strengths`). Limited data.
+  care about the quality of the prose" ([OPUS55 37:16](https://youtu.be/jgGyX7MPPVg?t=2236)). Limited data.
 - **End-to-end autonomy.** "Go through my computer, find the repo, and make a
   PR": it found the repo, refreshed the stale clone, made a worktree, filed and
   verified the PR, got it merged, for 1% of the weekly limit (same section).
@@ -121,16 +113,14 @@ model), or computer use. It needs explicit structure to run long: named stops,
   three.js than native tech.
 - **Design when directed.** "If you tell it what you want, and more importantly,
   also tell it what you don't want, it can make really good designs"
-  (`research/claude-supplemental.md § Video 1 › 3. Prompting guidance`).
+  ([OPUSG 17:11](https://youtu.be/ejjBbaq9RmY?t=1031)).
 - **ZDR available.** Zero data retention applies to Opus but not Fable/Mythos,
   which the speaker expects to make it "the most popular for coding with AI"
-  (`research/claude-releases.md § Video 2 › 4. Pricing, speed, context and
-  limits`).
+  ([OPUS55 10:20](https://youtu.be/jgGyX7MPPVg?t=620)).
 - **Steering and collaboration.** It handles mid-run follow-ups as additions,
   not replacements; the speaker calls it "a more pleasant collaborator" than 6.1
   Sol and "significantly better at actually implementing code without getting
-  blocked" (`research/gpt-releases.md § Video 2 › 5. Recommended prompting style
-  and workflow`).
+  blocked" ([SOL61 27:54](https://youtu.be/vu8X3YroB-w?t=1674)).
 
 ## Weaknesses and failure modes
 
@@ -138,28 +128,24 @@ model), or computer use. It needs explicit structure to run long: named stops,
   "context is 10% from autocompact ... if it crashed that work would be lost".
   The speaker: "None of this is stuff the model should think about or care
   about." It should trust compaction, which works and is fast
-  (`research/claude-releases.md § Video 2 › 3. Weaknesses, pitfalls and
-  misconceptions`). Tell it compaction is handled and not to stop for it.
+  ([OPUS55 34:45](https://youtu.be/jgGyX7MPPVg?t=2085)). Tell it compaction is handled and not to stop for it.
 - **Stops between phases.** Anthropic's guide: "On long tasks, it'll sometimes
   stop to report instead of going on: a summary that names the next step without
   taking it, an offer to continue, or a list of choices that don't actually block
   the work." An explicit "follow its phase 0 to 7 in order" prompt still stopped
-  after phase 0 (`research/claude-supplemental.md § Video 1 › 4. Pitfalls and
-  misconceptions corrected`). Name the stops; auto-reply "continue" to
+  after phase 0 ([OPUSG 18:34](https://youtu.be/ejjBbaq9RmY?t=1114)). Name the stops; auto-reply "continue" to
   non-blocking "Want me to continue?" endings.
 - **Reluctant to spawn subagents.** "Opus 5.5 seems less willing to spin up
   subagents unless you tell it that it can ... Even then it doesn't always do
-  it" (Theo, not the guide; `research/claude-supplemental.md § Video 1 › 5.
-  Subagents ...`). For known-parallel work, instruct it directly.
+  it" (Theo, not the guide; [OPUSG 20:47](https://youtu.be/ejjBbaq9RmY?t=1247)). For known-parallel work, instruct it directly.
 - **Slow to commit.** One performance run held "almost three hours" of changes
   local and uncommitted. Telling it to commit frequently is an inference from
-  this, not a stated tip (`research/claude-releases.md § Video 2 › 5.
-  Recommended prompting style and workflow`).
+  this, not a stated tip ([OPUS55 34:38](https://youtu.be/jgGyX7MPPVg?t=2078)).
 - **Runaway at max.** A max-effort thread ran 6.5 hours "writing a markdown plan
   ... in loops forever"; switched to high and asked for status, it finished in
   about 10 minutes. SkateBench: max used 13x the cost, 15x the tokens, 20x the
   worst-case latency for one extra correct answer
-  (`research/claude-supplemental.md § Video 1 › 4. Pitfalls`).
+  ([OPUSG 4:23](https://youtu.be/ejjBbaq9RmY?t=263)).
 - **Low is poor.** "Low is really bad ... not that capable considering the
   price"; no no-reasoning mode exists because "these models suck without
   reasoning".
@@ -167,16 +153,14 @@ model), or computer use. It needs explicit structure to run long: named stops,
   It will make mistakes. So will Fable, just less so." Discernment weakens in
   degraded states, and on performance work it may "get stuck repairing things it
   doesn't need to". Failure odds rise with job length
-  (`research/claude-releases.md § Video 2 › 3. Weaknesses`). In fleet management
-  it made "a couple dumb mistakes" (`research/gpt-releases.md § Video 2 › 3.
-  Weaknesses and pitfalls`).
+  ([OPUS55 37:41](https://youtu.be/jgGyX7MPPVg?t=2261)). In fleet management
+  it made "a couple dumb mistakes" ([SOL61 16:50](https://youtu.be/vu8X3YroB-w?t=1010)).
 - **Misses mess and regressions.** It rewrote the Rust port in a new crate
   without deleting the old 1.3M unused lines; 6.1 Sol found regressions "entirely
-  missed by Fable and by Opus" (`research/gpt-releases.md § Video 2 › 2.
-  Strengths, with evidence`).
+  missed by Fable and by Opus" ([SOL61 26:53](https://youtu.be/vu8X3YroB-w?t=1613)).
 - **Weaker reviewer and auditor.** Below Grok 4.7, Sol and Astra on the
   speaker's audit bench; "Fable is still slightly more thorough"
-  (`research/claude-releases.md § Video 2 › 3. Weaknesses`).
+  ([OPUS55 25:54](https://youtu.be/jgGyX7MPPVg?t=1554)).
 - **Front end without direction.** "Half of them are Tailwind templates, the
   other half are this very specific ... color pastel with the big shadows"; the
   design skill barely helps (same section). Mia's 100-page HTML test ranked it
@@ -184,12 +168,10 @@ model), or computer use. It needs explicit structure to run long: named stops,
 - **Token-hungry.** "Meaningfully less efficient than Opus 5"; it came close to
   the most expensive AA run "simply because of how many tokens it is using".
 - **Will spawn Fable subagents.** The Fish Slop run used a Fable 5.1 subagent
-  unintentionally, inflating cost (`research/claude-releases.md § Video 3 › 3.
-  Weaknesses, pitfalls and misconceptions`).
+  unintentionally, inflating cost ([SON55 26:57](https://youtu.be/8WbW_n95wc4?t=1617)).
 - **Safeguards.** First Opus with Fable-level bio and cyber safeguards; flagged
   messages move to older models. Avoid "show your reasoning" wording, which
-  risks a flag (`research/claude-supplemental.md § Video 1 › 3. Prompting
-  guidance`).
+  risks a flag ([OPUSG 25:59](https://youtu.be/ejjBbaq9RmY?t=1559)).
 - **Computer use on macOS.** "As long as you don't use Macs." Run long or
   computer-use agents on remote machines.
 
@@ -298,12 +280,10 @@ Handoff patterns:
 - **Opus delegates review to OpenAI.** Opus implements; 6.1 Sol reviews (reading
   code and reproducing with computer use); findings go back to Opus; Opus fixes;
   Sol re-reviews; then merge. The speaker already has Sol callable from inside
-  Claude Code for this (`research/gpt-releases.md § Video 2 › 8. Using it inside
-  or alongside Claude Code`).
+  Claude Code for this ([SOL61 29:47](https://youtu.be/vu8X3YroB-w?t=1787)).
 - **Opus delegates investigation.** Root-causing, triage and "what needs to be
   touched and why" go to 6.1 Sol; bounded codebase deep dives go to Sonnet 5.5,
-  which "will result in Opus feeling way faster" (`research/claude-releases.md §
-  Video 3 › 5. Recommended prompting style and workflow`).
+  which "will result in Opus feeling way faster" ([SON55 30:24](https://youtu.be/8WbW_n95wc4?t=1824)).
 - **Opus escalates design to Fable** for front-end and marketing pages, and for
   wide work where its output missed the bar.
 - **Opus rescues stalled OpenAI rewrites** (the TS-to-Rust port), then Sol
@@ -326,8 +306,7 @@ Handoff patterns:
 - Subscription is where it wins: "The amount of value you get out of your $200
   sub in Claude, it is running laps around our friends at OpenAI", "maybe not in
   the pure API prices". On API, 6.1 Sol matched Opus 5.5 max on DeepSWE at about
-  1/70 of the cost (`research/gpt-releases.md § Video 2 › 2. Strengths, with
-  evidence`).
+  1/70 of the cost ([SOL61 21:24](https://youtu.be/vu8X3YroB-w?t=1284)).
 - Effort can be raised or lowered mid-session without busting the cache. A
   value pattern: draft at medium/high, then a polish pass at xhigh.
 - Fast mode exists for Opus (2x price per the bundled API reference); not
@@ -336,15 +315,11 @@ Handoff patterns:
 
 ## Evidence
 
-- `research/claude-releases.md § Video 2: Claude Opus 5.5` (all sections),
-  `§ Video 3: Claude Sonnet 5.5 › 3. Weaknesses, pitfalls and misconceptions`,
-  `› 6. Subagents, orchestration, delegation and verification`, and
-  `§ Cross-video synthesis (for the routing table)`.
-- `research/claude-supplemental.md § Video 1: Getting the most out of Opus 5.5`
-  (all sections; reads Anthropic's guide by Addy Osmani).
-- `research/gpt-releases.md § Video 2: GPT-6.1 Sol` (sections 1–3, 5–9) and
-  `§ Cross-video synthesis (for the routing table)`.
-- `research/model-selection.md` covers only unversioned Opus / Opus 5 ("Opus
+- OPUS55: "My new favorite model.", Theo (t3.gg), YouTube, https://youtu.be/jgGyX7MPPVg
+- SON55: "OpenAI should be scared of this one", Theo (t3.gg), YouTube, https://youtu.be/8WbW_n95wc4
+- OPUSG: "Getting the most out of Opus 5.5", Theo (t3.gg), YouTube, https://youtu.be/ejjBbaq9RmY (reads Anthropic's guide by Addy Osmani).
+- SOL61: "OpenAI fights back", Theo (t3.gg), YouTube, https://youtu.be/vu8X3YroB-w
+- MODELS: "Please stop using stupid models", Theo (t3.gg), YouTube, https://youtu.be/iBrAWpjXNxs covers only unversioned Opus / Opus 5 ("Opus
   sucks"); it does not apply to 5.5 and is not used for scores.
 - API id, 1M context, medium as the API default effort and the fast-mode price
   come from the bundled Claude API reference (model table cached 2026-09-25),

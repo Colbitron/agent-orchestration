@@ -15,10 +15,13 @@ touched.
 
 **Capture evidence**
 
-- [ ] Save the source. A video transcript goes under
-  `transcripts/<vendor>/releases/<model-id>.html` (today:
-  `transcripts/claude/releases/claude-haiku-5-5.html`). Web research goes
-  straight into the digest under `research/`.
+- [ ] Save the source. Video transcripts are not committed to this repo:
+  they are a copy of someone else's work. Keep them in the private
+  companion repo (`agent-orchestration-sources`, same layout:
+  `transcripts/<vendor>/releases/<model-id>.html` plus the cleaned
+  `transcripts/txt/<model-id>.txt`) and cite the public video with a
+  timestamp instead. Web research goes straight into the digest under
+  `research/`.
 - [ ] Verify every price against the vendor's pricing page. Write the fetch
   date next to the number. Speakers misread prices, and captions mishear them.
 - [ ] Read timestamps from the transcript. Never estimate one. If a quote has
@@ -52,7 +55,7 @@ touched.
 - [ ] Add the model as a column or row in the synthesis table at the end of
   the digest.
 - [ ] Where the new facts change a historical claim, append a dated note:
-  `[Update YYYY-MM-DD: what changed; see § V4.4.]`. Never rewrite or delete
+  `[Update YYYY-MM-DD: what changed; see [H55 12:34](https://youtu.be/38_6C0dkKmU?t=754).]`. Never rewrite or delete
   the old claim. The record of what was true when matters for later audits.
 - [ ] In `research/model-gaps.md`, update the naming corrections table, the
   at-a-glance table, the model's numbered section, and the suggested

@@ -83,46 +83,45 @@ lead (Opus or Sonnet) sends it bounded, verifiable, parallel jobs: finding
 files, gathering data, categorising, reading docs, and many cheap attempts
 that a script can check. It is not for work that must land, for review as a
 merge gate, for long loops, or as a primary model. Theo's verdict: "Anthropic
-now has one small model that is sometimes worth using" (40:16).
+now has one small model that is sometimes worth using" ([H55 40:16](https://youtu.be/38_6C0dkKmU?t=2416)).
 
 ## Strengths
 
 - **Price under 100K.** $0.10 in, $0.50 out, $0.01 cache read: 10x cheaper
   than Haiku 4.5 on input and output and 20x cheaper than Sonnet 5.5
-  (Anthropic pricing page; `research/claude-releases.md § V4.4`; transcript
-  6:07-6:32). Anthropic says it is "on average about 75% less money to run"
-  than Haiku 4.5 (4:29).
-- **Fast.** 100-200 tok/s depending on provider (10:16); Theo saw about 180
-  tok/s in Claude Code on his subscription with reasoning on (11:34)
-  (`§ V4.4`).
+  (Anthropic pricing page;
+  [H55 6:07-6:32](https://youtu.be/38_6C0dkKmU?t=367)). Anthropic says it is "on average about 75% less money to run"
+  than Haiku 4.5 ([H55 4:29](https://youtu.be/38_6C0dkKmU?t=269)).
+- **Fast.** 100-200 tok/s depending on provider ([H55 10:16](https://youtu.be/38_6C0dkKmU?t=616)); Theo saw about 180
+  tok/s in Claude Code on his subscription with reasoning on ([H55 11:34](https://youtu.be/38_6C0dkKmU?t=694)).
 - **Parallel attempts beat one careful attempt on the right work.** Anthropic's
   egg-drop demo (single vendor run): Opus 5.5 alone took about 3.5 minutes, 25
   attempts, $0.47; Opus 5.5 with 10 Haiku 5.5 subagents took under a minute,
-  86 attempts, $0.14 (22:17-23:20). Theo: "for the subset of tasks where more
+  86 attempts, $0.14 ([H55 22:17-23:20](https://youtu.be/38_6C0dkKmU?t=1337)). Theo: "for the subset of tasks where more
   attempts is more valuable than smart attempts ... Haiku 55 is going to
-  slaughter. This is a small subset of work" (23:34-24:06) (`§ V4.6`).
+  slaughter. This is a small subset of work" ([H55 23:34-24:06](https://youtu.be/38_6C0dkKmU?t=1414)).
 - **Gathering and checking for a smarter model.** "When the model is unsure
   about a theory and it wants to vet four things to confirm it or wants to go
   look at eight apps ... or read through a bunch of documentation ... That is
-  when haiku is incredible" (33:16-33:41) (`§ V4.2`, `§ V4.6`).
+  when haiku is incredible" ([H55 33:16-33:41](https://youtu.be/38_6C0dkKmU?t=1996)).
 - **Designed to be called.** "The best use cases for Haiku 55 aren't clicking
   it in the UI or selecting it in Cloud Code ... It's letting your agents use
-  it and letting your applications use it" (22:00-22:17). Anthropic names
+  it and letting your applications use it" ([H55 22:00-22:17](https://youtu.be/38_6C0dkKmU?t=1320)). Anthropic names
   summaries, compactions, database queries, classification, subagent work for
-  Opus and Sonnet, live support and browser use (4:05-4:29) (`§ V4.1`).
+  Opus and Sonnet, live support and browser use ([H55 4:05-4:29](https://youtu.be/38_6C0dkKmU?t=245)).
 - **Large jump over Haiku 4.5 on vendor benchmarks.** Terminal-Bench 4.0 39.2%
   (Haiku 4.5 0.0%, GPT-6 Luna 16.4%); OSWorld 2.1 72.4% partial credit at max
   vs 15.7% for Haiku 4.5 and 48.9% for Luna (Anthropic numbers, not
-  independently verified; transcript 9:03-10:09) (`§ V4.2`).
+  independently verified; [H55 9:03-10:09](https://youtu.be/38_6C0dkKmU?t=543)).
 - **On the cheap end of the cost/intelligence chart.** On Theo's Slopalytics
   chart (Artificial Analysis data) it is "neck and neck" with GPT-6 Luna; with
-  Luna it forms the cheap end of the Pareto line (15:53-16:19, 39:49-40:12).
+  Luna it forms the cheap end of the Pareto line ([H55 15:53-16:19](https://youtu.be/38_6C0dkKmU?t=953); [H55 39:49-40:12](https://youtu.be/38_6C0dkKmU?t=2389)).
   Within Anthropic's lineup, "all of Haiku for the cheap and most of Opus for
-  the less cheap" (37:22) (`§ V4.2`, `§ V4.8`).
+  the less cheap" ([H55 37:22](https://youtu.be/38_6C0dkKmU?t=2242)).
 - **Some taste for its size.** A community video demo cost about $0.60 and was
-  "insanely impressive for the money" (24:52-25:08). Front end with the Claude
+  "insanely impressive for the money" ([H55 24:52-25:08](https://youtu.be/38_6C0dkKmU?t=1492)). Front end with the Claude
   design skill was "usable" for a model this cheap and far better than Grok 4.7
-  (25:25-27:25) (`§ V4.2`).
+  ([H55 25:25-27:25](https://youtu.be/38_6C0dkKmU?t=1525)).
 
 ## Weaknesses and failure modes
 
@@ -135,50 +134,49 @@ Each item is a guardrail the orchestrator must apply.
   wake itself up; "this thread is just done until I tell it to keep going".
   Theo's GitHub integration in T3 Code was locked out for about 50 minutes.
   "Small models will corner themselves like this, make something harder for
-  not just themselves, but for me" (33:46-34:56) (`§ V4.3`). Guardrail: give
+  not just themselves, but for me" ([H55 33:46-34:56](https://youtu.be/38_6C0dkKmU?t=2026)). Guardrail: give
   it a valid "rate-limited / cannot / nothing found" return, forbid
   self-waiting, share one rate-limit budget across parallel workers, and have
   the orchestrator own retries.
 - **Trusts CI status instead of auditing.** It marked PRs "merge ready" because
   GitHub's checks were clean: "it thinks that they're ready just cuz GitHub
-  said so. It didn't seem to audit them thoroughly itself" (30:47-30:55)
-  (`§ V4.3`). Guardrail: never treat its output as a review; green CI is not
+  said so. It didn't seem to audit them thoroughly itself" ([H55 30:47-30:55](https://youtu.be/38_6C0dkKmU?t=1847)). Guardrail: never treat its output as a review; green CI is not
   an audit; a stronger model or a human decides what is mergeable.
 - **Bad with reasoning off.** ThePrimeagen swapped GPT-6 Luna for Haiku 5.5 with
   reasoning off in automations and got a worse pass rate, a much higher fail
   rate, and slower runs. Theo: "Anthropic has trained their models to be bad
   at that ... you always have to let it reason at least a little bit"
-  (10:23-11:08) (`§ V4.3`, `§ V4.5`). Guardrail: reasoning on. For
+  ([H55 10:23-11:08](https://youtu.be/38_6C0dkKmU?t=623)). Guardrail: reasoning on. For
   reasoning-off categorisation, use OpenAI's cheap model (transcribed "Jev",
-  exact name unclear) or Luna, unless vision is needed (11:08-11:25).
+  exact name unclear) or Luna, unless vision is needed ([H55 11:08-11:25](https://youtu.be/38_6C0dkKmU?t=668)).
 - **The 5x price tier above 100K.** Every request over 100K prompt tokens pays
   5x on every line, cache hits included. Its Fish Slop build cost about $1:
   9.73M cache-read tokens, only 102 uncached input tokens, about $0.30 of
-  output, and 47 of 51 requests over 100K (30:11-30:35) (`§ V4.4`).
+  output, and 47 of 51 requests over 100K ([H55 30:11-30:35](https://youtu.be/38_6C0dkKmU?t=1811)).
   Guardrail: cap context near 100K and size batches to fit.
 - **Cost inversion on work it cannot do.** "If Opus can solve a problem in 100K
   tokens and Haiku burns a million before it figures out it can't, Haiku ends
-  up more expensive" (36:23-36:48) (`§ V4.3`). Guardrail: a token or time
+  up more expensive" ([H55 36:23-36:48](https://youtu.be/38_6C0dkKmU?t=2183)). Guardrail: a token or time
   budget per job; kill and escalate to Opus when it runs long without a
   checkable result.
 - **Not a coder for work that lands.** "Would I use this model for code? No"
-  (31:29-31:37). Terminal-Bench 4.0 39.2% vs 70.6% for Sonnet 5.5; Anthropic
+  ([H55 31:29-31:37](https://youtu.be/38_6C0dkKmU?t=1889)). Terminal-Bench 4.0 39.2% vs 70.6% for Sonnet 5.5; Anthropic
   itself says Sonnet and Opus remain better for complex agentic coding.
 - **Mediocre highs on wide builds.** Fish Slop had no mouse look, no sound, bad
   corner geometry and wrong enemy timing. "Its lows aren't as low as Astra's,
-  but its highs are a tenth as high" (28:23-30:04) (`§ V4.3`).
+  but its highs are a tenth as high" ([H55 28:23-30:04](https://youtu.be/38_6C0dkKmU?t=1703)).
 - **Front end without the design skill** falls back to "classic LLM design"
-  (26:11-26:24).
+  ([H55 26:11-26:24](https://youtu.be/38_6C0dkKmU?t=1571)).
 - **Lead-model mistakes.** On the PR audit it was the lead and stalled. Told to
   use Haiku for everything, an Opus lead proposed about 100 Haiku agents for
-  1,495 PRs (35:42-35:58); the orchestrator, not the lead, should cap agent
-  count (`§ V4.6`).
+  1,495 PRs ([H55 35:42-35:58](https://youtu.be/38_6C0dkKmU?t=2142)); the orchestrator, not the lead, should cap agent
+  count.
 - **Computer use is unproven.** Vendor OSWorld 2.1 strict pass rate is 37.1%,
   below Sonnet 5.5 (48.8%) and Opus 5.5 (53.2%); the 72.4% headline is partial
   credit at max effort. Theo: "I haven't tried it yet. I've heard good things"
-  (10:09).
+  ([H55 10:09](https://youtu.be/38_6C0dkKmU?t=609)).
 - **Token efficiency.** Theo: GPT-6.1 Sol on low "is as cheap as haiku on low,
-  largely due to the token efficiency difference" (12:58). Transcription is
+  largely due to the token efficiency difference" ([H55 12:58](https://youtu.be/38_6C0dkKmU?t=778)). Transcription is
   unclear here; treat as a hint, not a number.
 
 ## How to prompt it
@@ -193,7 +191,7 @@ the guardrails. Follow the kit's what / done / out shape and add these:
 - **One bounded job, under 100K tokens of prompt.** Name the inputs, the exact
   output shape (JSON, a list, a label set) and the stopping point. Split large
   sets into batches that fit (Opus chose about 15 PRs per Haiku agent,
-  35:42-35:58).
+  [H55 35:42-35:58](https://youtu.be/38_6C0dkKmU?t=2142)).
 - **"Cannot" is a valid answer.** Tell it to return early on rate limits,
   missing data or errors it cannot fix, and not to wait or loop.
 - **Check what it fetched.** Ask it to validate response shape before saving
@@ -214,7 +212,7 @@ Kit-written guardrail block for a Haiku subagent prompt (not tested on camera):
 > shape you expected; never save an error body as data. Do not judge whether
 > anything is ready to merge; green CI is not a review.
 
-Lead prompt that worked better than running Haiku as the lead (Theo, 35:13-35:27,
+Lead prompt that worked better than running Haiku as the lead (Theo, [H55 35:13-35:27](https://youtu.be/38_6C0dkKmU?t=2113),
 on Opus):
 
 > Use lots of subagents and workflows to review these PRs and use Haiku 5.5 for
@@ -226,8 +224,7 @@ Add an agent-count cap and a shared rate-limit budget to that prompt
 
 In Claude Code, set Haiku 5.5's autocompact window to 100K so sessions stay in
 the cheaper tier. An Anthropic employee recommended this, and Theo reports it
-is "saved per model", so it would apply to Haiku subagents only (8:31-8:55)
-(`§ V4.7`). Per-model persistence is unverified.
+is "saved per model", so it would apply to Haiku subagents only ([H55 8:31-8:55](https://youtu.be/38_6C0dkKmU?t=511)). Per-model persistence is unverified.
 
 Differences from prompting Opus 5.5: do not drop reasoning to save money, keep
 each job small and closed, and never let it own the done state.
@@ -236,7 +233,7 @@ each job small and closed, and never let it own the done state.
 
 Route here for:
 - File and code search a lead needs when a plain ripgrep will not do
-  (23:27-23:34).
+  ([H55 23:27-23:34](https://youtu.be/38_6C0dkKmU?t=1407)).
 - Data gathering: fetching and summarising many items (PRs, issues, logs),
   with a shared rate-limit budget.
 - Categorisation and summarisation, in agents or inside applications, with
@@ -259,22 +256,22 @@ Handoff patterns:
 - **Opus leads, Haiku gathers.** Opus plans and writes code; Haiku collects
   context, reads docs and categorises. "When Opus needs to go collect a bunch
   of data or read through tons of [stuff] or just categorize things, Haiku is
-  going to be an incredible addition" (39:08-39:23) (`§ V4.6`, `§ V4.8`).
+  going to be an incredible addition" ([H55 39:08-39:23](https://youtu.be/38_6C0dkKmU?t=2348)).
 - **Opus and Sol stay the core pair.** Theo keeps Opus coding and 6.1 Sol as
   auditor; Sol is "a different family with similar intelligence", not a tier
-  between Haiku and Opus (37:53-38:59) (`§ V4.8`).
+  between Haiku and Opus ([H55 37:53-38:59](https://youtu.be/38_6C0dkKmU?t=2273)).
 - **Haiku triages, Opus lands.** Haiku produced the performance-PR shortlist;
   Theo pasted a PR into Opus and told it to verify, fix and merge if confident
-  (30:42-31:20).
+  ([H55 30:42-31:20](https://youtu.be/38_6C0dkKmU?t=1842)).
 - **Within Anthropic, Opus plus Haiku.** "You can avoid Sonnet entirely and
-  just use Opus and Hiku" on the AA Pareto line (37:37-37:53). Sonnet 5.5 is
+  just use Opus and Hiku" on the AA Pareto line ([H55 37:37-37:53](https://youtu.be/38_6C0dkKmU?t=2257)). Sonnet 5.5 is
   still the kit's bounded-analysis subagent; this profile does not change that.
 - **Cross-vendor.** On the AA chart, Luna is "cheaper always" and "dumber
   always" than Haiku, and 6.1 Sol costs about the same per AA task as Haiku
-  with "a huge jump in intelligence" (16:44-17:09). In a mixed kit, Luna or Sol
+  with "a huge jump in intelligence" ([H55 16:44-17:09](https://youtu.be/38_6C0dkKmU?t=1004)). In a mixed kit, Luna or Sol
   may be better per dollar. Haiku's case is staying inside Anthropic: one
   provider, a Claude subscription without Codex, or Opus prompting a same-family
-  worker (17:42-18:12).
+  worker ([H55 17:42-18:12](https://youtu.be/38_6C0dkKmU?t=1062)).
 
 ## Cost notes
 
@@ -283,25 +280,25 @@ Handoff patterns:
   ($0.50 / $2.50 / $0.05 / $0.625 / $1.00; batch $0.25 / $1.25). Each request
   is priced on its own and cache reads count toward the threshold (Anthropic
   pricing page).
-- Claude Code writes 1-hour cache entries (30:20), so in Claude Code the cache
+- Claude Code writes 1-hour cache entries ([H55 30:20](https://youtu.be/38_6C0dkKmU?t=1820)), so in Claude Code the cache
   write price is $0.20 (or $1.00 above 100K).
 - The newer tokenizer counts about 30% more tokens than Haiku 4.5, so the 100K
   line arrives sooner than a Haiku 4.5 token count suggests.
 - Fish Slop: about $1 total, 47 of 51 requests in the higher tier. "If I had
   capped the context, the game probably would have come out much worse, but it
-  would have been way cheaper" (30:35-30:42).
+  would have been way cheaper" ([H55 30:35-30:42](https://youtu.be/38_6C0dkKmU?t=1835)).
 - AA cost per task (Theo's chart, approximate): Haiku at about $0.213 vs 6.1
-  Sol at about $0.214 (16:52), probably Haiku at max since only xhigh and max
+  Sol at about $0.214 ([H55 16:52](https://youtu.be/38_6C0dkKmU?t=1012)), probably Haiku at max since only xhigh and max
   had been measured then. Opus 5.5 low vs Haiku 5.5 max: "20 cents to 55 ...
-  around 2x more money for Opus" (36:56-37:07); read as Haiku max about $0.20
+  around 2x more money for Opus" ([H55 36:56-37:07](https://youtu.be/38_6C0dkKmU?t=2216)); read as Haiku max about $0.20
   and Opus low about $0.55, but the word order is ambiguous.
 - Effort for value: medium by default. Theo's chart puts xhigh and max as the
-  best value in Anthropic's range (14:01-14:13). The kit's never-max rule stands
+  best value in Anthropic's range ([H55 14:01-14:13](https://youtu.be/38_6C0dkKmU?t=841)). The kit's never-max rule stands
   until a local test shows max is worth it; xhigh is the setting to trial.
 - Cost inversion: a Haiku job that fails slowly can cost more than Opus
   succeeding. Set a budget per job and escalate.
 - Subscription credit (reported, unverified): Theo says the launch notes give
-  20x Max users $200 and 5x Max users $100 of API credit a month (20:12-20:36).
+  20x Max users $200 and 5x Max users $100 of API credit a month ([H55 20:12-20:36](https://youtu.be/38_6C0dkKmU?t=1212)).
   A secondary source (the-decoder) describes it as a credit for programmatic
   use (Agent SDK, `claude -p`, GitHub Actions, third-party apps), billed at API
   rates, dating from 2026-06-15. If true, `claude -p` bridge calls may draw from
@@ -309,12 +306,9 @@ Handoff patterns:
 
 ## Evidence
 
-- `research/claude-releases.md § V4.1` to `§ V4.8` (Video 4, Claude Haiku 5.5;
-  written in parallel with this profile and cited by section number).
-- Transcript: `transcripts/claude/releases/claude-haiku-5-5.html` (Theo, T3,
-  launch day, about 2026-10-07/08). Timestamps in this profile are from that
-  file. Mishearings read per `research/claude-releases.md § Transcription
-  notes` ("cash" = cache, "Soul" = Sol, "Raichu" / "Hiku" / "ha coup" =
+- H55: "finally a good small model", Theo (t3.gg), YouTube, https://youtu.be/38_6C0dkKmU
+  (launch day, about 2026-10-07/08). Timestamps in this profile are from that
+  video. Caption mishearings read as follows ("cash" = cache, "Soul" = Sol, "Raichu" / "Hiku" / "ha coup" =
   Haiku, "Slopalytics" = Theo's dashboard on Artificial Analysis data).
 - [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing),
   fetched 2026-10-08: both price tiers, the 100K rule, batch prices, the Sonnet

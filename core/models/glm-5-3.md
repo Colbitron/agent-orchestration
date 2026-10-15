@@ -99,8 +99,8 @@ Zhipu)` and `§ At-a-glance comparison`.
 - **Theo's remark.** "A more pleasant model to use arguably than Astra. I've seen
   GLM53 Flash go off the rails less than Astra for similar work." He suggests it,
   or an open-source plan, "if cost is the main concern"
-  (`research/model-selection.md § Video 2 › 2. Models mentioned › Others`, `§ 3.
-  Decision rules`, `§ 7. Cost management and rate limits`). Astra's floor is
+  ([FVA 1:14:10](https://youtu.be/P7bxbDSnZRM?t=4450), [FVA 1:09:43](https://youtu.be/P7bxbDSnZRM?t=4183),
+  [FVA 1:14:04](https://youtu.be/P7bxbDSnZRM?t=4444)). Astra's floor is
   scored 3 in this kit, so this is praise relative to a low bar.
 - **Open weights.** Self-hostable for teams that need to keep code in-house.
 - **Harness reach.** The GLM Coding Plan plugs into Claude Code (via base-URL
@@ -122,7 +122,7 @@ Zhipu)` and `§ At-a-glance comparison`.
 - **Context uncertainty.** 1M per one source; 200K for the open-weights
   architecture per another.
 - **Lower floor expected** outside Anthropic/OpenAI
-  (`research/model-selection.md § Video 1 › 2. Models mentioned`).
+  ([MODELS 5:41](https://youtu.be/iBrAWpjXNxs?t=341)).
 
 ## How to prompt it
 
@@ -183,10 +183,9 @@ Handoff patterns:
   run them from a terminal`, `§ 4b. GLM-5.3 and GLM-5.3-Flash (Z.ai / Zhipu)`,
   `§ Suggested routing-table shortlist` (GLM-5.3-Flash in the cheap tier; GLM-5.3
   at max excluded on cost unless on Coding Plan).
-- `research/model-selection.md § Video 2 › 2. Models mentioned › Others`, `§ 3.
-  Decision rules and "use X for Y" statements` (rule 24), `§ 7. Cost management
-  and rate limits`, `§ 8. Draft routing table (Video 2 only)`, and `§ Cross-video
-  notes` (GLM 5.3 Flash as a cheaper, more pleasant alternative to Astra).
+- [FVA 1:14:10](https://youtu.be/P7bxbDSnZRM?t=4450), [FVA 1:09:43](https://youtu.be/P7bxbDSnZRM?t=4183) (rule 24), [FVA 1:14:04](https://youtu.be/P7bxbDSnZRM?t=4444),
+  [FVA 1:14:17](https://youtu.be/P7bxbDSnZRM?t=4457), and [FVA 1:14:10](https://youtu.be/P7bxbDSnZRM?t=4450)
+  (GLM 5.3 Flash as a cheaper, more pleasant alternative to Astra).
 - URLs: [Z.ai pricing docs](https://docs.z.ai/guides/overview/pricing),
   [EvoLink: GLM-5.3 release](https://evolink.ai/blog/glm-5-3-release),
   [AA open-weights page](https://artificialanalysis.ai/models/open-source),

@@ -5,10 +5,19 @@ task, a workflow stage, a shell-out to another CLI, or a thread on another
 machine. The receiver sees only what you write, cannot ask what you meant,
 and you will usually read only its last message.
 
-Citations: `research/<file>.md § V1.3` means Video 1, section 3 of that file.
-`INSP` means `transcripts/general/agent-orchestration-inspiration.html`
-(Theo's orchestration video, recorded when the models were Fable 5, GPT-5.5
-and Opus 4.8).
+Sources:
+- FAB51: "My New Favorite Model", Theo (t3.gg), YouTube, https://youtu.be/r_dw-1109Ag
+- OPUS55: "My new favorite model.", Theo (t3.gg), YouTube, https://youtu.be/jgGyX7MPPVg
+- SON55: "OpenAI should be scared of this one", Theo (t3.gg), YouTube, https://youtu.be/8WbW_n95wc4
+- OPUSG: "Getting the most out of Opus 5.5", Theo (t3.gg), YouTube, https://youtu.be/ejjBbaq9RmY
+- FABG: "So I was using Fable wrong...", Theo (t3.gg), YouTube, https://youtu.be/-XWSJM-Ue-o
+- INSP: "A proper guide to Fable 5", Theo (t3.gg), YouTube, https://youtu.be/8GRmLR__OGQ (recorded when the models were Fable 5, GPT-5.5 and Opus 4.8)
+- FVA: "Fable Vs Astra Debate Is Over", Theo (t3.gg), YouTube, https://youtu.be/P7bxbDSnZRM
+- MODELS: "Please stop using stupid models", Theo (t3.gg), YouTube, https://youtu.be/iBrAWpjXNxs
+- SOL61: "OpenAI fights back", Theo (t3.gg), YouTube, https://youtu.be/vu8X3YroB-w
+- ASTRA: "It's Here.", Theo (t3.gg), YouTube, https://youtu.be/XFWpf0wLbh0
+
+`[KEY m:ss]` links to the video at that timestamp; the auto-generated captions often mishear model names (Sol as "Soul", Fable as "Able").
 
 ---
 
@@ -22,7 +31,7 @@ Every delegated prompt has three parts. Do not dispatch a prompt missing one.
 3. **The out.** When the model may stop and ask instead of pushing through.
 
 The canonical example, from Anthropic's Opus 5.5 guide
-(`research/claude-supplemental.md § V1.3`):
+([OPUSG 11:20](https://youtu.be/ejjBbaq9RmY?t=680)):
 
 ```
 Migrate the payments endpoint from the old client to the new one. Done means
@@ -33,7 +42,7 @@ explain.
 
 The out is "what might be the most important piece": models are trained hard
 not to give up, so without one they answer their own question and push on
-(`research/claude-supplemental.md § V1.2`).
+([OPUSG 8:02](https://youtu.be/ejjBbaq9RmY?t=482)).
 
 ## 2. Done states
 
@@ -47,25 +56,25 @@ Write done as observable facts, not activities.
 | "Look at the PR" | "Babysit it until every check and review bot is green." |
 
 - **"Make sure X" means do X and validate X**, and report if it fails
-  (`research/claude-supplemental.md § V1.2`).
+  ([OPUSG 6:18](https://youtu.be/ejjBbaq9RmY?t=378)).
 - **Prefer one-click artifacts:** PR link, screenshot, video in the PR,
   preview link, file path. Push delivery to the agent: not "tell me so I can
   build it" but "run it in the simulator, verify it, then push the build"
-  (`research/model-selection.md § V1.3`).
+  ([MODELS 15:04](https://youtu.be/iBrAWpjXNxs?t=904)).
 - **Say whether to open a PR.** Theo's 60-minute run built everything and
-  opened no PR because he had not asked (`research/claude-supplemental.md § V2.2`).
+  opened no PR because he had not asked ([FABG 22:12](https://youtu.be/-XWSJM-Ue-o?t=1332)).
 - **Say whether to merge.** The kit default is "propose PRs, never merge"
   (`docs/ARCHITECTURE.md`). Write a merge end state only when the user's config
   enables it.
 - **Phrasings known to work:** "File the PR and tell me when it's up." "Babysit
   it till everything is green." "Merge it once you've got everything green and
-  you're happy with your changes." (`research/claude-supplemental.md § V2.3`)
+  you're happy with your changes." ([FABG 26:41](https://youtu.be/-XWSJM-Ue-o?t=1601))
 
 ## 3. Branching end states
 
 When the right path depends on what the model finds, give it the branches and
 the data, not a fixed path. Either outcome then ends somewhere useful
-(`research/claude-supplemental.md § V2.2`):
+([FABG 17:06](https://youtu.be/-XWSJM-Ue-o?t=1026)):
 
 ```
 Someone is claiming their PR that we closed might be better than mine. Take a
@@ -80,10 +89,10 @@ If so, merge 28 into 200 and then merge it all the way in."
 ## 4. Explicit negatives
 
 "Being explicit about what you want is great, but being explicit about what
-you don't want is even better" (`research/claude-supplemental.md § V1.2`).
+you don't want is even better" ([OPUSG 7:10](https://youtu.be/ejjBbaq9RmY?t=430)).
 
 - **Name specific things to avoid.** "Avoid generic looks" swaps one default
-  for another; a list works (`research/claude-supplemental.md § V1.3`):
+  for another; a list works ([OPUSG 17:30](https://youtu.be/ejjBbaq9RmY?t=1050)):
   `Don't use a cream or off-white background, italic accent words in headings,
   numbered 1, 2, 3 section labels, monospace labels, or pill-shaped buttons.`
 - **Operational negatives and non-goals:** "I don't want you spamming my
@@ -94,7 +103,7 @@ you don't want is even better" (`research/claude-supplemental.md § V1.2`).
 
 State where the model is and how it reaches anything outside. Pre-authorise
 the sensitive actions you expect, so it neither stalls for permission nor
-improvises something sketchy (`research/claude-supplemental.md § V1.2`).
+improvises something sketchy ([OPUSG 5:58](https://youtu.be/ejjBbaq9RmY?t=358)).
 
 - **How to connect:** "You should be able to see how to connect through the
   fleet repo on this machine." Stops it inventing a method that trips a
@@ -103,24 +112,24 @@ improvises something sketchy (`research/claude-supplemental.md § V1.2`).
   rebasing, force-pushing its own branch, closing superseded PRs. Otherwise it
   "might be concerned when it goes to do that and then stop and ask me."
 - **Where heavy work runs.** One run hammered Theo's home IP until told to use
-  a container (`research/claude-supplemental.md § V2.8b`).
+  a container ([FABG 22:51](https://youtu.be/-XWSJM-Ue-o?t=1371)).
 - **What is reversible.** Staging that cannot reach prod is what makes "merge
-  when happy" safe (INSP; `research/claude-releases.md § V1.5`).
+  when happy" safe ([INSP 33:16](https://youtu.be/8GRmLR__OGQ?t=1996); [FAB51 43:58](https://youtu.be/r_dw-1109Ag?t=2638)).
 - **If the UI hides tool outputs, say so**, or the model will not repeat
-  results it expects the UI to show (`research/claude-supplemental.md § V2.3`).
+  results it expects the UI to show ([FABG 10:03](https://youtu.be/-XWSJM-Ue-o?t=603)).
 - **Attach context:** annotated screenshots, thread IDs, run links, PR
   numbers, log paths, and definitions of terms the task hinges on. Fable 5.1's
   one recorded miss read "auto-linking" too narrowly
-  (`research/claude-releases.md § V1.3`).
+  ([FAB51 39:02](https://youtu.be/r_dw-1109Ag?t=2342)).
 
 ## 6. Multi-phase and long runs
 
 Claude models sometimes stop to report instead of continuing: "a summary that
 names the next step without taking it, an offer to continue, or a list of
 choices that don't actually block the work"
-(`research/claude-supplemental.md § V1.4`). "Follow its phase 0 to 7 in order"
+([OPUSG 18:35](https://youtu.be/ejjBbaq9RmY?t=1115)). "Follow its phase 0 to 7 in order"
 still stopped after phase 0. Theo's working follow-up
-(`research/claude-supplemental.md § V1.2`):
+([OPUSG 9:53](https://youtu.be/ejjBbaq9RmY?t=593)):
 
 ```
 I want you to hold off on all questions until the very end when you get
@@ -131,7 +140,7 @@ me until you have a Tailscale link I can click on.
 ```
 
 For an unattended worker, add Anthropic's autonomy block
-(`research/claude-releases.md § V1.5`):
+([FAB51 36:59](https://youtu.be/r_dw-1109Ag?t=2219)):
 
 ```
 You are operating autonomously. The user is not watching in real time and
@@ -141,7 +150,7 @@ proceed without asking. Stop only for destructive actions or genuine scope
 changes the user must decide on.
 ```
 
-Or the shorter named-stops rule (`research/claude-supplemental.md § V1.6`):
+Or the shorter named-stops rule ([OPUSG 18:49](https://youtu.be/ejjBbaq9RmY?t=1129)):
 
 ```
 When a step doesn't need my input, keep going. Put status notes in the same
@@ -154,12 +163,12 @@ Keep the last sentence: a keep-going rule removes stops, so keep the ones
 before risky steps. If a worker still ends with "Want me to continue?" and
 nothing blocks it, reply `continue`. Fable may also "describe what it would do
 next instead of doing it" on async work; add "Do not end your turn until the
-work is complete" (`research/claude-supplemental.md § V2.3`).
+work is complete" ([FABG 14:10](https://youtu.be/-XWSJM-Ue-o?t=850)).
 
 ## 7. Subagent grant
 
 Opus 5.5 is reluctant to spawn subagents unless told it may
-(`research/claude-supplemental.md § V1.5`). Append to every lead-agent prompt:
+([OPUSG 20:47](https://youtu.be/ejjBbaq9RmY?t=1247)). Append to every lead-agent prompt:
 
 ```
 Use subagents and workflows however you choose. I trust your judgment there.
@@ -167,13 +176,13 @@ Use subagents and workflows however you choose. I trust your judgment there.
 
 For work known to parallelise (PR piles, audits), say "Use subagents for
 this." Pin subagent models; an Opus run spawned a Fable subagent unasked
-(`research/claude-releases.md § V3.6`).
+([SON55 26:32](https://youtu.be/8WbW_n95wc4?t=1592)).
 
 ## 8. Scope control
 
 Add to any narrowly scoped task, especially subagent tasks. Anthropic reports
 it cut unrequested additions and committed test code "substantially with no
-measurable change in task success" (`research/claude-supplemental.md § V2.3`):
+measurable change in task success" ([FABG 32:26](https://youtu.be/-XWSJM-Ue-o?t=1946)):
 
 ```
 If while working or testing you find pre-existing bugs, performance concerns,
@@ -186,21 +195,21 @@ Additions by situation:
 
 - Babysit / review-response loops (Sol drifted here): `Please don't scope
   creep. Stop adding new things. Only address real shortcomings. Don't post
-  filler comments.` (`research/claude-supplemental.md § V2.2`)
+  filler comments.` ([FABG 15:42](https://youtu.be/-XWSJM-Ue-o?t=942))
 - GPT implementers (Astra creeps by default): `Make the smallest possible
-  changes.` (`research/model-selection.md § V2.3`)
+  changes.` ([FVA 40:32](https://youtu.be/P7bxbDSnZRM?t=2432))
 - Rewrites that carry UI over (Astra discarded UI despite "reuse as much UI
   code as possible"): `I expect the UI to be pixel perfect identical. If any of
   the UI has changed, you have failed at your goal, so keep going until the UI
-  looks identical.` (`research/model-selection.md § V2.3`)
+  looks identical.` ([FVA 32:54](https://youtu.be/P7bxbDSnZRM?t=1974))
 - Cap test sprawl when it matters: "add at most one test file"
-  (`research/claude-releases.md § V1.5`).
+  ([FAB51 37:57](https://youtu.be/r_dw-1109Ag?t=2277)).
 
 ## 9. Reporting: the closing recap
 
 You usually read only the worker's last message. Fable 5.1 writes few progress
 updates by default; Theo saw ~150 tool calls with no text
-(`research/claude-supplemental.md § V2.3`). Anthropic's block, verbatim:
+([FABG 9:01](https://youtu.be/-XWSJM-Ue-o?t=541)). Anthropic's block, verbatim:
 
 ```
 Before you start, say in a line what you're about to do. Brief updates while
@@ -210,7 +219,7 @@ sees the last message has the full picture.
 ```
 
 For results you will parse, require the guide's headings plus a verification
-line (`research/claude-supplemental.md § V1.5`):
+line ([OPUSG 21:36](https://youtu.be/ejjBbaq9RmY?t=1296)):
 
 ```
 End your final message with these headings, in this order:
@@ -225,7 +234,7 @@ Read **Blocked on me** first.
 ## 10. Compaction hint
 
 Claude writes its own compaction summaries and keeps what you ask it to
-(`research/claude-supplemental.md § V2.3`). For any run likely to compact:
+([FABG 31:32](https://youtu.be/-XWSJM-Ue-o?t=1892)). For any run likely to compact:
 
 ```
 If your context is compacted, preserve: the task goal, the done conditions,
@@ -234,34 +243,34 @@ open blockers.
 ```
 
 Compaction is reliable now; do not let a worker fret about being "10% from
-autocompact" (`research/claude-releases.md § V2.3`).
+autocompact" ([OPUS55 34:51](https://youtu.be/jgGyX7MPPVg?t=2091)).
 
 ## 11. What not to say
 
 - **No "think hard / deeply / carefully".** The model already sizes its own
-  thinking (`research/claude-supplemental.md § V1.3`). Effort is a parameter,
+  thinking ([OPUSG 11:43](https://youtu.be/ejjBbaq9RmY?t=703)). Effort is a parameter,
   not prose (`effort-levels.md`).
 - **No "show your reasoning" or "what was your reasoning".** That wording risks
   safeguard flags on Claude. Ask "Explain why you made these changes"
-  (`research/claude-supplemental.md § V1.3, § V1.8b`).
+  ([OPUSG 26:50](https://youtu.be/ejjBbaq9RmY?t=1610); [OPUSG 26:53](https://youtu.be/ejjBbaq9RmY?t=1613)).
 - **No base64 blobs in context**; they trigger safeguards. Phrase checks as
   "Are there bugs in the program?" rather than compile-probing wording. For
   little-known languages, put the docs in context
-  (`research/claude-supplemental.md § V2.3`).
+  ([FABG 33:16](https://youtu.be/-XWSJM-Ue-o?t=1996)).
 - **No behavioural or formatting rules by default** ("be concise", "no
   bullets", "hold all findings for the end"). On current Claude models they
-  over-correct: a 10% habit cut to 1% (`research/claude-supplemental.md § V2.3`).
+  over-correct: a 10% habit cut to 1% ([FABG 12:23](https://youtu.be/-XWSJM-Ue-o?t=743)).
   Add one only to fix an observed problem. Exception: for user-facing prose,
   `Please remove all mannered prose.` in the user message.
 - **Don't micro-specify method.** Give environment and finish line. Put long
-  plans in a file and point to it (`research/claude-supplemental.md § V1.3`).
+  plans in a file and point to it ([OPUSG 9:42](https://youtu.be/ejjBbaq9RmY?t=582)).
 - **Don't do the model's search for it.** Describe the problem and let it find
   the files; pass known locations as context, not as a fence
-  (`research/model-selection.md § V1.3`, rule 8).
+  ([MODELS 15:00](https://youtu.be/iBrAWpjXNxs?t=900), rule 8).
 - **Don't edit earlier turns** of a Claude thread; it drops reasoning state
-  (`research/claude-releases.md § V1.3`). Steer with a new message. Current
+  ([FAB51 35:06](https://youtu.be/r_dw-1109Ag?t=2106)). Steer with a new message. Current
   models treat mid-run messages as additions, not replacements
-  (`research/claude-supplemental.md § V1.3`).
+  ([OPUSG 16:07](https://youtu.be/ejjBbaq9RmY?t=967)).
 
 ## 12. Prompting GPT models vs Claude models
 
@@ -269,13 +278,13 @@ Claude tends to do more than asked; GPT does what the text says, or less.
 
 | | Claude (Fable, Opus, Sonnet) | GPT (Astra, Sol) |
 |---|---|---|
-| Length | Context-rich: environment, negatives, permissions. | Much simpler. "Claude likes to prompt Codex as though it is Claude, which it is not" (INSP). |
-| Restraint | Needs the scope-control block. | Older GPT did only what it was told (INSP), but Astra scope-creeps when implementing and Sol when babysitting. Add "smallest possible changes". |
-| Follow-through | Acts on implied next steps. | Write imperatives. Asked "are any of the review comments worth addressing?", Astra said yes and changed nothing (`research/gpt-releases.md § V1.3`). Write "Fix them, push, and babysit until green." |
-| Getting stuck | Asks when given an out. | Sol "follows its process rules even when they stop all progress and it does not ask for help" (`research/gpt-releases.md § V2.3`). Give an escape hatch: "If you make no progress after N attempts, stop and report what blocks you." |
-| Empty results | — | "If you find nothing, say so clearly and name what you inspected." Without it, an empty result made Theo's parent model rerun (INSP). |
-| Procedures | Skills are pulled in reliably. | Put the procedure in the prompt; Codex may drop a skill on later turns (`research/model-selection.md § V2.6`). |
-| Trust | Normal. | Verify git/PR state yourself after it claims to have pushed or merged (`research/gpt-releases.md § V1.9`). |
+| Length | Context-rich: environment, negatives, permissions. | Much simpler. "Claude likes to prompt Codex as though it is Claude, which it is not" ([INSP 21:40](https://youtu.be/8GRmLR__OGQ?t=1300)). |
+| Restraint | Needs the scope-control block. | Older GPT did only what it was told ([INSP 21:58](https://youtu.be/8GRmLR__OGQ?t=1318)), but Astra scope-creeps when implementing and Sol when babysitting. Add "smallest possible changes". |
+| Follow-through | Acts on implied next steps. | Write imperatives. Asked "are any of the review comments worth addressing?", Astra said yes and changed nothing ([ASTRA 37:00](https://youtu.be/XFWpf0wLbh0?t=2220)). Write "Fix them, push, and babysit until green." |
+| Getting stuck | Asks when given an out. | Sol "follows its process rules even when they stop all progress and it does not ask for help" ([SOL61 15:49](https://youtu.be/vu8X3YroB-w?t=949)). Give an escape hatch: "If you make no progress after N attempts, stop and report what blocks you." |
+| Empty results | — | "If you find nothing, say so clearly and name what you inspected." Without it, an empty result made Theo's parent model rerun ([INSP 22:04](https://youtu.be/8GRmLR__OGQ?t=1324)). |
+| Procedures | Skills are pulled in reliably. | Put the procedure in the prompt; Codex may drop a skill on later turns ([FVA 55:43](https://youtu.be/P7bxbDSnZRM?t=3343)). |
+| Trust | Normal. | Verify git/PR state yourself after it claims to have pushed or merged ([ASTRA 38:59](https://youtu.be/XFWpf0wLbh0?t=2339)). |
 
 **Harness note (Codex CLI).** Shell out one-shot with a self-contained prompt;
 read-only sandbox for review/investigation. Commands live in `core/bridges/`.

@@ -6,9 +6,17 @@ user's config, a bridge skill, or an AGENTS.md / CLAUDE.md. The kit's config
 is meant to grow by small, evidence-driven edits and to shrink whenever a rule
 stops earning its place.
 
-Citations: `research/<file>.md § V1.3` means Video 1, section 3 of that file.
-`INSP` means `transcripts/general/agent-orchestration-inspiration.html`
-(recorded in the Fable 5 / GPT-5.5 / Opus 4.8 era).
+Sources:
+- INSP: "A proper guide to Fable 5", Theo (t3.gg), YouTube, https://youtu.be/8GRmLR__OGQ (recorded in the Fable 5 / GPT-5.5 / Opus 4.8 era)
+- MODELS: "Please stop using stupid models", Theo (t3.gg), YouTube, https://youtu.be/iBrAWpjXNxs
+- OPUSG: "Getting the most out of Opus 5.5", Theo (t3.gg), YouTube, https://youtu.be/ejjBbaq9RmY
+- FAB51: "My New Favorite Model", Theo (t3.gg), YouTube, https://youtu.be/r_dw-1109Ag
+- FVA: "Fable Vs Astra Debate Is Over", Theo (t3.gg), YouTube, https://youtu.be/P7bxbDSnZRM
+- FABG: "So I was using Fable wrong...", Theo (t3.gg), YouTube, https://youtu.be/-XWSJM-Ue-o
+- OPUS55: "My new favorite model.", Theo (t3.gg), YouTube, https://youtu.be/jgGyX7MPPVg
+
+`[KEY m:ss]` links to the video at that timestamp; the auto-generated captions
+often mishear model names (Sol as "Soul", Fable as "Able").
 
 ---
 
@@ -18,7 +26,7 @@ Theo's config was not designed up front: "I spent about half an hour getting
 it mostly working and then as I ran into problems I would go back to the
 original thread and tell Claude, 'Hey, I had this problem. How can we prevent
 this going forward?' And it would suggest changes. I would tell it to cut them
-in half and then put them in here" (INSP).
+in half and then put them in here" ([INSP 20:08](https://youtu.be/8GRmLR__OGQ?t=1208)).
 
 Run it like this:
 
@@ -39,7 +47,7 @@ approval, unless their config grants standing permission for this.
 ## 2. Diagnose before you prescribe
 
 Ask the model that made the mistake what led it there. Use Theo's wording
-(`research/model-selection.md § V1.3`, rule 13):
+([MODELS 11:58](https://youtu.be/iBrAWpjXNxs?t=718), rule 13):
 
 ```
 I expected you to do <X>, but you did <Y> instead. What led you there?
@@ -50,12 +58,12 @@ called and what files they read that led them in the wrong direction."
 
 - Do not ask it to "show your reasoning" or "what was your reasoning"; that
   wording risks safeguard flags on Claude. "Explain why you did this" is fine
-  (`research/claude-supplemental.md § V1.3`).
+  ([OPUSG 26:48](https://youtu.be/ejjBbaq9RmY?t=1608)).
 - Ask once and read the answer. The cause is often a misleading file, a stale
   doc, an ambiguous word, or a missing permission, not the model.
 - If the failure was intent (the model read a word narrowly), the fix is
   usually a glossary entry, not a rule
-  (`research/claude-releases.md § V1.3`; INSP on glossaries).
+  ([FAB51 39:22](https://youtu.be/r_dw-1109Ag?t=2362); [INSP 16:44](https://youtu.be/8GRmLR__OGQ?t=1004) on glossaries).
 
 ## 3. Pick the right layer
 
@@ -63,7 +71,7 @@ Fix at the lowest layer that removes the cause. In order of preference:
 
 | Layer | Fix here when | Example |
 |---|---|---|
-| **Codebase** | A new developer would have tripped too. | Delete dead code, fix a flaky test, clarify a confusing module boundary. "You should adjust your prompts a little, but you should adjust your codebase a lot" (`research/model-selection.md § V1.3`, rule 7). |
+| **Codebase** | A new developer would have tripped too. | Delete dead code, fix a flaky test, clarify a confusing module boundary. "You should adjust your prompts a little, but you should adjust your codebase a lot" ([MODELS 12:54](https://youtu.be/iBrAWpjXNxs?t=774), rule 7). |
 | **Bridge skill** | A shell-out was wrong: command, flags, prompt shape, output handling. | Record the correct command; add "if Codex finds nothing, say so" (§4). |
 | **Glossary** | The model misread a term. | Define "revert", "babysit", "done", or a project term. |
 | **Routing table / model profile** | The wrong model or effort was used for the task type. | Move a task type's default; note a failure mode in the profile and bump `as_of`. |
@@ -73,7 +81,7 @@ Fix at the lowest layer that removes the cause. In order of preference:
 Prefer adding a **check** over adding a **rule**. A path-scoped review agent
 that blocks merge enforces a convention; a line in AGENTS.md "only guarantees
 that your agent knows about them, not that it's actually going to follow"
-(`research/model-selection.md § V2.5`).
+([FVA 2:03](https://youtu.be/P7bxbDSnZRM?t=123)).
 
 ## 4. Capture exact commands in the bridge
 
@@ -81,7 +89,7 @@ The most valuable lines in a bridge skill are the commands. "Not because the
 model can't get them right, but because the one or two times they get it
 wrong, it's really annoying. So you ask the model when that happens, what did
 you get wrong? What is the right structure for this? And then once you have
-that, you can go add it here" (INSP).
+that, you can go add it here" ([INSP 21:23](https://youtu.be/8GRmLR__OGQ?t=1283)).
 
 When a shell-out fails:
 
@@ -89,7 +97,7 @@ When a shell-out fails:
 2. Run the corrected command once to confirm it works.
 3. Add it to the bridge verbatim, in a code block, next to a one-line note of
    when to use it.
-4. Add any output-handling fix the failure revealed. Theo's examples (INSP):
+4. Add any output-handling fix the failure revealed. Theo's examples ([INSP 21:58](https://youtu.be/8GRmLR__OGQ?t=1318)):
    - Codex returned nothing and the parent reran it → "If Codex finds nothing,
      say that clearly and mention what the review target is that it inspected."
    - Claude prompted Codex as if it were Claude → a short, simple example prompt.
@@ -97,11 +105,11 @@ When a shell-out fails:
    - Tasks timed out → a note that they can.
 
 Keep the bridge **description** complete enough to decide when to call it: the
-model sees only the description until it invokes the skill (INSP). When you
+model sees only the description until it invokes the skill ([INSP 23:17](https://youtu.be/8GRmLR__OGQ?t=1397)). When you
 change a bridge's trigger, rewrite the description, not just the body. Theo
 widened his computer-use bridge from "when the user asks Claude to have Codex
 test a flow" to "when the user asks Claude to test a flow" so it became the
-default (INSP).
+default ([INSP 23:58](https://youtu.be/8GRmLR__OGQ?t=1438)).
 
 ## 5. Keep standing rules minimal
 
@@ -109,24 +117,24 @@ Current models are hurt by rules written for older ones.
 
 - "Any behavioral instructions that you have in your CLAUDE.md are worth
   deleting and reconsidering. See how it feels to not have them at all and
-  then adjust over time" (`research/claude-supplemental.md § V2.3`). Theo has
+  then adjust over time" ([FABG 12:28](https://youtu.be/-XWSJM-Ue-o?t=748)). Theo has
   none.
 - Formatting rules over-correct: a habit the model shows 10% of the time can be
-  pushed to 1% (`research/claude-supplemental.md § V2.3`). Old anti-chatter rules
+  pushed to 1% ([FABG 12:17](https://youtu.be/-XWSJM-Ue-o?t=737)). Old anti-chatter rules
   ("hold all findings for the final response") now suppress output you want
-  (`research/claude-releases.md § V1.5`).
+  ([FAB51 34:28](https://youtu.be/r_dw-1109Ag?t=2068)).
 - Anti-slop rules became unnecessary for Opus 5.5; Theo deleted his "unslop"
-  instructions and did not re-add them (`research/claude-releases.md § V2.2`).
+  instructions and did not re-add them ([OPUS55 10:03](https://youtu.be/jgGyX7MPPVg?t=603)).
 - **Reset procedure:** "Pretend you're on a brand new machine. Delete
   everything. Install Claude Code from scratch. Set it up with as little as
   possible... from there, slowly start adding small things that solve your
-  small problems" (`research/claude-supplemental.md § V2.4`).
+  small problems" ([FABG 40:50](https://youtu.be/-XWSJM-Ue-o?t=2450)).
 - **Don't change harness defaults.** Theo's only Claude Code changes: fullscreen,
   routing through his proxy, memory off. "Some random post you saw on Twitter
   isn't more clever than the hundreds of billions of dollars... going into stuff
-  at Claude Code" (`research/claude-supplemental.md § V2.4`).
-- **What does belong in standing config** (from Theo's setup, INSP;
-  `research/claude-supplemental.md § V1.6`): the glossary, the model roster
+  at Claude Code" ([FABG 38:40](https://youtu.be/-XWSJM-Ue-o?t=2320)).
+- **What does belong in standing config** (from Theo's setup, [INSP 11:41](https://youtu.be/8GRmLR__OGQ?t=701);
+  [OPUSG 19:10](https://youtu.be/ejjBbaq9RmY?t=1150)): the glossary, the model roster
   with scores and the standing-override rule, named stops for approvals, bridge
   pointers, and preferences that are genuinely his (tech stack, code style).
 
@@ -139,19 +147,19 @@ pass can tell whether the reason still holds.
 Configs and mental models go stale with each release. "Any customization or
 careful configuration you've done to work around the flaws are probably out of
 date and a lot of your own mental model around this stuff is also out of
-date. Reset it" (`research/claude-supplemental.md § V2.1`).
+date. Reset it" ([FABG 40:36](https://youtu.be/-XWSJM-Ue-o?t=2436)).
 
 Procedure:
 
 1. **Keep a personal set of previously failed prompts.** Theo: "I always start
    with a set that I've tried on other things that failed to see if it can
-   succeed" (`research/model-selection.md § V1.3`, rule 5). Store them with
+   succeed" ([MODELS 8:58](https://youtu.be/iBrAWpjXNxs?t=538), rule 5). Store them with
    the date, the model that failed, and what failure looked like.
 2. **Run the set on the new model** with the user's current config, then with
    standing rules stripped. Compare.
 3. **Prompt wider** than before. Old narrow prompts hide the difference
    between models ("you also suck at prompting" if you notice no difference
-   going back a tier, `research/model-selection.md § V1.1`).
+   going back a tier, [MODELS 1:04](https://youtu.be/iBrAWpjXNxs?t=64)).
 4. **Update or add the model profile** in `core/models/`, set `confidence`
    honestly, bump `as_of`, and re-run the routing generator.
 5. **Delete workarounds the new model no longer needs** (§5).
@@ -159,7 +167,7 @@ Procedure:
    (`effort-levels.md`). Do not test `max` except to confirm it is still bad.
 7. **Do not trust benchmarks alone.** Theo was fooled by Opus 5's ceiling: "I
    focused too much on what the best looked like... and it misbehaved far more
-   often than I had known" (`research/model-selection.md § V1.2`). Measure the
+   often than I had known" ([MODELS 4:53](https://youtu.be/iBrAWpjXNxs?t=293)). Measure the
    floor: how often it does something dumb on wide tasks.
 
 ## 7. Audit what agents write
@@ -167,23 +175,23 @@ Procedure:
 - **Skills and prompts written by agents must be audited by a human.** "Please
   write your skills by hand or at least audit them." "If you let the agent
   write the skill, you let the skill be involved when it writes another skill,
-  you end up in slop hell very fast" (`research/model-selection.md § V2.3`).
+  you end up in slop hell very fast" ([FVA 55:01](https://youtu.be/P7bxbDSnZRM?t=3301)).
   Astra is slightly better at it than Fable, but "none of them are good at it".
 - **Read the parts the model wrote.** Theo found a model-written cost clause
   he disagreed with while reviewing his own CLAUDE.md on camera and rewrote it
-  (INSP; see `cost-model.md` §7).
+  ([INSP 18:14](https://youtu.be/8GRmLR__OGQ?t=1094); see `cost-model.md` §7).
 - **Do not copy someone else's config blindly.** "Don't just blindly copy paste
-  my stuff... I want you guys to learn from this" (INSP). The interview exists
+  my stuff... I want you guys to learn from this" ([INSP 22:18](https://youtu.be/8GRmLR__OGQ?t=1338)). The interview exists
   so each user's config reflects their own environment.
 - **Prune stale AGENTS.md.** Claude Code reads AGENTS.md when no CLAUDE.md
   exists, so an AGENTS.md written for "old cheaper dumb models" full of
   formatting rules will start steering Claude
-  (`research/claude-supplemental.md § V2.4`). Clean it up; if the team will
+  ([FABG 12:49](https://youtu.be/-XWSJM-Ue-o?t=769)). Clean it up; if the team will
   not allow that, override locally (e.g. a `CLAUDE.local.md` that says to
   ignore it).
 - **Do not ask models how harnesses work internally.** "The models really
   really struggle with understanding these things"
-  (`research/claude-supplemental.md § V2.4`). Check harness docs instead; keep
+  ([FABG 38:17](https://youtu.be/-XWSJM-Ue-o?t=2297)). Check harness docs instead; keep
   defaults when unsure.
 
 ## 8. What to log
@@ -199,19 +207,19 @@ run, append one record to the user's run log (kit convention:
 | `delegated_by` (orchestrator model or human) | Separate your routing decisions from the user's. |
 | `wall_clock_minutes` | Diagnostic of task and codebase (`parallelism.md` §12). |
 | `human_interventions` | Theo's metric: "how long can the model run without your input?" |
-| `follow_ups_to_merge` | Mergeability: commits or fixes between PR filed and merged (Fable ~2 vs Astra ~6 in `research/model-selection.md § V2.4`). |
+| `follow_ups_to_merge` | Mergeability: commits or fixes between PR filed and merged (Fable ~2 vs Astra ~6 in [FVA 33:46](https://youtu.be/P7bxbDSnZRM?t=2026)). |
 | `outcome` | merged / closed / superseded / abandoned / info-only. |
 | `escalated_to` | Whether the standing override was used, and to which model. |
 | `reviewer_findings` | Confirmed / unconfirmed / contradicted counts, per reviewer model. |
 | `cost_or_quota` | Dollars on API, or quota % on subscription, if known. |
 | `notes` | One line; link to the improvement made, if any. |
 
-Theo's two headline metrics (`research/model-selection.md § V1.3`, rule 6):
+Theo's two headline metrics ([MODELS 15:51](https://youtu.be/iBrAWpjXNxs?t=951), rule 6):
 "How long can the model run without your input?" and "How likely is it that
 the thing works by the time a human gets involved?" Track both per model and
 task type. His own log analysis (median run time 53 s → 2 min 20 s; monthly
 P95 9 → 22 min as models improved) came from having an agent analyse his
-prompt history (`research/model-selection.md § V1.3`).
+prompt history ([MODELS 21:26](https://youtu.be/iBrAWpjXNxs?t=1286)).
 
 Use the log:
 
@@ -222,7 +230,7 @@ Use the log:
   the same task types.
 - **Trace review:** reading what models actually did, then refining skills, is
   how Maria got to "fire a single prompt and get a PR landed instantly" after
-  3–4 days of review (`research/model-selection.md § V1.5`).
+  3–4 days of review ([MODELS 18:23](https://youtu.be/iBrAWpjXNxs?t=1103)).
 
 ## 9. Distributing changes
 
@@ -230,7 +238,7 @@ Use the log:
   `~/.agent-orchestration/` and is shared across harnesses
   (`docs/ARCHITECTURE.md`). Theo distributed his CLAUDE.md by telling the
   agent: "I just updated the CLAUDE.md in this repo. Commit it and push it out
-  to the rest of the fleet" (`research/claude-supplemental.md § V1.2`).
+  to the rest of the fleet" ([OPUSG 19:31](https://youtu.be/ejjBbaq9RmY?t=1171)).
 - After any change to routing or bridges, re-run the generator so every
   adapter picks it up.
 
@@ -244,11 +252,11 @@ config grows past what fits on one screen:
    the model that caused it still in use?
 3. Propose deleting rules whose reason no longer applies. Theo expects to
    delete his bridge skills "once better models come out, or better yet,
-   Anthropic gets good at computer use" (INSP).
+   Anthropic gets good at computer use" ([INSP 20:32](https://youtu.be/8GRmLR__OGQ?t=1232)).
 4. Try the deletion on a few real tasks before committing to it.
 
 The direction of travel is less configuration over time, and more trust in
 the model where the log shows it has earned it. Theo's trust ladder went from
 tab completion to "I tell it to find them, fix them, and merge them for me"
 for bug fixes and performance work, with product calls kept by the human
-(`research/claude-releases.md § V1.6`).
+([FAB51 52:54](https://youtu.be/r_dw-1109Ag?t=3174)).

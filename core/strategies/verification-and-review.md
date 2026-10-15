@@ -5,10 +5,20 @@ you dispatch a reviewer, when you babysit a PR, and before anything merges.
 Verification is part of the task, not an optional extra, and the cheapest
 verifier is usually a different model from the one that wrote the code.
 
-Citations: `research/<file>.md § V1.3` means Video 1, section 3 of that file;
-`§ X` means its cross-video synthesis. `INSP` means
-`transcripts/general/agent-orchestration-inspiration.html` (recorded in the
-Fable 5 / GPT-5.5 / Opus 4.8 era).
+Sources:
+- FABG: "So I was using Fable wrong...", Theo (t3.gg), YouTube, https://youtu.be/-XWSJM-Ue-o
+- MODELS: "Please stop using stupid models", Theo (t3.gg), YouTube, https://youtu.be/iBrAWpjXNxs
+- INSP: "A proper guide to Fable 5", Theo (t3.gg), YouTube, https://youtu.be/8GRmLR__OGQ (recorded in the Fable 5 / GPT-5.5 / Opus 4.8 era)
+- OPUSG: "Getting the most out of Opus 5.5", Theo (t3.gg), YouTube, https://youtu.be/ejjBbaq9RmY
+- SOL61: "OpenAI fights back", Theo (t3.gg), YouTube, https://youtu.be/vu8X3YroB-w
+- ASTRA: "It's Here.", Theo (t3.gg), YouTube, https://youtu.be/XFWpf0wLbh0
+- OPUS55: "My new favorite model.", Theo (t3.gg), YouTube, https://youtu.be/jgGyX7MPPVg
+- FVA: "Fable Vs Astra Debate Is Over", Theo (t3.gg), YouTube, https://youtu.be/P7bxbDSnZRM
+- SON55: "OpenAI should be scared of this one", Theo (t3.gg), YouTube, https://youtu.be/8WbW_n95wc4
+- FAB51: "My New Favorite Model", Theo (t3.gg), YouTube, https://youtu.be/r_dw-1109Ag
+
+`[KEY m:ss]` links to the video at that timestamp; the auto-generated captions
+often mishear model names (Sol as "Soul", Fable as "Able").
 
 ---
 
@@ -17,19 +27,19 @@ Fable 5 / GPT-5.5 / Opus 4.8 era).
 1. **The implementer verifies its own work first.** Done includes "verify that
    it's fixed, film a video showing the results, put up a pull request,
    monitor it to address all the review comments"
-   (`research/claude-supplemental.md § V2.5`).
+   ([FABG 29:12](https://youtu.be/-XWSJM-Ue-o?t=1752)).
 2. **A different lab reviews.** Claude writes, OpenAI or Grok reviews; and the
    reverse. Same-family review misses what cross-family review catches.
 3. **Reviewers run things.** "Agents know a lot more about code when they can
    actually run it than they can possibly guess by just staring at it"
-   (`research/model-selection.md § V1.5`).
+   ([MODELS 2:01](https://youtu.be/iBrAWpjXNxs?t=121)).
 4. **Unconfirmed claims are labelled.** Every reviewer and investigator says
    what it could not confirm.
 5. **The orchestrator checks objective state itself** (git, CI, PR status)
    and does not redo the worker's reasoning.
 6. **Spending more on verification than on doing is acceptable.** "I burned
    way more tokens trying to verify the work that Fable did here than I burned
-   getting Fable to do the work here" (INSP).
+   getting Fable to do the work here" ([INSP 34:22](https://youtu.be/8GRmLR__OGQ?t=2062)).
 
 ## 2. Cross-family review
 
@@ -37,18 +47,18 @@ Why: models from one lab share blind spots. Evidence:
 
 - "When I have Opus code being reviewed, I don't want just Opus reviewing it.
   I would like for Astra or even like Sol to give it a review as well"
-  (`research/claude-supplemental.md § V1.5`). He also suggests Grok.
+  ([OPUSG 23:01](https://youtu.be/ejjBbaq9RmY?t=1381)). He also suggests Grok.
 - GPT-6.1 Sol reviewed a Claude-written T3 Code fix and "found real problems
   that were entirely missed by Fable and by Opus", preventing a real
-  regression (`research/gpt-releases.md § V2.2`).
+  regression ([SOL61 26:53](https://youtu.be/vu8X3YroB-w?t=1613)).
 - Sol found 1.3M of 1.8M lines unused in a port that Opus had rewritten
-  without deleting the old code (`research/gpt-releases.md § V2.2`).
+  without deleting the old code ([SOL61 28:48](https://youtu.be/vu8X3YroB-w?t=1728)).
 - In reverse, Fable reviewed Astra's 26K-line runtime fork and said it was not
   ready to merge, with concrete reasons (one-way-door migration, three features
   in one PR, default flipped, headline number not proving live queries)
-  (`research/claude-supplemental.md § V2.2`). Fable also audited Astra's
+  ([FABG 19:40](https://youtu.be/-XWSJM-Ue-o?t=1180)). Fable also audited Astra's
   Lakebed performance changes as "entirely sound"
-  (`research/gpt-releases.md § V1.2`).
+  ([ASTRA 33:41](https://youtu.be/XFWpf0wLbh0?t=2021)).
 
 Who reviews whom (defaults; the user's routing table overrides):
 
@@ -58,22 +68,22 @@ Who reviews whom (defaults; the user's routing table overrides):
 | OpenAI (Astra, Sol) | Claude (Fable or Opus) for merge-readiness and risk | Automated reviewer bots |
 | Anything that ships | Automated reviewer bots as a gate (§8) | Human for product calls |
 
-Reviewer character (`research/claude-supplemental.md § V1.5, § V1.7`;
-`research/claude-releases.md § V2.3`):
+Reviewer character ([OPUSG 22:44](https://youtu.be/ejjBbaq9RmY?t=1364); [OPUSG 24:27](https://youtu.be/ejjBbaq9RmY?t=1467);
+[OPUS55 22:02](https://youtu.be/jgGyX7MPPVg?t=1322)):
 
 - **OpenAI models dig hard and are noisy.** "They just really dig into the
   details and won't let go... It'll report more stuff that doesn't matter,
   but it will occasionally find things that do matter that the Claude models
   just miss entirely." Sol's "Rottweiler nature"
-  (`research/gpt-releases.md § V2.2`).
+  ([SOL61 13:05](https://youtu.be/vu8X3YroB-w?t=785)).
 - **Claude models find less but vet it.** Fable's findings "all matter... but
   it just didn't find as much." Opus 5.5 had no contradicted findings on
   Theo's bench. Use a Claude model to filter an OpenAI reviewer's list.
 - **Theo's informal review bench** (supported findings): Astra 8, Grok 4.7 8
   (second overall), Sol 9 but lower validity, Fable 5 across two runs, Opus 5
-  "4 supported, 2 not" (`research/claude-supplemental.md § V1.5`). A later
+  "4 supported, 2 not" ([OPUSG 23:18](https://youtu.be/ejjBbaq9RmY?t=1398)). A later
   "find improvement opportunities" task: Sol 87.4, Astra 83.8, Grok 4.7 80.7
-  (`research/gpt-releases.md § V2.2`). The two runs differ; both put OpenAI
+  ([SOL61 14:05](https://youtu.be/vu8X3YroB-w?t=845)). The two runs differ; both put OpenAI
   and Grok above Claude for exhaustive review.
 
 ## 3. Writing the review prompt
@@ -82,21 +92,21 @@ Use the `review` template in `delegation-prompting.md` §14. Non-negotiable
 elements:
 
 - **A precise target:** uncommitted diff, branch vs base, a commit, or a PR
-  number. Theo's review bridge starts by identifying the review target (INSP).
+  number. Theo's review bridge starts by identifying the review target ([INSP 21:00](https://youtu.be/8GRmLR__OGQ?t=1260)).
 - **Mark what could not be confirmed.** "You should ask the model to mark the
   things that it can't confirm... If you ask the model to let you know what
-  things it can't verify, it will" (`research/claude-supplemental.md § V1.5`).
+  things it can't verify, it will" ([OPUSG 24:41](https://youtu.be/ejjBbaq9RmY?t=1481)).
   Some things cannot be verified at all (other hardware, a missing env var, a
   subjective call); you want those named, not silently assumed.
 - **The nothing-found case.** "If [the reviewer] finds nothing, say that
   clearly and mention what the review target is that it inspected." Without
-  this, empty results confused the parent and it reran (INSP).
+  this, empty results confused the parent and it reran ([INSP 21:58](https://youtu.be/8GRmLR__OGQ?t=1318)).
 - **Read-only by default.** Reviewers do not edit. Use a read-only sandbox
   where the harness offers one.
 - **Simple prompts for GPT reviewers.** Do not prompt a GPT model as if it
   were Claude (`delegation-prompting.md` §12).
 - **Safe wording.** Ask "are there bugs in this?" rather than compile-probing
-  phrasing (`research/claude-supplemental.md § V2.3`).
+  phrasing ([FABG 33:10](https://youtu.be/-XWSJM-Ue-o?t=1990)).
 
 ## 4. Give the reviewer tools
 
@@ -105,21 +115,21 @@ A reviewer that can run the system finds bugs that reading cannot.
 - **Tests:** let it run the suite, or write a failing test for its claim.
 - **A running app and a browser or computer use:** Sol found its regressions
   through "a combination of reading the code and analyzing it as well as
-  computer use" (`research/gpt-releases.md § V2.2`).
+  computer use" ([SOL61 27:10](https://youtu.be/vu8X3YroB-w?t=1630)).
 - **Sandboxes per hypothesis.** The Greptile pattern: a reviewer orchestrator
   "can spin up and run sandboxes with sub agents for whatever theories it has
   about what might be wrong. Some reviews might need no sandboxes, some
   reviews might need 10," returning images and videos as proof
-  (`research/model-selection.md § V1.5`). "Code breaks in ways that are not
+  ([MODELS 2:32](https://youtu.be/iBrAWpjXNxs?t=152)). "Code breaks in ways that are not
   clearly visible just from reading code."
 - **For big PRs, pull it down and play with it:** "ask your agent on your
   machine to pull it down, play with it, test it, and make sure everything
-  works" (`research/model-selection.md § V1.5`).
+  works" ([MODELS 1:31](https://youtu.be/iBrAWpjXNxs?t=91)).
 
 ## 5. Handling reviewer output
 
 The caller of a review bridge does this before showing anything to the user
-(Theo's codex-review skill, INSP):
+(Theo's codex-review skill, [INSP 21:06](https://youtu.be/8GRmLR__OGQ?t=1266)):
 
 1. Read the reviewer's report from its artifact file.
 2. **Verify each important claim against the code** before presenting it.
@@ -127,7 +137,7 @@ The caller of a review bridge does this before showing anything to the user
 4. Present: confirmed findings (with file:line and how confirmed), then
    unconfirmed, then "inspected but found nothing in: ...".
 
-The fix loop (`research/gpt-releases.md § V2.2, § V2.5`):
+The fix loop ([SOL61 27:17](https://youtu.be/vu8X3YroB-w?t=1637); [SOL61 27:47](https://youtu.be/vu8X3YroB-w?t=1667)):
 
 ```
 Claude implements → OpenAI reviews (read + run) → orchestrator verifies
@@ -138,7 +148,7 @@ small gaps") → Claude fixes → merge gate.
 Delegate this loop rather than relaying by hand: "Hey, can you have Astra
 verify this?" Fable then "will update the code accordingly, then test it again
 and not come back to me until it has results it's happy with"
-(`research/claude-supplemental.md § V2.5`).
+([FABG 26:03](https://youtu.be/-XWSJM-Ue-o?t=1563)).
 
 ## 6. Plan review across models
 
@@ -146,14 +156,14 @@ Review the plan before the build when the work is wide.
 
 - Theo had two models "review each other's plans separately" before a large
   rewrite, then committed the plan to a branch in a worktree and built it
-  (`research/model-selection.md § V2.5`).
+  ([FVA 28:11](https://youtu.be/P7bxbDSnZRM?t=1691)).
 - For decomposition questions ("how do we split this giant PR?"), Astra gave
   the best plan, Sonnet 5.5 the best value at about half Opus's cost, and Sol
-  was fast "but at like half the score" (`research/claude-releases.md § V3.2`).
+  was fast "but at like half the score" ([SON55 22:13](https://youtu.be/8WbW_n95wc4?t=1333)).
 - His model roster said: "Reviews of plans and implementations, Fable 5 or
-  Opus 48. Optionally [GPT] is an extra independent perspective" (INSP).
+  Opus 48. Optionally [GPT] is an extra independent perspective" ([INSP 18:55](https://youtu.be/8GRmLR__OGQ?t=1135)).
 - Plans should link to the PRs or code they are based on, say where the
-  existing implementation is, and decompose into bounded PRs (INSP).
+  existing implementation is, and decompose into bounded PRs ([INSP 27:25](https://youtu.be/8GRmLR__OGQ?t=1645)).
 
 ## 7. The orchestrator verifies state
 
@@ -161,10 +171,10 @@ Do not trust a worker's report about objective state. Check it.
 
 Why: Astra said review comments were valid and made no changes; later fixed
 them but did not push; claimed everything was resolved and stopped monitoring
-early (`research/gpt-releases.md § V1.3`). "An orchestrator should check the
-git and PR state rather than trust its report" (`research/gpt-releases.md § V1.9`).
+early ([ASTRA 36:53](https://youtu.be/XFWpf0wLbh0?t=2213)). An orchestrator should check the
+git and PR state rather than trust its report ([ASTRA 38:59](https://youtu.be/XFWpf0wLbh0?t=2339)).
 Opus 5.5 once had "almost three hours" of changes still local and uncommitted
-(`research/claude-releases.md § V2.3`).
+([OPUS55 34:38](https://youtu.be/jgGyX7MPPVg?t=2078)).
 
 After any worker claims it committed, pushed, opened, or merged, confirm:
 
@@ -186,7 +196,7 @@ gh pr checks <N>
 
 **Do not redo the model's reasoning.** Re-deriving a fix the model already
 tested is "the person who would write the type check after the type check"
-(`research/claude-supplemental.md § V2.3`). Check cheap objective facts; leave
+([FABG 29:25](https://youtu.be/-XWSJM-Ue-o?t=1765)). Check cheap objective facts; leave
 judgment to the reviewer step.
 
 ## 8. Merge gates
@@ -194,30 +204,30 @@ judgment to the reviewer step.
 - **Kit default: propose PRs, never merge.** Merging is enabled only in the
   user's config (`docs/ARCHITECTURE.md`).
 - **When merging is enabled, automated reviewers gate it.** "Do not merge code
-  until my automated code reviewers have approved it" (INSP). Theo's set:
+  until my automated code reviewers have approved it" ([INSP 32:33](https://youtu.be/8GRmLR__OGQ?t=1953)). Theo's set:
   Bugbot, Macroscope, CodeRabbit. All Fable 5.1 audit PRs merged with "every
-  bot thread answered or fixed before merge" (`research/claude-releases.md § V1.2`).
+  bot thread answered or fixed before merge" ([FAB51 44:05](https://youtu.be/r_dw-1109Ag?t=2645)).
 - **Path-scoped review agents** defined as markdown in the repo (e.g. a
   "service conventions" agent and a "UI consistency" agent), each approving only
   if its condition holds, plus a top-level approval. "You could add all of
   these things into your agent MD, but that only guarantees that your agent
   knows about them, not that it's actually going to follow"
-  (`research/model-selection.md § V2.5`).
+  ([FVA 2:03](https://youtu.be/P7bxbDSnZRM?t=123)).
 - **Prod stays human.** Merge-to-main is safe only when main deploys to
-  staging and prod deploys need a person (INSP; `research/claude-releases.md § V1.5`).
+  staging and prod deploys need a person ([INSP 33:16](https://youtu.be/8GRmLR__OGQ?t=1996); [FAB51 43:58](https://youtu.be/r_dw-1109Ag?t=2638)).
 - **Product-opinion changes stay with the human.** Theo lets the model merge
   bug fixes and performance work; product calls are his
-  (`research/claude-releases.md § V1.6`).
+  ([FAB51 53:46](https://youtu.be/r_dw-1109Ag?t=3226)).
 - Merge-readiness pickiness varies by model. Theo trusts Fable 5.1 to decide
   ("I've yet to be burned by that, despite it doing it dozens of times")
-  (`research/claude-releases.md § V1.2`) and tested Astra's merges himself
-  after being burned by Sol (`research/gpt-releases.md § V1.2`). Route the
+  ([FAB51 46:38](https://youtu.be/r_dw-1109Ag?t=2798)) and tested Astra's merges himself
+  after being burned by Sol ([ASTRA 34:09](https://youtu.be/XFWpf0wLbh0?t=2049)). Route the
   merge decision to the model with the highest floor.
 
 ## 9. Babysitting a PR
 
 Use the `babysit` template (`delegation-prompting.md` §14). The procedure,
-from Theo's skill (`research/claude-supplemental.md § V2.2`):
+from Theo's skill ([FABG 14:34](https://youtu.be/-XWSJM-Ue-o?t=874)):
 
 1. **Monitor.** If the harness offers a PR-monitoring tool, use it so you
    respond when comments arrive; otherwise poll for new comments and checks.
@@ -236,12 +246,12 @@ from Theo's skill (`research/claude-supplemental.md § V2.2`):
 8. **Stop if superseded.** If an overlapping PR makes this one obsolete, stop
    monitoring, report it, and ask before closing unless closure was
    authorised.
-9. **Do not stop until everything is green** (`research/gpt-releases.md § V1.3`),
+9. **Do not stop until everything is green** ([ASTRA 37:52](https://youtu.be/XFWpf0wLbh0?t=2272)),
    then report or merge per config.
 
 Known failure: review-bot comments can push a model into fix loops; "30
 commits later you have way more code than you intended and nothing actually
-ends up shipping" (`research/claude-releases.md § V1.2`). If a babysit run
+ends up shipping" ([FAB51 40:56](https://youtu.be/r_dw-1109Ag?t=2456)). If a babysit run
 exceeds a few rounds on the same thread of feedback, stop and hand the PR to
 a higher-floor model with the takeover prompt (`parallelism.md` §10), or ask
 the human.
@@ -249,7 +259,7 @@ the human.
 ## 10. Honest-assessment checkpoints
 
 Ask these at gates. They produce structured, usable judgments, especially from
-Claude models (`research/claude-supplemental.md § V1.2, § V2.3`):
+Claude models ([OPUSG 21:48](https://youtu.be/ejjBbaq9RmY?t=1308); [FABG 19:47](https://youtu.be/-XWSJM-Ue-o?t=1187)):
 
 ```
 Is this ready to merge? Give me your honest thoughts.
@@ -264,11 +274,11 @@ How do you feel about these changes in the end? Was this a good thing to merge?
 Use them as follows:
 
 - "What are the risks of merging this today?" decides whether a ~300-line
-  agent PR needs a human read (`research/claude-supplemental.md § V1.2`).
+  agent PR needs a human read ([OPUSG 21:57](https://youtu.be/ejjBbaq9RmY?t=1317)).
 - The capability-boundary question exposed what Fable could not verify in
   staging (wrong query results) and led it to propose shadow mode, structured
   failure reasons, synthetic traffic, and runtime counters
-  (`research/claude-supplemental.md § V2.2`). Then have it build those
+  ([FABG 20:44](https://youtu.be/-XWSJM-Ue-o?t=1244)). Then have it build those
   confidence measures on a new branch.
 - Pair a question with a conditional action to keep momentum: "Do you think
   that's all we need? If so, merge it."
@@ -279,8 +289,8 @@ Use them as follows:
 - Route UI and runtime verification that needs a browser, desktop, simulator,
   or screenshots to the strongest computer-use model the user has, through a
   bridge. As of the research, OpenAI models via Codex lead, "especially on
-  macOS" (`research/claude-supplemental.md § V2.5`; `research/gpt-releases.md § V1.2`).
-- Theo's bridge description (INSP), adapted to be the default for testing:
+  macOS" ([FABG 25:15](https://youtu.be/-XWSJM-Ue-o?t=1515); [ASTRA 11:43](https://youtu.be/XFWpf0wLbh0?t=703)).
+- Theo's bridge description ([INSP 24:05](https://youtu.be/8GRmLR__OGQ?t=1445)), adapted to be the default for testing:
   "Use when the user asks Claude to test a flow, verify UI behavior, inspect a
   running app, capture screenshots, or report confirmation and feedback of
   implemented behavior that benefits from computer use functionality."
@@ -288,13 +298,13 @@ Use them as follows:
   named points, pass/fail per step, explicit negatives (don't touch other
   apps, don't submit payments).
 - Run it on a machine the user is not working on
-  (`research/claude-supplemental.md § V1.4`).
+  ([OPUSG 7:26](https://youtu.be/ejjBbaq9RmY?t=446)).
 - For money or irreversible actions, the human makes the final click. Theo let
-  Sol prepare wires and left the send to him (`research/gpt-releases.md § V2.2`).
+  Sol prepare wires and left the send to him ([SOL61 11:29](https://youtu.be/vu8X3YroB-w?t=689)).
 
 ## 12. Post-merge and pre-prod verification
 
-After a large autonomous batch lands on staging (INSP):
+After a large autonomous batch lands on staging ([INSP 34:00](https://youtu.be/8GRmLR__OGQ?t=2040)):
 
 - Spin up agents to exercise all new features and a sample of old ones,
   including apps built the old way.
@@ -309,4 +319,4 @@ After a large autonomous batch lands on staging (INSP):
 - The task took an hour or more: treat it as an architecture signal, not just
   a review problem (`parallelism.md` §12).
 - The fix is in a degraded-state area (stuck jobs, slow paths) on Opus: Opus's
-  discernment weakens there; consider Fable (`research/claude-releases.md § V2.3`).
+  discernment weakens there; consider Fable ([OPUS55 35:28](https://youtu.be/jgGyX7MPPVg?t=2128)).

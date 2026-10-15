@@ -90,12 +90,11 @@ implementer and has it call Sol to review, investigate and triage.
   low cost $0.21 per task, taking 4.8 minutes, vs Opus 5.5 max at $14.65 and
   50 minutes for the same score: "a tenth the time and a 70th the price."
   Re-priced, the speaker's whole session history came to $1,550 vs $5,700 at
-  Opus's guessed price. (`research/gpt-releases.md § Benchmarks (his own runs,
-  which he caveats heavily)`; `research/gpt-releases.md § 4. Pricing, speed,
-  context, limits, and access` (Video 2))
+  Opus's guessed price. ([SOL61 21:18](https://youtu.be/vu8X3YroB-w?t=1278);
+  [SOL61 18:05](https://youtu.be/vu8X3YroB-w?t=1085))
 - **Lean context.** About 110K tokens read per request vs about 360K for Sonnet
   5.5. "Did three rounds of work for about half the cost of Sonnet's single
-  round." (`research/gpt-releases.md § Token efficiency and context management`)
+  round." ([SOL61 18:58](https://youtu.be/vu8X3YroB-w?t=1138))
 - **Deep review and auditing ("Rottweiler").** "Dig into a problem and shake it
   and tear it to pieces until they find every single thing wrong with it."
   - On a real T3 Code PR written by Claude Code, it found two regressions
@@ -109,27 +108,24 @@ implementer and has it call Sol to review, investigate and triage.
   - It found 1.3M of 1.8M lines unused after a TS-to-Rust rewrite that Opus
     had left behind.
   "I absolutely trust it to review things."
-  (`research/gpt-releases.md § Deep code review, auditing, and investigation:
-  his main use`)
+  ([SOL61 13:12](https://youtu.be/vu8X3YroB-w?t=792))
 - **Steadier floor than Astra.** Asked whether it fixes Astra's spikes: "mostly,
   not entirely, but for the most part, yeah." Testers called it "incredible"
-  and "incredibly boring." (`research/gpt-releases.md § Reliability and low
-  spikiness: the key improvement over Astra`)
+  and "incredibly boring." ([SOL61 10:51](https://youtu.be/vu8X3YroB-w?t=651))
 - **Computer use good enough to trust with money.** It went through his email
   for unpaid invoices and set up a Chrome tab per wire with the details filled
   in, leaving him to click send. "It didn't get a single thing wrong." It is
   "still not quite as good as Astra" but worth it for the price.
-  (`research/gpt-releases.md § Computer use: good enough to trust with money`)
+  ([SOL61 11:29](https://youtu.be/vu8X3YroB-w?t=689))
 - **Blind evaluation by Opus 5.5.** It placed first (87.4) in a blind 10-model
   bench. Opus's verdict: "incredible for scoped work, top of the frontier...
-  about level with Opus." (`research/gpt-releases.md § Blind evaluation by Opus
-  5.5`)
+  about level with Opus." ([SOL61 15:38](https://youtu.be/vu8X3YroB-w?t=938))
 - **Blender.** "If you give it like a screenshot... and say, 'you have Blender
   over the CLI, go make this,' it will." Its fish-game graphics beat Sonnet
-  5.5's. (`research/gpt-releases.md § Blender`)
+  5.5's. ([SOL61 24:57](https://youtu.be/vu8X3YroB-w?t=1497))
 - **Fast to completion.** Opus judged "its speed should add a premium because
   it is quite fast", consistent with 4.8-minute DeepSWE tasks.
-  (`research/gpt-releases.md § Speed` (Video 2))
+  ([SOL61 17:13](https://youtu.be/vu8X3YroB-w?t=1033))
 
 ## Weaknesses and failure modes
 
@@ -137,42 +133,37 @@ implementer and has it call Sol to review, investigate and triage.
   regressed again... It has no taste and you're going to have to bring your
   taste yourself." The fish game had 20+ pieces of filler copy ("take a
   breather", "Your little world can wait"), "worse than almost any I've ever
-  seen." (`research/gpt-releases.md § Frontend and UI: "unacceptably garbage"`)
+  seen." ([SOL61 24:41](https://youtu.be/vu8X3YroB-w?t=1481))
 - **Game mechanics.** Movement was jank, the frame rate worse, the loop thin,
   and the game ended at random within 30 seconds. "I would never have it make
-  the actual mechanics for my games." (`research/gpt-releases.md § Game
-  mechanics and feel`)
+  the actual mechanics for my games." ([SOL61 25:08](https://youtu.be/vu8X3YroB-w?t=1508))
 - **Stalls on long unattended builds.** On the TS-to-Rust port, "it made no
   progress. It burned a shitload of tokens." Per Opus, it "wasted 4 days."
   Opus restarted the port and got it working in a day.
-  (`research/gpt-releases.md § Long unattended building and heavy rewrites:
-  clearly worse than Anthropic`)
+  ([SOL61 16:07](https://youtu.be/vu8X3YroB-w?t=967))
 - **Doesn't ask for help.** It "follows its process rules even when they stop
   all progress and it does not ask for help." The speaker: "This I absolutely
   noticed." An orchestrator cannot rely on it to escalate and must give it
-  escape hatches and time or step budgets. (`research/gpt-releases.md § Rigid
-  process-following without escalation`)
+  escape hatches and time or step budgets. ([SOL61 15:49](https://youtu.be/vu8X3YroB-w?t=949))
 - **Merge-worthiness.** "It is harder to justify merging this code than it is
   for code from Opus." Its first drafts had real bugs that review bots caught.
-  (`research/gpt-releases.md § Code he would merge`)
+  ([SOL61 27:38](https://youtu.be/vu8X3YroB-w?t=1658))
 - **Edge-of-capability weirdness.** "Some tasks that are just at the edge of its
   capability that it will start to do weirder stuff on." It also made "a couple
-  dumb mistakes" managing his agent fleet. (`research/gpt-releases.md § Lower
-  ceiling`; `§ Judgment in fleet and infrastructure management`)
+  dumb mistakes" managing his agent fleet. ([SOL61 12:19](https://youtu.be/vu8X3YroB-w?t=739);
+  [SOL61 16:50](https://youtu.be/vu8X3YroB-w?t=1010))
 - **Noisy findings.** OpenAI reviewers "report more stuff that doesn't matter."
   On one review bench Sol's 9 findings were judged less valid than Astra's or
   Grok's 8 (which Sol version is unclear, see Evidence). The orchestrator or a
   Claude model should filter and verify its findings before acting.
-  (`research/claude-supplemental.md § 5. Subagents, orchestration, delegation,
-  verification, review, model choice` (Video 1))
+  ([OPUSG 22:46](https://youtu.be/ejjBbaq9RmY?t=1366))
 - **Scope creep and review-comment loops when babysitting.** The speaker added
   "Please don't scope creep. Stop adding new things. Only address real
   shortcomings" and "don't post filler comments" to his babysit skill because
   Sol scope-crept during babysitting. GPT-5.6 Sol bloated PRs and got stuck in
   review loops. These observations are from earlier Sol versions; keep the
-  guardrails for 6.1. (`research/claude-supplemental.md § 2. Concrete workflow
-  the speaker uses` (Video 2); `research/claude-releases.md § 2. Strengths
-  (with evidence)` (Video 1))
+  guardrails for 6.1. ([FABG 15:42](https://youtu.be/-XWSJM-Ue-o?t=942);
+  [FAB51 52:06](https://youtu.be/r_dw-1109Ag?t=3126))
 - **Verify git and PR state.** Astra's "says it fixed, didn't push" behaviour
   hasn't been reported for 6.1 Sol. The precaution still applies to any Codex
   run: check the remote branch, `gh pr checks` and open review threads, not the
@@ -180,9 +171,9 @@ implementer and has it call Sol to review, investigate and triage.
 - **Skill-dropping on later turns.** Codex's system prompt says a skill used in
   one turn shouldn't apply to later turns unless requested. This was observed
   with Astra, and Sol inherits the harness. Re-invoke skills by name each turn.
-  (`research/model-selection.md § 6. Claude Code / Codex specifics`)
+  ([FVA 55:43](https://youtu.be/P7bxbDSnZRM?t=3343))
 - **Lower ceiling than Astra** for computer use and 3D, and slightly below Opus
-  5.5 for 3D overall. (`research/gpt-releases.md § Blender`)
+  5.5 for 3D overall. ([SOL61 11:10](https://youtu.be/vu8X3YroB-w?t=670))
 
 ## How to prompt it
 
@@ -191,7 +182,7 @@ implementer and has it call Sol to review, investigate and triage.
   simpler." A Codex model "is not going to do things you don't tell it to,
   unlike Claude models", so leave out Claude-style guardrail essays and
   "think hard" lines, and give the target, the task and the done state.
-  (`transcripts/general/agent-orchestration-inspiration.html` ~21:40, said of
+  ([INSP 21:40](https://youtu.be/8GRmLR__OGQ?t=1300), said of
   GPT-5.5 in Codex)
 - **Scope it tightly.** "Incredible for scoped work." Name the review target
   (diff, branch, PR), the question, and the output format.
@@ -268,7 +259,7 @@ reason, that is given a prompt and no context, cannot make a good decision
 around how hard the problem is." Route by task type and context, and count
 steps-to-completion and cache-read price, not per-token list price. Sol wins
 on cost because it finishes in few steps, not because it is cheap per token.
-(`research/gpt-releases.md § Critique of naive cost routers`)
+([SOL61 19:42](https://youtu.be/vu8X3YroB-w?t=1182))
 
 ## Cost notes
 
@@ -296,13 +287,12 @@ on cost because it finishes in few steps, not because it is cheap per token.
 ## Evidence
 
 **From the GPT-6.1 Sol video (primary; the basis of this profile):**
-`research/gpt-releases.md § Video 2: GPT-6.1 Sol` and all its subsections:
+SOL61: "OpenAI fights back", Theo (t3.gg), YouTube, https://youtu.be/vu8X3YroB-w:
 pricing, the 96% cache-read figure, DeepSWE and Terminal Bench 4 runs, the
 review and audit results (87.4, the two T3 Code regressions, 1.3M dead lines),
 the blind Opus evaluation, computer-use invoice story, frontend verdict, the
 TS-to-Rust stall, "does not ask for help", the naive cost-router test, the
-subscription figures, and the Opus-calls-Sol setup. Also `§ Cross-video
-synthesis (for the routing table)`. Caveats:
+subscription figures, and the Opus-calls-Sol setup. Also ASTRA: "It's Here.", Theo (t3.gg), YouTube, https://youtu.be/XFWpf0wLbh0. Caveats:
 - The transcript says "6.1 Sonnet" once, almost certainly a slip for Sol.
 - "I told Soul to come in and it got it from 83.7% to 100%" is almost certainly
   Opus, per context.
@@ -313,34 +303,30 @@ synthesis (for the routing table)`. Caveats:
 - "297 vs 584" is read as $2.97 vs $5.84, and "$512" as $5.12.
 
 **From earlier Sol versions (not 6.1; used only for guardrails, not scores):**
-- GPT-5.6 Sol: `research/model-selection.md § GPT-5.6 Sol ("Soul") — previous
-  OpenAI generation` (mergeability 2–3/10, "would just get lost if you tried to
+- GPT-5.6 Sol: [FVA 35:18](https://youtu.be/P7bxbDSnZRM?t=2118); [FVA 54:11](https://youtu.be/P7bxbDSnZRM?t=3251); [FVA 37:36](https://youtu.be/P7bxbDSnZRM?t=2256)
+  (mergeability 2–3/10, "would just get lost if you tried to
   steer it", exploratory-only rule, AA $1.99 per task);
-  `research/gpt-releases.md § Code quality and scope discipline compared with
-  GPT-5.6 Sol` (bloated PRs, unneeded tests, yolo-merge burns);
-  `research/claude-releases.md § 2. Strengths (with evidence)` (Video 1:
-  scope creep, 30-minute merge loop, physics lead).
+  [ASTRA 20:02](https://youtu.be/XFWpf0wLbh0?t=1202); [ASTRA 34:09](https://youtu.be/XFWpf0wLbh0?t=2049)
+  (bloated PRs, unneeded tests, yolo-merge burns);
+  [FAB51 52:06](https://youtu.be/r_dw-1109Ag?t=3126); [FAB51 50:13](https://youtu.be/r_dw-1109Ag?t=3013); [FAB51 22:45](https://youtu.be/r_dw-1109Ag?t=1365)
+  (scope creep, 30-minute merge loop, physics lead).
 - Most likely GPT-5.6 Sol: the babysit-skill scope-creep lines in
-  `research/claude-supplemental.md § 2. Concrete workflow the speaker uses`
-  (Video 2). That digest maps "Soul" to 6.1, but notes the Fable video was
+  [FABG 15:42](https://youtu.be/-XWSJM-Ue-o?t=942). That digest maps "Soul" to 6.1, but notes the Fable video was
   recorded before Opus 5.5 shipped, which predates GPT-6 and 6.1 Sol.
-- GPT-6 Sol (6.0): `research/claude-releases.md` Videos 2–3. "GPT6 Soul" was
+- GPT-6 Sol (6.0): [OPUS55 3:29](https://youtu.be/jgGyX7MPPVg?t=209); [SON55 15:04](https://youtu.be/8WbW_n95wc4?t=904); [SON55 24:03](https://youtu.be/8WbW_n95wc4?t=1443). "GPT6 Soul" was
   released alongside Opus 5.5. The Sonnet video called it "kind of just DOA"
   and scored it "faster but at like half the score" on the decomposition
   bench. The 6.1 video says 6.0 Sol and Luna "weren't that good."
-- **Ambiguous version:** `research/claude-supplemental.md § 5. Subagents,
-  orchestration, delegation, verification, review, model choice` (Video 1,
-  the Opus 5.5 guide video). Sol had 9 findings judged less valid on the
-  review bench. The digest reads this as 6.1; it could be 6.0.
+- **Ambiguous version:** [OPUSG 23:47](https://youtu.be/ejjBbaq9RmY?t=1427) (the Opus 5.5 guide video). Sol had 9 findings judged less valid on the
+  review bench. The caption says "GB6 Soul", so this may be GPT-6 Sol (6.0) rather than 6.1.
 
 **Other sources:**
-- `transcripts/general/agent-orchestration-inspiration.html` ~15:00–15:53
-  ("cost in quotes of nine", said of GPT-5.5 on a Codex sub) and ~21:40–22:18
+- [INSP 15:00–15:53](https://youtu.be/8GRmLR__OGQ?t=900)
+  ("cost in quotes of nine", said of GPT-5.5 on a Codex sub) and [INSP 21:40–22:18](https://youtu.be/8GRmLR__OGQ?t=1300)
   (prompt Codex more simply; "if Codex finds nothing, say that clearly and
-  mention what the review target is"). No research digest exists yet.
+  mention what the review target is").
 - **Unverified:** Cursor access. The Opus 5.5 video says "OpenAI has banned
-  Cursor from using their models" (`research/claude-releases.md § 2. Strengths
-  (with evidence)`, Video 2). `cursor` stays in `harnesses` until confirmed.
+  Cursor from using their models" ([OPUS55 7:18](https://youtu.be/jgGyX7MPPVg?t=438)). `cursor` stays in `harnesses` until confirmed.
 - **Not stated anywhere:** context window, cache-write price, release month,
   API model id.
 

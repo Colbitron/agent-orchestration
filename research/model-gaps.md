@@ -80,10 +80,10 @@ The Haiku 4.5 facts below are kept for history. Haiku 5.5 replaced it on about 2
   - ID: `claude-haiku-5-5` | Price (≤100K prompt tokens): $0.10 input / $0.01 cache hit / $0.50 output; 5-minute cache write $0.125, 1-hour $0.20; batch $0.05 / $0.25 | Price (>100K prompt tokens): 5x, i.e. $0.50 / $0.05 / $2.50, cache writes $0.625 / $1.00, batch $0.25 / $1.25 | Context: 1M | Max out: 128K | Effort support: low / medium / high / xhigh / max, default `medium`; adaptive thinking on by default, can be disabled only at `high` or below; `budget_tokens` returns 400 | AA II: not found
   - **100K rule (official):** the prompt length counts all input tokens, including cache reads and cache writes, and each request is priced on its own. A request over 100K pays the higher prices even when part of its prompt is a cache hit. Haiku 5.5 is the only current Anthropic model without flat 1M-context pricing.
   - Newer tokenizer: about 30% more tokens than Haiku 4.5 for the same text. No server-side refusal fallback. Supports compaction, task budgets and computer use.
-  - Speed: 100 to 200 tok/s depending on provider (reported); about 180 tok/s in Claude Code on one subscription (`research/claude-releases.md` § V4.2).
+  - Speed: 100 to 200 tok/s depending on provider (reported); about 180 tok/s in Claude Code on one subscription ([H55 11:34](https://youtu.be/38_6C0dkKmU?t=694)).
   - Vendor benchmarks (not independently verified): Terminal-Bench 4.0 39.2% (Haiku 4.5 0.0%, GPT-6 Luna 16.4%, Sonnet 5.5 70.6%); OSWorld 2.1 72.4% partial credit at max (strict pass 37.1%). Anthropic says Sonnet and Opus remain better for complex agentic coding.
   - On the release, Anthropic cut Sonnet 5.5 cache reads from $0.20 to $0.10. Opus 5.5 stays at $0.20.
-- **Haiku 5.5 routing suggestion** (from `research/claude-releases.md` § V4.8):
+- **Haiku 5.5 routing suggestion** (from Theo's launch video, [H55](https://youtu.be/38_6C0dkKmU), digested in `research/claude-releases.md`, Video 4, section 8):
   - Use it as a **subagent** under Opus, not as a primary or interactive model: codebase search where grep is not enough, data gathering, reading docs or logs, vetting several hypotheses, categorisation, summaries.
   - Use it for many-attempts work that has a cheap, objective verifier (tests, a simulator, a script).
   - Do **not** give it implementation, code review, merge decisions or PR-readiness audits. In the video it trusted green CI as proof of readiness and cornered itself on a GitHub rate limit.
