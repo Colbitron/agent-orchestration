@@ -32,7 +32,31 @@ stamp_get() {
   awk -v k="$1" '{ sub(/\r$/, "") } $1 == k { sub(/^[^ \t]+[ \t]+/, ""); print; exit }' "$stamp" 2>/dev/null
 }
 
-# Compare the routing stamp against the kit's current profiles, tasks.md and version.
+# Print the installed kit's commit, or nothing when it cannot be told.
+# 1. The root is the top of a git checkout (a path install): its short HEAD.
+#    A root inside some other repository (a git-managed ~/.claude) does not count.
+# 2. Otherwise a marketplace cache copy, which Claude Code names after the
+#    commit it installed (cache/<marketplace>/<plugin>/<12-hex sha>/): the
+#    root's basename, when it is 7 to 40 lowercase hex characters.
+# core/interview/generate.py (kit_info) applies the same two rules.
+kit_commit() {
+  if command -v git >/dev/null 2>&1 &&
+    prefix=$(git -C "$root" rev-parse --show-prefix 2>/dev/null) && [ -z "$prefix" ]; then
+    git -C "$root" rev-parse --short HEAD 2>/dev/null
+    return 0
+  fi
+  base=${root%/}
+  base=${base##*/}
+  case "$base" in
+    "" | *[!0-9a-f]*) return 0 ;;
+  esac
+  if [ "${#base}" -ge 7 ] && [ "${#base}" -le 40 ]; then
+    printf '%s\n' "$base"
+  fi
+  return 0
+}
+
+# Compare the routing stamp against the kit's current profiles, tasks.md and commit.
 routing_status() {
   stamp="$cfg/routing.stamp"
   echo
@@ -90,16 +114,31 @@ routing_status() {
     fi
   fi
 
-  stamp_ver=$(stamp_get kit_version)
-  cur_ver=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$root/.claude-plugin/plugin.json" 2>/dev/null | head -n 1)
-  [ -n "$cur_ver" ] || cur_ver="unknown"
-  ver_changed=0
-  if [ -n "$stamp_ver" ] && [ "$stamp_ver" != "$cur_ver" ]; then
-    ver_changed=1
+  # The kit has no version number; a push to main is a release. Compare the
+  # commit the table was generated from with the installed one. Short SHAs can
+  # differ in length, so one being a prefix of the other counts as a match.
+  # Older stamps may carry kit_version and no kit_commit; that is not a change.
+  stamp_commit=$(stamp_get kit_commit)
+  [ "$stamp_commit" = "unknown" ] && stamp_commit=""
+  cur_commit=$(kit_commit)
+  commit_changed=0 commit_note=""
+  if [ -z "$cur_commit" ]; then
+    commit_note="not checked: the install is neither a git checkout nor a commit-named cache copy"
+  elif [ -z "$stamp_commit" ]; then
+    commit_note="not checked: the stamp records no commit"
+  else
+    case "$cur_commit" in
+      "$stamp_commit"*) ;;
+      *) case "$stamp_commit" in "$cur_commit"*) ;; *) commit_changed=1 ;; esac ;;
+    esac
   fi
 
-  if [ "$nchanged" -eq 0 ] && [ "$nnew" -eq 0 ] && [ "$tasks_changed" -eq 0 ] && [ "$ver_changed" -eq 0 ]; then
-    echo "Up to date (generated $generated)."
+  if [ "$nchanged" -eq 0 ] && [ "$nnew" -eq 0 ] && [ "$tasks_changed" -eq 0 ] && [ "$commit_changed" -eq 0 ]; then
+    if [ -n "$commit_note" ]; then
+      echo "Up to date (generated $generated; kit commit $commit_note)."
+    else
+      echo "Up to date (generated $generated)."
+    fi
     return 0
   fi
   if [ "$nchanged" -gt 0 ]; then
@@ -109,7 +148,8 @@ routing_status() {
     echo "$nnew new profile(s) not in the table: $(list_end "$new" "$nnew")"
   fi
   [ "$tasks_changed" -eq 1 ] && echo "tasks.md changed since the table was generated."
-  [ "$ver_changed" -eq 1 ] && echo "kit version $stamp_ver -> $cur_ver"
+  [ "$commit_changed" -eq 1 ] && echo "kit commit $stamp_commit -> $cur_commit"
+  [ -n "$commit_note" ] && echo "Kit commit $commit_note."
   echo "Run /agent-orchestration:refresh to regenerate."
   return 0
 }

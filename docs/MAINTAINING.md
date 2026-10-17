@@ -138,35 +138,57 @@ $0.20 to $0.10 per million tokens.
 
 ## 3. Release
 
-- [ ] Bump `version` in `.claude-plugin/plugin.json`: the minor number for a
-  new or changed profile, routing rule or skill; the patch number for
-  doc-only fixes. The installed copy's cache path is keyed by version, and
-  the session-start check reports a kit version change, so the bump is how
-  users learn a release landed.
+A push to `main` is a release. There is no version to bump:
+`.claude-plugin/plugin.json` deliberately has no `version`, so Claude Code
+versions an install by the commit it came from. Users get a push when they
+next run `claude plugin marketplace update agent-orchestration` and then
+`claude plugin update agent-orchestration@agent-orchestration`, or in the
+background if they turned on auto-update for the marketplace (off by default
+for a third-party marketplace; see the README's Updating section).
+
+- [ ] Do not add `version` back to `plugin.json` or to the entry in
+  `.claude-plugin/marketplace.json`. A pinned version keeps every user on
+  their cached copy until the string changes, however many commits you
+  push, and `claude plugin update` reports "already at the latest version".
 - [ ] Commit with a message that names the models touched, for example
   "Add Claude Haiku 5.5, deprecate Haiku 4.5, cut Sonnet 5.5 cache reads".
-- [ ] Push to the GitHub remote. The marketplace installs from GitHub, not
-  from your working tree.
+- [ ] Push to `main` on the GitHub remote. The marketplace installs from
+  GitHub, not from your working tree. The installed copy lands in
+  `~/.claude/plugins/cache/agent-orchestration/agent-orchestration/<sha>/`,
+  where `<sha>` is the first 12 characters of the commit it was installed
+  from.
 - [ ] Claude Code users: `claude plugin marketplace update agent-orchestration`,
   then `claude plugin update agent-orchestration@agent-orchestration`,
   restart Claude Code, then run `/agent-orchestration:refresh`.
+- [ ] Never rename the plugin. Its `name` (in `plugin.json` and in the
+  `marketplace.json` entry) is the install id users hold in `enabledPlugins`
+  and type in `/plugin install`, so changing it breaks every existing
+  install. For a cosmetic change to the label shown in `/plugin`, set
+  `displayName` in `plugin.json` and keep `name`. If a rename is ever
+  unavoidable, add a `renames` map to `marketplace.json` (see the Claude
+  Code docs, "Host and maintain a marketplace").
 - [ ] Other harnesses: pull the repo, then run
   `sh adapters/install.sh <harness> --update`, then the harness's
   `ao-refresh` skill (section 4).
 
-**The developer loop.** The installed plugin is a cache copy under
-`~/.claude/plugins/cache/`, pinned to a commit. Edits in the repo are not
-live in any Claude Code session until you push, update the plugin and restart.
-To preview a change before release, run the generator against the repo:
-`python3 core/interview/generate.py --kit-root . --diff`. Do not assume a
-running session sees what you just wrote.
+**The developer loop.** An install from a local path (the maintainer's)
+loads in place from the repo, so edits are live at the next session start or
+`/reload-plugins`, and after each local commit the session-start status
+reports `kit commit X -> Y` until you run `/agent-orchestration:refresh`. A
+marketplace install is a cache copy pinned to a commit SHA: it sees nothing
+until you push, run `claude plugin update agent-orchestration@agent-orchestration`
+and restart. To preview a change before release, run the generator against
+the repo: `python3 core/interview/generate.py --kit-root . --diff`.
 
 ## 4. Refresh an existing routing table
 
 - [ ] At session start `hooks/session-start.sh` compares
   `~/.agent-orchestration/routing.stamp` to the `as_of` dates in
-  `core/models/`, the `core/tasks.md` hash and the kit version. When it
-  reports changed or new profiles, run `/agent-orchestration:refresh`
+  `core/models/`, the `core/tasks.md` hash and the kit commit. The kit
+  commit is the short HEAD when the kit root is a git checkout (a path
+  install), else the cache directory's name when it is a commit SHA (a
+  marketplace install); otherwise the status says the kit commit was not
+  checked. When it reports changes, run `/agent-orchestration:refresh`
   (Claude Code, `skills/refresh/SKILL.md`) or `ao-refresh` (other harnesses,
   `adapters/_shared/skills/ao-refresh/SKILL.md`).
 - [ ] Refresh runs `core/interview/generate.py` with `--check --json` to read

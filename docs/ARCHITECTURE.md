@@ -78,7 +78,7 @@ core/models/*.md  +  ~/.agent-orchestration/config.yaml
   ~/.agent-orchestration/routing.md     ← the user's routing table and
                                            standing rules
   ~/.agent-orchestration/glossary.md    ← what the user's words mean
-  ~/.agent-orchestration/routing.stamp  ← kit version, commit, tasks hash,
+  ~/.agent-orchestration/routing.stamp  ← kit commit, tasks hash,
                    │                       and every profile's as_of
                    ▼
   adapters load these each session (Claude Code: plugin hook or CLAUDE.md

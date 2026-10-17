@@ -189,7 +189,7 @@ python3 "$KIT_ROOT/core/interview/generate.py" [--check | --diff | --write] [--j
 - `--out DIR`: where the files go (default: the config's directory).
 - `--check`: writes nothing; exit 0 if `routing.md` and `glossary.md` match
   what would be generated (ignoring the `Generated` line) and the stamp
-  matches the current profiles, `tasks.md`, kit version and
+  matches the current profiles, `tasks.md`, the kit commit and
   `config.user.updated`; exit 1 if anything is stale or differs.
 - `--diff` (the default): prints a unified diff of what `--write` would
   change in `routing.md` and `glossary.md`. Writes nothing.
@@ -236,8 +236,8 @@ inputs on the same UTC date; set `SOURCE_DATE_EPOCH` to pin the date.
 generated <ISO-8601 UTC>
 generator generate.py 1
 kit_root <absolute path>
-kit_version <version from .claude-plugin/plugin.json, or unknown>
-kit_commit <git short sha of the kit root, or unknown>
+kit_version <retained for old stamps; plugin.json has no version, so always unknown>
+kit_commit <git short sha if the kit root is the top of a checkout, else its dir name if 7-40 hex, else unknown>
 config_updated <config.user.updated>
 tasks <first 12 hex of sha256 of core/tasks.md>
 profile <id> <as_of> <enabled|disabled|unconfigured>

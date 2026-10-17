@@ -25,6 +25,14 @@ claude plugin marketplace add Colbitron/agent-orchestration
 claude plugin install agent-orchestration@agent-orchestration
 ```
 
+No SSH key registered with GitHub? Add `export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1`
+to your shell profile first. For `Colbitron/agent-orchestration` Claude Code
+tries SSH before HTTPS. `claude plugin install` in the shell can fall back
+to HTTPS by itself, but installs from `/plugin` inside a session and every
+plugin update do not, so without the variable they fail. Over HTTPS a
+private repository also needs a stored GitHub credential: `gh auth login`,
+then `gh auth setup-git`.
+
 Then, in any session:
 
 ```
@@ -42,15 +50,26 @@ markdown, so any capable agent can run it: point it at
 
 ## Updating
 
-Claude Code:
+The kit has no version number. Every push to `main` is a release, and your
+installed copy is tied to the commit it came from.
+
+Claude Code does not auto-update third-party marketplaces unless you turn it
+on. To have new commits arrive in the background, turn it on once: in a
+session, open `/plugin`, go to **Marketplaces**, select `agent-orchestration`,
+and select **Enable auto-update**. Claude Code then checks after a random
+delay of up to ten minutes following your first message in a session; an
+update it finds loads after `/reload-plugins` or at the next start.
+
+To update by hand instead:
 
 ```bash
 claude plugin marketplace update agent-orchestration
 claude plugin update agent-orchestration@agent-orchestration
 ```
 
-Restart Claude Code, then run `/agent-orchestration:refresh` so your routing
-table picks up changed model profiles. The session-start status block tells
+Inside a session, `/plugin marketplace update agent-orchestration` does the
+same. Restart Claude Code, then run `/agent-orchestration:refresh` so your
+routing table picks up changed model profiles. The session-start status block tells
 you when a refresh is needed.
 
 Other harnesses, from an up-to-date checkout of this repo:
@@ -73,9 +92,8 @@ marked block in your instructions file; see `adapters/README.md`.
 
 ## Maintaining
 
-- New model: follow [docs/MAINTAINING.md](docs/MAINTAINING.md), then bump
-  `version` in `.claude-plugin/plugin.json`, commit, and push, so
-  `claude plugin update` picks it up.
+- New model: follow [docs/MAINTAINING.md](docs/MAINTAINING.md), then commit
+  and push to `main`. That push is the release; there is no version to bump.
 - New harness: add `core/bridges/<id>.md` and `adapters/<id>/`.
 - Routing felt wrong: edit `~/.agent-orchestration/config.yaml`, not the
   generated `routing.md`, then run `/agent-orchestration:refresh` (not setup).

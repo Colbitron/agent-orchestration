@@ -489,14 +489,25 @@ def kit_info(kit_root):
             version = str(json.load(fh).get("version") or "unknown")
     except (OSError, ValueError):
         pass
+    # The installed commit, by the same two rules as hooks/session-start.sh:
+    # 1. the kit root is the top of a git checkout (a path install): its short
+    #    HEAD. A root inside some other repository (a git-managed ~/.claude)
+    #    does not count, or it would record that repository's commit;
+    # 2. otherwise a marketplace cache copy, which Claude Code names after the
+    #    commit it installed: the root's basename, if it is 7-40 hex characters.
     commit = "unknown"
     try:
-        proc = subprocess.run(["git", "-C", kit_root, "rev-parse", "--short", "HEAD"],
+        proc = subprocess.run(["git", "-C", kit_root, "rev-parse", "--show-prefix", "--short", "HEAD"],
                               stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-        if proc.returncode == 0 and proc.stdout.strip():
-            commit = proc.stdout.decode("utf-8").strip()
+        lines = proc.stdout.decode("utf-8").splitlines()
+        if proc.returncode == 0 and len(lines) == 2 and not lines[0].strip() and lines[1].strip():
+            commit = lines[1].strip()
     except OSError:
         pass
+    if commit == "unknown":
+        base = os.path.basename(os.path.normpath(kit_root))
+        if re.fullmatch(r"[0-9a-f]{7,40}", base):
+            commit = base
     return version, commit
 
 
@@ -954,9 +965,9 @@ def render_routing(ctx, rows, bridges, agents, date, version, commit, short_why=
     name = str(user.get("name") or "you")
     out = []
     out.append("# Routing table for %s" % name)
-    out.append("Generated %s by generate.py from config.yaml (kit %s, %s). Edit config.yaml and run "
+    out.append("Generated %s by generate.py from config.yaml (kit %s). Edit config.yaml and run "
                "/agent-orchestration:refresh rather than editing this file; lessons go in lessons.md."
-               % (date, version, commit))
+               % (date, commit))
     out.append("")
 
     # Models available
@@ -1232,9 +1243,9 @@ def render_glossary(cfg, defaults, date, version, commit):
             entries.append([k, str(v).strip()])
             keys.append(k)
     out = ["# Glossary for %s" % name,
-           "Generated %s by generate.py from the kit defaults plus config.yaml (kit %s, %s). Edit the "
+           "Generated %s by generate.py from the kit defaults plus config.yaml (kit %s). Edit the "
            "glossary block in config.yaml and run /agent-orchestration:refresh rather than editing this file."
-           % (date, version, commit),
+           % (date, commit),
            ""]
     for e in entries:
         if e is None:
@@ -1574,6 +1585,7 @@ def generate(args, errors, warnings):
         stamp_profiles == {i: (models[i].as_of, models[i].state) for i in models}
         and old_stamp.get("tasks") == tasks_hash
         and old_stamp.get("kit_version") == version
+        and old_stamp.get("kit_commit") == commit
         and old_stamp.get("config_updated") == iso(as_dict(config.get("user")).get("updated"))
         and old_stamp.get("generator") == "%s %s" % (GENERATOR, GENERATOR_VERSION))
     content_ok = (old_routing is not None and old_gloss is not None
