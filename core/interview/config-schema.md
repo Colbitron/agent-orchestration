@@ -75,12 +75,16 @@ priorities:
   frustration_tolerance: low           # low → prefer high-floor models
   budget_sensitivity: medium           # low | medium | high
   speed_matters: false                 # true → weight `speed` on narrow tasks
+  speed_requires_review: false         # true → add the "Speed rule" to Standing
+                                       #   rules: speed never skips review
 
 # Autonomy is opt-in. Default is "propose". The interview explains each
 # level before asking.
 autonomy:
   level: propose                   # propose | merge-with-gates | goal-mode
   reviewer_bots: []                # e.g. [coderabbit, cursor-bugbot, macroscope]
+  merge_gate: null                 # optional: what must hold before a merge, e.g.
+                                   #   "ci-green + independent-model-review"
   may:
     create_worktrees: true
     open_prs: true
@@ -96,6 +100,15 @@ autonomy:
 # Optional per-model effort overrides. Profiles carry the defaults.
 effort:
   claude-opus-5-5: high
+
+# Optional: replace the computed row for a task id from core/tasks.md. Every
+# field is optional; a field left out keeps the computed value.
+routing_overrides:
+  babysit:
+    primary: claude-sonnet-5-5     # an enabled model id; null, "" or none empties it
+    fallback: claude-opus-5-5      # same rules as primary
+    reason: "Cheaper quota for long polling loops"   # shown in the row's Why
+    effort: medium                 # one of the primary's effort.levels; never max
 
 # Things the orchestrator should know about how this user works. Free text,
 # kept short. Rendered verbatim into routing.md.
@@ -126,6 +139,54 @@ logging:
   enabled: true
   path: ~/.agent-orchestration/runs.jsonl
 ```
+
+### What the less obvious keys do
+
+`generate.py` is the reference for these; the lines quoted are what it writes
+into `routing.md`.
+
+**`priorities.speed_requires_review`.** Only `true` has an effect. It adds this
+bullet to "Standing rules", right after the priority order: "Speed rule: on
+small tasks a faster or cheaper model may do the work only if a smarter model
+with better taste reviews the result before it lands. Speed never skips
+review." It does not change scoring; `speed_matters` does that.
+
+**`autonomy.merge_gate`.** A free-text gate, written as the user said it. When
+it is set:
+
+- "Standing permissions" gets "Merge gate: `<merge_gate>`. Never merge without
+  it." after the autonomy level line, at every level.
+- If `may.merge_prs` is true, the level is not `propose`, and `may_notes` has
+  no `merge_prs` entry, "May:" lists "merge PRs (only under the merge gate)".
+- If `reviewer_bots` is empty, `may.merge_prs` is true and the level is not
+  `propose`, the bots line reads "Reviewer bots that gate merges: none; the
+  merge gate above stands in for them." instead of "none; merges stay human."
+
+**`routing_overrides.<task>`.** Applied after scoring, row by row; the
+`feature` override is applied before `review` is resolved, so the
+cross-family rule sees the final implementer. Accepted fields are `primary`,
+`fallback`, `reason` and `effort`. An overridden row's Why becomes "Config
+override: <reason>." (or "Config override." with no reason), and the
+profile note (with any guardrail), the "no model rates better" remark and
+the `orchestrate` row's "session model" label are dropped. Without
+`effort`, the row's effort comes from `config.effort` or the final primary's
+profile default. With `primary` emptied, the row shows `none` as primary.
+
+These are errors (exit 2, nothing written):
+
+- `routing_overrides.<task>: no such task id in core/tasks.md`
+- `routing_overrides.<task>.<primary|fallback>: no profile for <id>`
+- `routing_overrides.<task>.<primary|fallback>: <id> is not enabled in config.models`
+- `routing_overrides.<task>.effort is <value>; it must be one effort level as a string`
+- `routing_overrides.<task>.effort is max; the kit never uses max effort`
+- `routing_overrides.<task>.effort is <level> but <id> has no effort control (effort.levels is empty)`
+- `routing_overrides.<task>.effort is <level>, not one of <id>'s levels: <levels>`
+- `effort is max on rows <task>[, <task>...]; the kit never uses max` (the
+  row-level check, raised alongside the `is max` message above)
+
+The two level checks (no effort control, not one of the levels) run against
+the row's final primary and are skipped when the override leaves no
+primary. A non-string effort and `max` are errors with or without a primary.
 
 ## Derivation rules the generator follows
 
@@ -160,3 +221,16 @@ The interview re-reads the file after writing it and checks:
 - `priorities.order` contains exactly the three axes once each
 
 If any check fails, it fixes the file and tells the user what it changed.
+
+`generate.py` also warns, without failing, about any key this schema does not
+list: at the top level and inside `user`, each `harnesses` and `bridges`
+entry, `access` and each `access.<vendor>`, each `models.<id>`, `priorities`,
+`autonomy`, `autonomy.may`, `autonomy.may_notes`, `routing_overrides.<task>`,
+`preferences`, `standing_rules` and `logging`. A vendor under `access` is
+known if it is listed above or is the `vendor` of a profile. Extra keys
+under `autonomy.may` and `preferences` are still written into `routing.md`
+as given; every other unknown key is ignored. It also warns when one of
+those blocks, or a `routing_overrides.<task>` entry, is present but not a
+mapping (for example `priorities is a string, expected a mapping; ignored`).
+Add a new key here and to
+`generate.py`'s key lists together.

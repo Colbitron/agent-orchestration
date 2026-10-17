@@ -48,8 +48,11 @@ For each task id in `core/tasks.md` and each enabled model:
   overrides it. A configured effort must be one level from that model's
   `effort.levels`, written as a string.
 - **Overrides**: `config.routing_overrides.<task>` (primary, fallback, reason,
-  optional effort) replaces the computed row. Apply the `feature` override
-  before resolving `review`, so the review rule sees the final implementer.
+  optional effort; each field optional) replaces those parts of the computed
+  row, and the row's Why becomes "Config override: <reason>." A configured
+  effort is checked against the row's final primary. Apply the `feature`
+  override before resolving `review`, so the review rule sees the final
+  implementer. See `config-schema.md` for the exact rules and errors.
 - **Why**: one sentence built from the profile's task note and the axis that
   decided it. Cite nothing; the user can read the profile.
 
@@ -107,6 +110,10 @@ than editing this file; lessons go in lessons.md.
 - Use cheaper models to gather information and try things; move the work
   that has to land to the model with the highest floor and taste.
 - Priority order when axes conflict: <priorities.order>.
+- Speed rule: on small tasks a faster or cheaper model may do the work only
+  if a smarter model with better taste reviews the result before it lands.
+  Speed never skips review. (Only if `priorities.speed_requires_review` is
+  true.)
 - Never use `max` effort on any model. <effort notes from profiles>.
 - Every delegated prompt states what you want, what "done" means, and when
   to stop and ask. See delegation-prompting.
@@ -118,10 +125,16 @@ than editing this file; lessons go in lessons.md.
 - Log each delegated task to <logging.path> if logging is enabled.
 
 ## Standing permissions (autonomy: <level>)
-- May: <list from autonomy.may where true>
+- <one line describing the level>
+- Merge gate: `<autonomy.merge_gate>`. Never merge without it. (Only if
+  `autonomy.merge_gate` is set.)
+- May: <list from autonomy.may where true; merge PRs carries "(only under
+  the merge gate)" when a gate is set and may_notes has no merge_prs entry>
 - May never: <list where false>, deploy to production, or act outside the
   repository without asking.
-- Reviewer bots that gate merges: <list or "none; merges stay human">.
+- Reviewer bots that gate merges: <list, or "none; the merge gate above
+  stands in for them" when merging is allowed under a gate, or "none;
+  merges stay human">.
 - Staging: <safe to exercise / treat as shared>.
 
 ## How I work
@@ -195,7 +208,8 @@ as before.
 Exit 2 means an error, and nothing is written. The errors are:
 - no config, no YAML parser, or YAML that does not parse;
 - an unreadable enabled profile, or a score that is not a number;
-- an override naming a disabled model;
+- an override naming an unknown task id, a model with no profile, or a
+  disabled model;
 - an effort that is `max`, not a string, or not one of the model's levels;
 - a duplicate task id;
 - a write failure. The three files are written to temp files first and
@@ -207,6 +221,9 @@ Warnings go to stderr and the JSON `warnings` list. The warning cases are:
 - a missing score axis, tasks block or `effort.default`;
 - `propose` with `merge_prs: true` (merging is then listed under May never);
 - a quoted `enabled` value;
+- a config key `config-schema.md` does not list ("unknown config key
+  <path>; ignored", or how it is used instead, plus a "did you mean" hint
+  when a known key is close), or a config block that is not a mapping;
 - malformed optional fields. Output is byte-identical for the same
 inputs on the same UTC date; set `SOURCE_DATE_EPOCH` to pin the date.
 

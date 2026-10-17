@@ -83,6 +83,26 @@ HARNESS_NAMES = {
     "grokbuild": "Grok Build", "t3-code": "T3 Code", "antigravity": "Antigravity",
 }
 
+# Config keys this script reads, plus the few config-schema.md documents for
+# the user's own record (version; access plan, notes, provider, models).
+# check_config_keys() warns about anything else so a misspelt or retired key
+# is visible instead of silently doing nothing. Keep in step with the schema.
+CONFIG_KEYS = ("version", "user", "harnesses", "access", "models", "priorities",
+               "autonomy", "effort", "routing_overrides", "preferences",
+               "standing_rules", "bridges", "glossary", "logging")
+USER_KEYS = ("name", "updated")
+HARNESS_KEYS = ("id", "primary", "cli", "smoke_tested")
+ACCESS_VENDORS = ("anthropic", "openai", "google", "xai", "open_weights")  # plus profile vendors
+ACCESS_KEYS = ("type", "plan", "notes", "provider", "models")
+MODEL_KEYS = ("enabled", "cost")
+PRIORITY_KEYS = ("order", "frustration_tolerance", "budget_sensitivity", "speed_matters",
+                 "speed_requires_review")
+AUTONOMY_KEYS = ("level", "reviewer_bots", "merge_gate", "may", "may_notes", "staging_is_safe")
+STANDING_RULES_KEYS = ("extra",)
+BRIDGE_KEYS = ("id", "note")
+LOGGING_KEYS = ("enabled", "path")
+OVERRIDE_KEYS = ("primary", "fallback", "reason", "effort")
+
 # Times become ISO 8601 UTC strings and dates ISO dates, matching _normalise.
 RUBY_YAML = (
     "def n(o); case o; when Hash then o.each_with_object({}) { |(k, v), h| h[n(k)] = n(v) }; "
@@ -1334,6 +1354,78 @@ def default_config():
     return os.path.join(base, "config.yaml")
 
 
+def type_word(value):
+    if isinstance(value, bool):
+        return "a boolean"
+    if isinstance(value, (int, float)):
+        return "a number"
+    if isinstance(value, str):
+        return "a string"
+    if isinstance(value, list):
+        return "a list"
+    return "a %s" % type(value).__name__
+
+
+def check_config_keys(config, models, warnings):
+    """Warn (never error) about config keys the generator does not know.
+
+    Covers the top level and every block generate.py reads. Model ids under
+    models and effort, task ids under routing_overrides and glossary terms
+    are checked elsewhere or free-form, so only their inner keys are checked.
+    A block that is present but not a mapping is warned about too.
+    """
+    def mapping(block, where, effect="ignored"):
+        if block is None:  # an empty block is harmless
+            return False
+        if not isinstance(block, dict):
+            warnings.append("%s is %s, expected a mapping; %s" % (where, type_word(block), effect))
+            return False
+        return True
+
+    def unknown(block, allowed, where, effect="ignored", shape_effect="ignored"):
+        if not mapping(block, where, shape_effect):
+            return
+        for k in block:
+            if k in allowed:
+                continue
+            path = "%s.%s" % (where, k) if where else k
+            near = difflib.get_close_matches(k, allowed, n=1)
+            warnings.append("unknown config key %s; %s%s" % (
+                path, effect, " (did you mean %s?)" % near[0] if near else ""))
+
+    unknown(config, CONFIG_KEYS, "")
+    unknown(config.get("user"), USER_KEYS, "user")
+    if config.get("harnesses") is not None and not isinstance(config.get("harnesses"), list):
+        warnings.append("harnesses must be a list of {id, primary, cli}; ignored")
+    for i, entry in enumerate(as_list(config.get("harnesses"))):
+        unknown(entry, HARNESS_KEYS, "harnesses[%d]" % i)
+    vendors = list(ACCESS_VENDORS) + sorted(set(m.vendor for m in models.values()) - set(ACCESS_VENDORS))
+    unknown(config.get("access"), vendors, "access", "no profile has this vendor, so it is ignored")
+    for vendor, entry in as_dict(config.get("access")).items():
+        unknown(entry, ACCESS_KEYS, "access.%s" % vendor)
+    for mid, entry in as_dict(config.get("models")).items():
+        unknown(entry, MODEL_KEYS, "models.%s" % mid, shape_effect="the model counts as disabled")
+    unknown(config.get("priorities"), PRIORITY_KEYS, "priorities")
+    auto = config.get("autonomy")
+    unknown(auto, AUTONOMY_KEYS, "autonomy")
+    may_keys = [k for k, _ in AUTONOMY_LABELS]
+    unknown(as_dict(auto).get("may"), may_keys, "autonomy.may", "listed in routing.md as written")
+    may = as_dict(as_dict(auto).get("may"))
+    unknown(as_dict(auto).get("may_notes"), may_keys + [k for k in may if k not in may_keys],
+            "autonomy.may_notes", "no matching autonomy.may key, so it is ignored")
+    mapping(config.get("routing_overrides"), "routing_overrides", "no row is overridden")
+    for tid, entry in as_dict(config.get("routing_overrides")).items():
+        unknown(entry, OVERRIDE_KEYS, "routing_overrides.%s" % tid,
+                shape_effect="treated as an empty override (the row keeps its computed models "
+                             "but its Why becomes \"Config override.\")")
+    unknown(config.get("preferences"), [k for k, _ in PREFERENCE_LABELS], "preferences",
+            "listed under How I work as written")
+    unknown(config.get("standing_rules"), STANDING_RULES_KEYS, "standing_rules")
+    for i, entry in enumerate(as_list(config.get("bridges"))):
+        unknown(entry, BRIDGE_KEYS, "bridges[%d]" % i)
+    unknown(config.get("logging"), LOGGING_KEYS, "logging")
+
+
 def generate(args, errors, warnings):
     kit_root = os.path.realpath(args.kit_root)
     if not os.path.isdir(os.path.join(kit_root, "core", "models")):
@@ -1428,6 +1520,7 @@ def generate(args, errors, warnings):
     for k, v in as_dict(config.get("preferences")).items():
         if isinstance(v, str) and any(l.lstrip().startswith("#") for l in v.splitlines()[1:]):
             warnings.append("preferences.%s has a line starting with #; kept only its first line" % k)
+    check_config_keys(config, models, warnings)
 
     rows = build_rows(ctx, errors, warnings) if ctx.enabled else []
 

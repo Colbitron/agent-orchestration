@@ -73,7 +73,11 @@ Explain the three axes in one line each (intelligence, taste, cost; see
    low / medium / high tolerance. Low tolerance pushes the table toward
    high-floor models.
 3. "How tight is budget?" low / medium / high sensitivity.
-4. "Does speed matter more than quality on small tasks?" yes / no.
+4. "Does speed matter more than quality on small tasks?" yes / no. Record
+   it as `priorities.speed_matters`. If yes, ask whether a faster model's
+   work must still be reviewed by a smarter one before it lands; if so, set
+   `priorities.speed_requires_review: true`, which adds a "Speed rule" to
+   the standing rules.
 
 ## 4. Autonomy
 
@@ -84,13 +88,21 @@ Explain the three levels, in this order, then ask which one:
 - **merge-with-gates**: the agent may merge when CI and the user's named
   review bots are green and it has answered every bot thread. Ask which
   bots they have (CodeRabbit, Cursor Bugbot, Macroscope, Greptile, other).
-  If none, explain that this level without bots is just "merge when the
-  agent feels like it" and recommend `propose`.
+  If none, explain that without bots the gate has to be an independent
+  review by a model other than the implementer (see the merge gate below),
+  and recommend `propose` only if they do not want that.
 - **goal-mode**: merge-with-gates plus permission to keep going through a
   todo list until a stated condition holds, including closing superseded
   PRs and rebasing stacks. Say plainly that this is Theo's "yolo" mode and
   only makes sense when production deploys stay human and staging can be
   broken.
+
+Record the bots as `autonomy.reviewer_bots`. For merge-with-gates or
+goal-mode, ask what must hold before the agent merges (for example "CI green
+plus the named bots", or, with no bots, "CI green plus an independent review
+by a model other than the implementer") and record it in their words as
+`autonomy.merge_gate`. The routing table then states the gate and says never
+to merge without it.
 
 Then ask the yes/no permissions in `autonomy.may`, pre-filled for the chosen
 level, and whether staging is safe to exercise freely.
@@ -123,8 +135,10 @@ say so; no stamp is written in that case. Then
 show the user the routing table (the table only, not the standing rules)
 and ask two questions:
 
-1. "Any row you'd route differently?" Apply changes as user overrides in
-   `config.yaml` (not by hand-editing routing.md, which gets regenerated).
+1. "Any row you'd route differently?" Apply changes as
+   `routing_overrides.<task>` entries in `config.yaml` (`primary`,
+   `fallback`, `reason`, optional `effort`; see `config-schema.md`), not by
+   hand-editing routing.md, which gets regenerated. Re-run the generator.
 2. "Should I wire this into your harness now?" See step 8.
 
 ## 8. Wire the harness
