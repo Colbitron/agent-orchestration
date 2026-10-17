@@ -24,6 +24,18 @@ Read that file from the kit root first if you have not this session.
    - a change to a core profile or strategy doc, if the lesson is general
      and not user-specific; say so and let the user decide whether to
      upstream it
+
+   If the lesson is harness-independent (about a model's behaviour or a kit
+   strategy, not about this user's machine or config), offer in the same
+   proposal to send it back to the kit as an issue, as well as appending it
+   to `lessons.md`: `gh issue create --repo Colbitron/agent-orchestration
+   --title "<rule in one line>" --body-file <file>`, with a body in the
+   repo's issue shape (`## Why`: what happened and the lesson date;
+   `## Tasks`: one `- [ ]` per file to change; `## Done`: one line). The
+   body leaves the user's machine: scrub project names, paths and secrets
+   from it, write it to a temporary or scratch directory (never the repo),
+   and show the user the exact body before filing. If `gh` cannot reach the
+   repo, give the user the body to file themselves.
 3. **Cut it in half.** Show the proposal and remove anything the user does
    not confirm. Theo's rule: the model always suggests too much.
 4. **Apply.** Append to `lessons.md` in this form:
@@ -33,7 +45,8 @@ Read that file from the kit root first if you have not this session.
    ```
 
    Make any bridge or config edit the user approved. If config changed,
-   regenerate `routing.md` via the generator procedure.
+   regenerate `routing.md` via the generator procedure. Open the kit issue
+   only if the user confirmed it, and give them its URL.
 5. **Confirm.** Restate the rule in one line so the user can object.
 
 Never rewrite or delete earlier lessons. If a lesson contradicts an older

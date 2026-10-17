@@ -115,6 +115,12 @@ improvises something sketchy ([OPUSG 5:58](https://youtu.be/ejjBbaq9RmY?t=358)).
   a container ([FABG 22:51](https://youtu.be/-XWSJM-Ue-o?t=1371)).
 - **What is reversible.** Staging that cannot reach prod is what makes "merge
   when happy" safe ([INSP 33:16](https://youtu.be/8GRmLR__OGQ?t=1996); [FAB51 43:58](https://youtu.be/r_dw-1109Ag?t=2638)).
+- **Shared resources and the browser.** A run that holds a shared resource
+  gets "You are the only one holding <resource>; don't wait for it to be free
+  or poll to acquire it." Parallel browser lanes each get "Create your own
+  tab group and touch only tabs you created." The §14 templates carry both
+  lines; the rules are in `parallelism.md` §3 "Shared resources" (lesson,
+  2026-10-06; lesson, 2026-10-13).
 - **If the UI hides tool outputs, say so**, or the model will not repeat
   results it expects the UI to show ([FABG 10:03](https://youtu.be/-XWSJM-Ue-o?t=603)).
 - **Attach context:** annotated screenshots, thread IDs, run links, PR
@@ -321,6 +327,9 @@ You may <pre-authorised actions>. Stop and ask only if <product decision the spe
 Read <plan file> in full before you start. Do every phase, 0 through <N>, in
 order; don't stop between phases; hold questions until the end.
 Environment: <machine, how to connect, where heavy work runs>.
+<If this run holds a shared resource:> You are the only one holding
+<worktree with copied secrets | port | merge gate | lock>; don't wait for it
+to be free or poll to acquire it.
 You have permission to <create worktrees, rebase, branch, open PRs...>.
 Mark each item in <todo.md> done as you finish it and commit that change.
 Done means <artifact, e.g. all tests pass and a link I can click>; don't report
@@ -363,6 +372,7 @@ done or listed as skipped, and <tests | linter> pass.
 Find out <question> using <docs | web | APIs>; prefer primary sources. Done
 means a short report: the answer, a source link per claim, and what you could
 not determine. Mark quotations as quotations.
+<If other lanes use the browser:> Create your own tab group and touch only tabs you created.
 
 --- computer-use ---
 On <machine | simulator | browser>, open <app/URL> and <flow>. Expected:
@@ -370,6 +380,7 @@ On <machine | simulator | browser>, open <app/URL> and <flow>. Expected:
 apps | log in | submit payments>. Done means pass/fail per step, the
 screenshots, and exact notes on any mismatch. If you can't reach the app, stop
 and say what failed.
+<If other lanes use the browser:> Create your own tab group and touch only tabs you created.
 
 --- copy ---
 Write <UI text | docs page> for <audience> so they can <do/know X>.
@@ -395,6 +406,9 @@ finding isn't worth addressing, reply with a short written reason and resolve
 it. Rebase on main when needed. Please don't scope creep: only address real
 shortcomings, and don't post filler comments. If an overlapping PR makes this
 one obsolete, stop, report it, and ask before closing.
+<If this run holds a shared resource:> You are the only one holding
+<local CI gate | worktree with copied secrets>; the orchestrator hands it to
+you free, so don't wait for it to be free or poll to acquire it.
 <Report when green | Merge when green and you're happy.>
 
 --- orchestrate ---
@@ -402,6 +416,9 @@ one obsolete, stop, report it, and ask before closing.
 worktrees however you choose; I trust your judgment. Keep working while
 subagents run: test their findings and plan the next step. Subagent models:
 <pins from routing table>; prefix subagent names with the model.
+Dispatch runs that hold <shared resource> one at a time and tell each it is
+the only one holding it; parallel browser lanes each create their own tab
+group and touch only tabs they created, or run one at a time.
 <Merge policy and reviewer-bot gate.> Done means <every item in todo.md done |
 all PRs merged or listed with blockers>. Stop and ask only for product
 decisions or destructive actions.

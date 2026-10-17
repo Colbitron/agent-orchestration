@@ -74,7 +74,8 @@ You do not need the human to create worktrees by hand
 Parallelise when all of these hold:
 
 - The units are **independent**: no shared files, or a merge order you can
-  state up front.
+  state up front, and any lane that holds a shared resource is pulled out and
+  run serially (see "Shared resources" below).
 - Each unit has its own **checkable done state** (see `delegation-prompting.md`).
 - The **result is worth the extra spend.** Parallel agents burn more: "It's
   going to burn more because it's just doing more"
@@ -121,6 +122,28 @@ Required controls:
   integration out for about 50 minutes ([H55 33:46-34:56](https://youtu.be/38_6C0dkKmU?t=2026)).
 - **Make "cannot" or "nothing found" a valid return.** The same run saved error
   bodies as data, said it would wait for the quota reset, and never resumed.
+
+### Shared resources
+
+A shared resource is anything only one run can safely hold at a time: a
+worktree with copied secrets, a port, a local CI or merge gate, a lock file,
+a browser tab group.
+
+- **Dispatch runs that hold a shared resource strictly one at a time, from
+  the orchestrator.** Start the next only when the previous has returned, put
+  "you are the only one holding <resource>" in the prompt, and give the
+  subagent no wait or poll loop. Agents polling one local merge gate made
+  scheduling unpredictable, and their poll loops survived an outage and took
+  the gate later (lesson, 2026-10-06).
+- **Before stopping any agent, check whether it holds a shared resource; after
+  an outage, list agents and inspect the resource's state (worktree, ports,
+  processes, lock) before re-dispatching.** Stopping a holder mid-run strands
+  the resource and wastes the run (lesson, 2026-10-06).
+- **When more than one parallel subagent needs the browser, each creates its
+  own tab group and touches only tabs it created, or the browser-dependent
+  lanes run serially.** Four research lanes shared one Chrome tab group; tabs
+  moved under one lane and the group was removed while it was still working
+  (lesson, 2026-10-13).
 
 ## 4. Lead behaviour while subagents run
 

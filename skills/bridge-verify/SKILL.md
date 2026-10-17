@@ -47,7 +47,10 @@ user prefers. Then take the first route that is actually reachable:
    (`mcp__claude-in-chrome__*`), the desktop app's built-in browser, desktop
    computer use, or a Playwright MCP. If the harness has a skill for that
    tool, load it first, then drive the flow yourself. Work in a new tab, and
-   ask before driving the desktop the user is actively using.
+   ask before driving the desktop the user is actively using. If other
+   subagents use the browser in parallel, each creates its own tab group and
+   touches only tabs it created, or the browser lanes run one at a time
+   (`core/strategies/parallelism.md` §3 "Shared resources").
 3. **Programmatic fallback**: start the app and check behaviour without a
    screen: `curl` the endpoints, run the project's e2e or integration tests
    (a headless Playwright/Cypress script if the project already has one),

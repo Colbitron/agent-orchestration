@@ -40,10 +40,15 @@ Expected: <behaviour per step>. Capture a screenshot at <named points>.
 Don't <touch other apps | log in | submit payments>. Done means pass/fail
 per step, the screenshots, and exact notes on any mismatch. If you can't
 reach the app, stop and say what failed.
+<If other lanes use the browser:> Create your own tab group and touch only
+tabs you created.
 ```
 
 Run it on a machine the user is not working on. For money or irreversible
 actions the human makes the final click. Never put secrets in the prompt.
+If more than one parallel lane uses the browser, each creates its own tab
+group and touches only tabs it created, or the browser lanes run one at a
+time (`KIT_ROOT/core/strategies/parallelism.md` §3 "Shared resources").
 
 ## 3. Run it
 
