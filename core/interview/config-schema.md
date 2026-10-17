@@ -14,6 +14,7 @@ and Codex has one config and one routing table.
   routing.md       generated routing table and standing rules
   glossary.md      generated glossary (defaults + user overrides)
   runs.jsonl        optional: one line per delegated task, for tuning
+                   (the canonical record in core/strategies/improvement-loop.md §8)
   lessons.md       appended by the improvement loop; never regenerated
 ```
 

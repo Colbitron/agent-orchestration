@@ -197,22 +197,48 @@ Procedure:
 ## 8. What to log
 
 Routing can only improve if you record what happened. After every delegated
-run, append one record to the user's run log (kit convention:
-`~/.agent-orchestration/runs.jsonl`, overridable in config):
+run, append one line to the user's run log (`logging.path` in config; kit
+default `~/.agent-orchestration/runs.jsonl`). This is the canonical record:
+one JSON object with exactly these ten keys, in this order, and nothing else.
 
-| Field | Why |
+| Key | Meaning |
 |---|---|
-| `date`, `repo`, `task_type` (from `core/tasks.md`) | Group results by routing row. |
-| `model`, `effort`, `harness`, `access` (subscription/API) | Which choice produced the result. |
-| `delegated_by` (orchestrator model or human) | Separate your routing decisions from the user's. |
-| `wall_clock_minutes` | Diagnostic of task and codebase (`parallelism.md` §12). |
-| `human_interventions` | Theo's metric: "how long can the model run without your input?" |
-| `follow_ups_to_merge` | Mergeability: commits or fixes between PR filed and merged (Fable ~2 vs Astra ~6 in [FVA 33:46](https://youtu.be/P7bxbDSnZRM?t=2026)). |
-| `outcome` | merged / closed / superseded / abandoned / info-only. |
-| `escalated_to` | Whether the standing override was used, and to which model. |
-| `reviewer_findings` | Confirmed / unconfirmed / contradicted counts, per reviewer model. |
-| `cost_or_quota` | Dollars on API, or quota % on subscription, if known. |
-| `notes` | One line; link to the improvement made, if any. |
+| `ts` | When the run ended: ISO 8601 date (`2026-10-15`) or date-time with offset (`2026-10-15T14:05:00-06:00`). |
+| `repo` | Repository or project name, or `null`. |
+| `row` | One task id from `core/tasks.md` (`feature`, `review`, ...): the routing row used. |
+| `model` | One profile id: a file name in `core/models/` without `.md` (`claude-opus-5-5`, not `opus-5.5`). |
+| `effort` | Effort as passed (`high`, `default`), or `null`. |
+| `mechanism` | How it ran, free text: `subagent`, `workflow`, `bridge:<id>`, `subagent+worktree`, ... |
+| `duration_s` | Wall-clock seconds as an integer, or `null`. A diagnostic of task and codebase (`parallelism.md` §12). |
+| `outcome` | merged / closed / superseded / abandoned / info-only / pass / fail, plus a short clause; `unknown` when not recorded. |
+| `follow_ups` | What still needs doing, one string (`; `-separated); `none` when there are none. |
+| `notes` | Free text, or `null`. |
+
+```
+{"ts":"2026-10-15T14:05:00-06:00","repo":"hill-family-cookbook","row":"review","model":"gpt-6-1-sol","effort":"high","mechanism":"bridge:codex-cli","duration_s":412,"outcome":"info-only: 3 confirmed, 1 unconfirmed","follow_ups":"fix the two auth findings","notes":"task: review PR 141; harness: codex; delegated_by: claude-opus-5-5; reviewer_findings: confirmed 3, unconfirmed 1, contradicted 0"}
+```
+
+Richer facts go in `notes` as `key: value` pairs separated by `; `, when
+known: `task` (a one-line description), `harness`, `access`
+(subscription/API), `delegated_by` (orchestrator model or human, to separate
+your routing decisions from the user's), `human_interventions` (Theo's metric:
+"how long can the model run without your input?"), `escalated_to` (a profile
+id, when the standing override was used; `model` stays the routed one),
+`reviewer_findings` (confirmed / unconfirmed / contradicted counts),
+`follow_ups_to_merge` (commits or fixes between PR filed and merged: Fable ~2
+vs Astra ~6 in [FVA 33:46](https://youtu.be/P7bxbDSnZRM?t=2026)),
+`cost_or_quota`, and a link to any improvement made. An earlier version of
+this section gave each of these its own key; nothing wrote that shape, so
+they stay in `notes` until the log shows one is worth a key.
+
+`scripts/normalize_runs.py` rewrites older rows to this record (dry run by
+default; `--write` backs the file up first), and `--check` validates a log
+against it. A compound row such as `babysit+review` keeps its first id in
+`row` and adds `also_row: review` to `notes`, only when every part is a task
+id. An escalation such as `claude-fable-5-1->claude-opus-5-5` keeps the left
+side in `model` and adds `escalated_to: claude-opus-5-5` to `notes`, only
+when both sides are profile ids. Values it cannot map without guessing, such
+as an unknown model id, are left as written and listed.
 
 Theo's two headline metrics ([MODELS 15:51](https://youtu.be/iBrAWpjXNxs?t=951), rule 6):
 "How long can the model run without your input?" and "How likely is it that

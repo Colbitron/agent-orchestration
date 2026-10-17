@@ -52,6 +52,7 @@ adapters/
                      and the AGENTS.md fragment
   codex/             AGENTS.md fragment + skills for Codex CLI
   ...                further harnesses
+scripts/             maintenance scripts (normalize_runs.py: run-log records)
 research/            digests of the source videos and web research (evidence)
 docs/                this file and other design notes
 ```

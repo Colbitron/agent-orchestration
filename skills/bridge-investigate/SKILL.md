@@ -103,7 +103,9 @@ not re-run. The investigator does not fix; route any fix through
 ## 6. Log
 
 If `logging.enabled` in `~/.agent-orchestration/config.yaml`, append one JSON
-line to `logging.path` (fields per `core/strategies/improvement-loop.md` §8:
-`task_type`, `model`, `effort`, `harness`, `mechanism: "bridge:<id>"`,
-`wall_clock_minutes`, `outcome: "info-only"`, `escalated_to`, `notes`). If a
-command or flag was wrong, run `/agent-orchestration:lesson`.
+line to `logging.path`: the canonical record in
+`core/strategies/improvement-loop.md` §8, with `row` set to the task id you
+routed by, `model` as the investigator's profile id (the `core/models/` file
+name, never a short name), `mechanism: "bridge:<id>"`, `outcome` starting
+`info-only`, and `harness` and any `escalated_to` in `notes`. If a command or
+flag was wrong, run `/agent-orchestration:lesson`.

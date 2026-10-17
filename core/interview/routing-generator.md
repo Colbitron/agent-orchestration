@@ -122,7 +122,10 @@ than editing this file; lessons go in lessons.md.
   (e.g. `[sol] review-auth`) so the human can see who did what.
 - If a bridged model returns nothing, it must say so and name what it
   inspected; do not re-run on an empty result.
-- Log each delegated task to <logging.path> if logging is enabled.
+- Log each delegated task to <logging.path> if logging is enabled, as one
+  canonical record (core/strategies/improvement-loop.md §8). `model` is
+  the profile id, the core/models/ file name (<feature primary's id> for
+  <its short name>), never the short name in this table.
 
 ## Standing permissions (autonomy: <level>)
 - <one line describing the level>

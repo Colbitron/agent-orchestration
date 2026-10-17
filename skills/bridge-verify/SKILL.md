@@ -93,7 +93,9 @@ fallback alone without telling the user what remains unchecked.
 ## 5. Log
 
 If `logging.enabled` in `~/.agent-orchestration/config.yaml`, append one JSON
-line to `logging.path` (fields per `core/strategies/improvement-loop.md` §8:
-`task_type: "computer-use"`, `model`, `harness`, `mechanism` set to the route
-used, `wall_clock_minutes`, `outcome`, `notes` naming any fallback). If a
-route failed for a fixable reason, run `/agent-orchestration:lesson`.
+line to `logging.path`: the canonical record in
+`core/strategies/improvement-loop.md` §8, with `row: "computer-use"`,
+`model` as the profile id (the `core/models/` file name, never a short
+name), `mechanism` set to the route used, and `harness` and any fallback
+in `notes`. If a route failed for a fixable reason, run
+`/agent-orchestration:lesson`.

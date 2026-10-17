@@ -55,8 +55,12 @@ user can afford.
   re-run on an empty result.
 - Apply the standing permissions block literally: never merge, close,
   force-push, or deploy unless the table says you may.
-- Log the delegation if logging is enabled: one JSON line with task id,
-  model, effort, mechanism, duration, outcome, and follow-ups needed.
+- Log the delegation if logging is enabled: one JSON line in the canonical
+  record of `KIT_ROOT/core/strategies/improvement-loop.md` §8 (`ts`, `repo`,
+  `row`, `model`, `effort`, `mechanism`, `duration_s`, `outcome`,
+  `follow_ups`, `notes`, in that order). `model` is the profile id, the
+  `KIT_ROOT/core/models/` file name such as `claude-opus-5-5`, never a short
+  name like `opus-5.5`; `row` is one task id from `KIT_ROOT/core/tasks.md`.
 
 ## When something goes wrong
 

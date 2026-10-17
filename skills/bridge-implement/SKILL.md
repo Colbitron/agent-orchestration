@@ -114,6 +114,8 @@ branch only with `git branch -d`; ask before `-D`.
 ## 9. Log
 
 If `logging.enabled` in `~/.agent-orchestration/config.yaml`, append one JSON
-line to `logging.path` (fields per `core/strategies/improvement-loop.md` §8,
-with `mechanism: "bridge:<id>"`). If a command was wrong, run
+line to `logging.path`: the canonical record in
+`core/strategies/improvement-loop.md` §8, with `model` as the implementer's
+profile id (the `core/models/` file name, never a short name) and
+`mechanism: "bridge:<id>"`. If a command was wrong, run
 `/agent-orchestration:lesson`.

@@ -109,11 +109,13 @@ fix through `/agent-orchestration:orchestrate`.
 ## 6. Log
 
 If `logging.enabled` in `~/.agent-orchestration/config.yaml`, append one line
-to `logging.path` (default `~/.agent-orchestration/runs.jsonl`), fields per
-`core/strategies/improvement-loop.md` §8:
+to `logging.path` (default `~/.agent-orchestration/runs.jsonl`): the
+canonical record in `core/strategies/improvement-loop.md` §8, ten keys in
+this order, `model` as the reviewer's profile id (the `core/models/` file
+name, such as `gpt-6-1-sol`, never a short name):
 
 ```
-{"date":"<YYYY-MM-DD>","repo":"<name>","task_type":"review","model":"<id>","effort":"<e>","harness":"<callee harness>","mechanism":"bridge:<id>","delegated_by":"<you>","wall_clock_minutes":<n>,"outcome":"info-only","reviewer_findings":{"confirmed":<n>,"unconfirmed":<n>,"contradicted":<n>},"notes":""}
+{"ts":"<ISO 8601 date-time with offset>","repo":"<name or null>","row":"review","model":"<profile id>","effort":"<e or null>","mechanism":"bridge:<id>","duration_s":<n or null>,"outcome":"info-only: <n> confirmed, <n> unconfirmed","follow_ups":"<what remains, or none>","notes":"harness: <callee harness>; delegated_by: <your profile id>; reviewer_findings: confirmed <n>, unconfirmed <n>, contradicted <n>"}
 ```
 
 If a command or flag was wrong, run `/agent-orchestration:lesson` so the fix

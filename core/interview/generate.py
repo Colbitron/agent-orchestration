@@ -1082,7 +1082,12 @@ def render_routing(ctx, rows, bridges, agents, date, version, commit, short_why=
                  "not re-run on an empty result.")
     logging = as_dict(cfg.get("logging"))
     if logging.get("enabled") is True:
-        rules.append("Log each delegated task to %s." % (logging.get("path") or "~/.agent-orchestration/runs.jsonl"))
+        ex = feature.primary if feature and feature.primary else None
+        rules.append("Log each delegated task to %s as one canonical record "
+                     "(core/strategies/improvement-loop.md §8). `model` is the profile id, the "
+                     "core/models/ file name (%s), never the short name in this table." % (
+                         logging.get("path") or "~/.agent-orchestration/runs.jsonl",
+                         "`%s` for %s" % (ex.id, ex.short) if ex else "such as `claude-opus-5-5`"))
     for extra in as_list(as_dict(cfg.get("standing_rules")).get("extra")):  # non-list: warned, ignored
         if extra is not None and str(extra).strip():
             rules.append(str(extra).strip())

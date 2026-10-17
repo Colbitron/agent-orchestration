@@ -195,5 +195,7 @@ The split that worked on 2026-10-08:
   unverified. Agents cite the packet; they do not re-derive facts.
 - [ ] The orchestrator reviews every diff, using a different model from the
   implementer (`core/strategies/verification-and-review.md`).
-- [ ] One line per delegation in `~/.agent-orchestration/runs.jsonl`, with
-  the fields in `core/strategies/improvement-loop.md` §8.
+- [ ] One line per delegation in `~/.agent-orchestration/runs.jsonl`: the
+  canonical record in `core/strategies/improvement-loop.md` §8, with
+  `model` as the profile id (`claude-opus-5-5`, not `opus-5.5`).
+  `python3 scripts/normalize_runs.py --check` validates the log.
