@@ -37,6 +37,13 @@ touched.
   quirks in `notes_on_cost` (today: Haiku's 5x price above 100K prompt tokens).
   The session-start check compares `as_of` dates to the routing stamp, so a
   profile edit without an `as_of` bump is invisible to users.
+- [ ] For an open-weights model the user can run themselves, fill the
+  `local` block (memory per quantized build, `min_memory_gb`, third-party
+  `measured_speed` rows with their source keys) from the research digest;
+  never from a run on your own machine. Quote Ollama tags in `api_ids`
+  (`"gpt-oss:20b"`). Add the id to the bridge's `reaches:` in
+  `core/bridges/ollama.md` and `openrouter-api.md`, and to the example
+  `models:` block in `core/interview/config-schema.md` as `enabled: false`.
 - [ ] Mark the superseded profile (today: `core/models/claude-haiku-4-5.md`):
   `status: deprecated` with a comment naming the successor, bump `as_of`,
   point `role_hints.as_primary` and the summary at the new file. Keep its

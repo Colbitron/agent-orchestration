@@ -2,13 +2,17 @@
 id: ollama
 harness: none                    # local HTTP server, one-shot chat completion, no tools
 binary: curl                     # plus jq; server is `ollama` (installed here: /usr/local/bin/ollama 0.35.1)
-reaches: []                      # local open-weights models; none have a core/models profile
+reaches: [qwen3-8-27b, gpt-oss-20b]   # local open-weights models with a core/models profile (tags "qwen3.8:27b", "gpt-oss:20b")
 auth: "none (local server on 127.0.0.1:11434; override with OLLAMA_HOST)"
 verified: local                  # endpoints probed 2026-10-02 (error shape only); no model pulled, so no completion run
 as_of: 2026-10-02
 ---
 Free, private, local fan-out for small mechanical tasks. No tools: inline everything. Quality
-depends entirely on the pulled model and the machine's memory; verify every answer.
+depends entirely on the pulled model and the machine's memory; verify every answer. Profiles
+with a `local` block (`core/models/qwen3-8-27b.md`, `core/models/gpt-oss-20b.md`) say which
+quantized build fits which machine; the generator checks that against `config.hardware`.
+Agent harnesses driving a local model need `OLLAMA_CONTEXT_LENGTH=65536` or more (Ollama
+defaults to 4K below 24 GiB), and the first request after a model loads can take minutes.
 
 ## Install
 `ollama` app or CLI, then `ollama pull <model>`. Here: `ollama version is 0.35.1`, server

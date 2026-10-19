@@ -2,7 +2,7 @@
 id: opencode-cli
 harness: opencode
 binary: opencode
-reaches: []                      # mainly open-weights models with no core/models profile; any provider/model it has auth for
+reaches: [qwen3-8-27b, gpt-oss-20b]   # `-m ollama/qwen3.8` or `ollama launch opencode --model gpt-oss` locally, OpenRouter hosted; also any provider/model it has auth for
 auth: "opencode auth login (API keys, ChatGPT Plus/Pro, GitHub Copilot, GitLab Duo, OpenCode Zen/Go) or provider env vars. NOT Claude Pro/Max"
 verified: docs                   # opencode is not installed on this machine
 as_of: 2026-10-02

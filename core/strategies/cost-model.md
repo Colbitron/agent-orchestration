@@ -297,7 +297,7 @@ Caveats to state when advising a user:
   of sub agents, you can probably get by on a single $200 plan" (Claude); most
   devs can get by on Codex $200 "when used responsibly".
 
-Routing implications (the generator reads these from the user's config):
+Routing implications (the setup interview writes these into the user's config as cost scores; the generator reads the scores):
 
 - **Protect the scarce pool.** On Claude subscriptions, spend the non-Fable
   half on work that does not need Fable. "The things I'd use low for I'm just
@@ -406,3 +406,41 @@ Some heavy users split traffic across several subscriptions with a local proxy
 Claude Code, losing some built-in features; [INSP 42:20](https://youtu.be/8GRmLR__OGQ?t=2540); [FVA 1:07:12](https://youtu.be/P7bxbDSnZRM?t=4032)). This kit mentions it only so you can
 recognise the setup in a user's config. It does not endorse it. Check the
 provider's terms before suggesting it, and never set it up unasked.
+
+## 13. Local open-weights models
+
+Sources: `research/open-weights-small.md` (web research, 2026-10-19; nothing run
+by the kit).
+
+A model running on hardware the user already owns costs nothing per token, which
+is why the kit scores `host: local` models at cost 9 rather than 10:
+
+- **The hardware is shared.** A 27B dense model at Q4 holds about 18 GB of
+  memory for as long as it is loaded; on a 32 GB Mac that is most of what the
+  GPU may use, and the user's editor, browser and build run in what is left.
+- **Wall-clock is the real price.** Dense 27B models generate 10 to 45 tokens
+  per second on Apple silicon and read a 20K-token agent preamble over
+  minutes; gpt-oss-20b is several times faster but far less capable. A task
+  that a hosted model finishes in a minute can take a quarter of an hour.
+- **Retries cost the same as first attempts.** The cost-per-completed-task
+  logic of §1 still applies: a local model that flails through ten attempts
+  has spent the user's afternoon, and the orchestrator must verify every
+  result because no cheap second family exists to review it.
+- **Memory limits context, and context limits agents.** Agent harnesses need a
+  64K context; each 8K of context costs a few hundred megabytes on these
+  models. On a 16 GB machine gpt-oss-20b runs with half its MoE layers on the
+  CPU at 8K to 16K context, too little for Claude Code, OpenCode or Codex to
+  drive it, and Qwen3.8-27B runs only as its 2-bit build through llama.cpp,
+  which reaches 64K context at an estimated 5 to 12 tokens per second.
+- **Hosted versions of the same weights are often the better buy.** gpt-oss-20b
+  costs about a cent per Artificial Analysis task hosted and runs at 258 tok/s;
+  Qwen3.8-27B hosted is expensive for its class, and its MoE sibling
+  Qwen3.8-Flash-Next is smarter for a third of the price. Local wins only when
+  the data cannot leave the machine or there is no network.
+
+The generator applies three rules from this: a local model that is slow (a
+`speed` score of 3 or below) or running below its profile's recommended memory
+does not auto-win the bulk row when another cheap model without those marks is
+enabled; a model running below its recommended memory has every task fit
+counted one step worse; and a model whose smallest usable build does not fit
+`hardware.memory_gb` is disabled with a note rather than routed to.

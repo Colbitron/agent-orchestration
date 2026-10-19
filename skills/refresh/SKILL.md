@@ -26,7 +26,7 @@ python3 "$KIT_ROOT/core/interview/generate.py" --kit-root "$KIT_ROOT" --check --
 2. **New profiles.** If `unconfigured_profiles` is non-empty, read each
    one's frontmatter in `core/models/`. Propose a `config.models` line with
    `enabled` and `cost` derived from the user's `access` block by
-   "Derivation rules the generator follows" in
+   "Derivation rules the interview applies when writing `models`" in
    `core/interview/config-schema.md`. Ask once, with every proposal in a single
    `AskUserQuestion` (multiSelect). Write only the lines the user accepts
    into the `models` block of `config.yaml`. Change nothing else in that

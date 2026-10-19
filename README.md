@@ -48,6 +48,20 @@ See `adapters/<harness>/README.md`. The setup interview itself is plain
 markdown, so any capable agent can run it: point it at
 `core/interview/setup-interview.md`.
 
+## No subscription? Local models only
+
+The kit also routes for people who run open-weights models on their own
+hardware and pay nothing per token. Run the setup interview, answer
+"local" for open-weights access, confirm your machine's memory, and the
+generator enables the profiles whose weights fit (today Qwen3.8-27B at Q4
+on 24 GB of VRAM or a 32 GB Mac, and gpt-oss-20b on 16 GB) and disables the
+rest with a note. Every speed and memory figure in those profiles is a
+cited third-party measurement; the kit never benchmarks anything on your
+machine. Expect a single-family review row and a `propose` autonomy level:
+no local model can honestly gate another's merge. The worked example is at
+the end of `core/interview/config-schema.md`; the evidence is in
+`research/open-weights-small.md`.
+
 ## Updating
 
 The kit has no version number. Every push to `main` is a release, and your

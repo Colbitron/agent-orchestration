@@ -52,6 +52,11 @@ EXPENSIVE_EXTRA_ROWS = ("frontend",)
 EXPENSIVE_MAX_COST = 4
 BULK_MIN_COST = 8
 COMPUTER_USE_MIN = 6
+# Local models: share of unified memory the GPU may use by default on macOS
+# (community figure, 66-75%; research/open-weights-small.md Model 1 §4), and
+# the speed score at or below which a local model does not auto-win bulk.
+UNIFIED_USABLE = 0.75
+LOCAL_SLOW_SPEED = 3
 
 AUTONOMY_LABELS = [
     ("create_worktrees", "create worktrees"),
@@ -89,12 +94,13 @@ HARNESS_NAMES = {
 # is visible instead of silently doing nothing. Keep in step with the schema.
 CONFIG_KEYS = ("version", "user", "harnesses", "access", "models", "priorities",
                "autonomy", "effort", "routing_overrides", "preferences",
-               "standing_rules", "bridges", "glossary", "logging")
+               "standing_rules", "bridges", "glossary", "logging", "hardware")
+HARDWARE_KEYS = ("memory_gb", "kind", "gpu", "notes")
 USER_KEYS = ("name", "updated")
 HARNESS_KEYS = ("id", "primary", "cli", "smoke_tested")
 ACCESS_VENDORS = ("anthropic", "openai", "google", "xai", "open_weights")  # plus profile vendors
 ACCESS_KEYS = ("type", "plan", "notes", "provider", "models")
-MODEL_KEYS = ("enabled", "cost")
+MODEL_KEYS = ("enabled", "cost", "host")
 PRIORITY_KEYS = ("order", "frustration_tolerance", "budget_sensitivity", "speed_matters",
                  "speed_requires_review")
 AUTONOMY_KEYS = ("level", "reviewer_bots", "merge_gate", "may", "may_notes", "staging_is_safe")
@@ -294,13 +300,50 @@ class Model(object):
         self.effort = as_dict(data.get("effort"))
         self.access = as_dict(data.get("access"))
         self.role_hints = as_dict(data.get("role_hints"))
+        self.local = as_dict(data.get("local"))
         # filled from config
         self.state = "unconfigured"
         self.cost = None
+        self.host = None          # "local" | "api" | None (not stated)
+        self.local_fit = None     # (quant, gb) of the largest local build that fits the hardware
+        self.fit_penalty = 0      # 1 when the fitting build is below local.recommended_memory_gb
 
     @property
     def short(self):
         return self.name[7:] if self.name.startswith("Claude ") else self.name
+
+    @property
+    def runs_locally(self):
+        """True when the profile has a local block with at least one sized build."""
+        return bool(self.local.get("runs_locally")) or bool(as_dict(self.local.get("memory_gb_by_quant")))
+
+    def local_runtimes(self, quant):
+        """Runtimes that ship this build, from local.runtimes_by_quant; None when the
+        profile does not restrict that build (the reach column then names no runtime)."""
+        by_quant = as_dict(self.local.get("runtimes_by_quant"))
+        if quant in by_quant:
+            return [str(r) for r in as_list(by_quant.get(quant))]
+        return None
+
+    def local_builds(self):
+        """(quant, gb) for every sized build at or above local.min_memory_gb; builds
+        below that floor are unusable quality and never count."""
+        def num(v):
+            return isinstance(v, (int, float)) and not isinstance(v, bool)
+        floor_gb = self.local.get("min_memory_gb")
+        floor_gb = floor_gb if num(floor_gb) else 0
+        return [(str(q), gb) for q, gb in as_dict(self.local.get("memory_gb_by_quant")).items()
+                if num(gb) and gb >= floor_gb]
+
+    def local_build_for(self, usable_gb):
+        """The build to assume on a machine with usable_gb: local.preferred_quant when
+        it fits, else the largest build that fits. Returns (quant, gb) or None."""
+        fits = [b for b in self.local_builds() if b[1] <= usable_gb]
+        preferred = str(self.local.get("preferred_quant") or "")
+        for b in fits:
+            if b[0] == preferred:
+                return b
+        return max(fits, key=lambda x: (x[1], x[0])) if fits else None
 
     @property
     def alias(self):
@@ -339,7 +382,12 @@ class Model(object):
     def fit(self, task):
         entry = as_dict(self.tasks.get(task))
         f = str(entry.get("fit") or "unknown")
-        return f if f in FIT_RANK else "unknown"
+        f = f if f in FIT_RANK else "unknown"
+        # A local build below the profile's recommended memory is a weaker
+        # model than the one the task fits describe: one step worse, poor stays poor.
+        if self.fit_penalty and f in ("best", "good", "ok"):
+            f = {"best": "good", "good": "ok", "ok": "poor"}[f]
+        return f
 
     def note(self, task):
         return str(as_dict(self.tasks.get(task)).get("note") or "").strip()
@@ -537,6 +585,10 @@ class Ctx(object):
         self.harnesses = harnesses
         self.primary_harness = str((primary or harnesses or [{}])[0].get("id") or "unknown")
         self.enabled = [m for m in models.values() if m.state == "enabled"]
+        self.bridge_ids = [str(as_dict(b).get("id") or "") for b in as_list(config.get("bridges"))]
+        self.local_provider = str(as_dict(as_dict(config.get("access")).get("open_weights")).get("provider") or "").lower()
+        self.local_notes = []     # sentences about local models that do not fit the hardware
+        self.unfit_ids = set()    # models disabled by the hardware check
 
     def axis(self, model, name):
         if name == "cost":
@@ -759,9 +811,12 @@ def build_rows(ctx, errors, warnings):
 
         if tid == "review" and feature_primary is not None:
             fam = feature_primary.family
-            families = set(m.family for m in ctx.enabled)
-            if len(families) > 1:
-                pool = [m for m in ctx.enabled if m.family != fam]
+            # Another family reviews only if one of its models rates ok or better
+            # for review; a poor or unknown reviewer is no gate at all.
+            other_family = [m for m in ctx.enabled if m.family != fam
+                            and FIT_RANK[m.fit(tid)] <= FIT_RANK["ok"]]
+            if other_family:
+                pool = other_family
                 p_ranked = plain_pick(task, pool)[2]
                 primary = p_ranked[0]
                 if restricted and ctx.expensive(primary):
@@ -785,16 +840,30 @@ def build_rows(ctx, errors, warnings):
                     decider = ("Single-family setup: a second vendor's reviewer would catch more. "
                                "Highest thoroughness (%s) apart from the feature primary, %s"
                                % (primary.score("thoroughness"), feature_primary.short))
+                    if FIT_RANK[primary.fit(tid)] > FIT_RANK["ok"]:
+                        decider += ("; it rates %s for review, so treat its pass as a smoke check, not a gate"
+                                    % primary.fit(tid))
                     fallback = pick_fallback(ranked, primary, task, exclude=(feature_primary.id,))
                 else:
                     primary = feature_primary
-                    decider = ("Only one model enabled; the implementer reviews its own work. "
-                               "Add a second model for a real gate")
+                    if len(ctx.enabled) > 1:
+                        decider = ("No other enabled model rates ok or better for review, so the implementer "
+                                   "reviews its own work. Enable a second capable model for a real gate")
+                    else:
+                        decider = ("Only one model enabled; the implementer reviews its own work. "
+                                   "Add a second model for a real gate")
                     fallback = pick_fallback(ranked, primary, task)
 
         if tid == "bulk" or task_kind(task) == "mechanical":
             cheap = [m for m in ctx.enabled
                      if (m.cost or 0) >= BULK_MIN_COST and FIT_RANK[m.fit(tid)] <= FIT_RANK["ok"]]
+            # A free local model wins bulk unless it is slow, or running below its
+            # recommended memory, and another cheap model exists.
+            quick = [m for m in cheap if not (m.host == "local" and
+                                              (m.score("speed") <= LOCAL_SLOW_SPEED or m.fit_penalty))]
+            slow_skipped = quick and len(quick) < len(cheap)
+            if slow_skipped:
+                cheap = quick
             if cheap:
                 cheap.sort(key=lambda m: (-(m.cost or 0), ranked.index(m) if m in ranked else 99, m.id))
                 winner = cheap[0]
@@ -802,6 +871,9 @@ def build_rows(ctx, errors, warnings):
                     primary = winner
                     displaced = None
                 decider = "Cheapest capable quota (cost %s, fit %s) wins bulk" % (winner.cost, winner.fit(tid))
+                if slow_skipped:
+                    decider += ("; a local model that is slow (speed %s or less) or below its recommended "
+                                "memory does not auto-win it" % LOCAL_SLOW_SPEED)
 
         if displaced is not None and displaced is not primary:
             fallback = displaced
@@ -847,7 +919,9 @@ def build_rows(ctx, errors, warnings):
             if model is None:
                 errors.append("routing_overrides.%s.%s: no profile for %s" % (tid, key, mid))
             elif model.state != "enabled":
-                errors.append("routing_overrides.%s.%s: %s is not enabled in config.models" % (tid, key, mid))
+                why = ("does not fit hardware.memory_gb, so it was disabled" if str(mid) in ctx.unfit_ids
+                       else "is not enabled in config.models")
+                errors.append("routing_overrides.%s.%s: %s %s" % (tid, key, mid, why))
             else:
                 setattr(row, key, model)
         row.empty_text = None if row.primary is not None else (row.empty_text or "Override leaves no primary")
@@ -909,10 +983,35 @@ def reach_via(ctx, model, bridges, agents):
             parts.append("subagent only" + (" (%s)" % ", ".join("`%s`" % n for n in names) if names else ""))
         else:
             parts.append("this session")
+    local_label = None
+    local_runtimes = None
+    if model.local_fit:
+        quant, gb = model.local_fit
+        local_runtimes = model.local_runtimes(quant)
+        local_label = "local %s build, about %s GB" % (quant.upper(), gb)
+        if local_runtimes is not None:
+            local_label += ", via " + join_words(local_runtimes, "or")
     for bid in [str(b) for b in as_list(model.access.get("invoke_via"))]:
         bridge = as_dict(bridges.get(bid))
-        if str(bridge.get("harness")) in harness_ids:
-            parts.append("`%s`" % bid)
+        # A bridge counts when its harness is configured, when the user listed it
+        # under config.bridges, or when it is the local runtime a fitting model uses.
+        via_harness = str(bridge.get("harness")) in harness_ids
+        # config.bridges can only vouch for a bridge that has no harness of its own
+        # (a raw API or a local server); a CLI bridge still needs its harness configured.
+        via_config = bid in ctx.bridge_ids and str(bridge.get("harness") or "none") == "none"
+        ollama_has_build = local_runtimes is None or "ollama" in local_runtimes
+        via_local = (bid == "ollama" and local_label is not None and ollama_has_build
+                     and ctx.local_provider in ("", "ollama"))
+        if bid == "ollama" and model.local_fit and not ollama_has_build:
+            continue  # Ollama's library has no build this small; the label names the runtime that does
+        if via_harness or via_config or via_local:
+            if via_local:
+                parts.append("`%s` (%s)" % (bid, local_label))
+                local_label = None
+            else:
+                parts.append("`%s`" % bid)
+    if local_label:
+        parts.append(local_label)
     if not parts:
         return UNREACHABLE
     if len(parts) == 1:
@@ -951,11 +1050,24 @@ def effort_cell(model, effort, overridden):
 
 
 def vendor_access(config, model):
+    """How the user reaches this model's vendor: the access.<vendor>.type value,
+    "none", or "hosted-only" for an open-weights model that cannot run locally
+    when the user's open-weights access is local only. Open-weights models are
+    gated on access.open_weights whatever their vendor (OpenAI's gpt-oss runs
+    without an OpenAI account)."""
     access = as_dict(config.get("access"))
+    if model.family == "open-weights":
+        # access.<vendor> still counts for an open-weights vendor's own hosted API
+        # (zhipu, deepseek, alibaba...). The four closed-vendor keys describe other
+        # products: access.openai is ChatGPT or the OpenAI API, not gpt-oss.
+        if model.vendor in access and model.vendor not in ACCESS_VENDORS:
+            return str(as_dict(access[model.vendor]).get("type") or "none")
+        kind = str(as_dict(access.get("open_weights")).get("type") or "none")
+        if kind == "local" and not model.runs_locally:
+            return "hosted-only"
+        return kind
     if model.vendor in access:
         return str(as_dict(access[model.vendor]).get("type") or "none")
-    if model.family == "open-weights":
-        return str(as_dict(access.get("open_weights")).get("type") or "none")
     return "none"
 
 
@@ -985,9 +1097,11 @@ def render_routing(ctx, rows, bridges, agents, date, version, commit, short_why=
 
     notes = []
     config_order = list(as_dict(cfg.get("models")).keys())
-    disabled = [ctx.models[i] for i in config_order if i in ctx.models and ctx.models[i].state == "disabled"]
-    turned_off = [m for m in disabled if vendor_access(cfg, m) != "none"]
+    disabled = [ctx.models[i] for i in config_order if i in ctx.models and ctx.models[i].state == "disabled"
+                and i not in ctx.unfit_ids]
+    turned_off = [m for m in disabled if vendor_access(cfg, m) not in ("none", "hosted-only")]
     no_access = [m for m in disabled if vendor_access(cfg, m) == "none"]
+    hosted_only = [m for m in disabled if vendor_access(cfg, m) == "hosted-only"]
 
     def label(m):
         return m.name + (" (%s)" % m.status if m.status in ("deprecated", "preview", "unreleased") else "")
@@ -995,6 +1109,10 @@ def render_routing(ctx, rows, bridges, agents, date, version, commit, short_why=
         notes.append("Disabled in config: %s." % join_words([label(m) for m in turned_off]))
     if no_access:
         notes.append("Disabled, no vendor access: %s." % join_words([label(m) for m in no_access]))
+    if hosted_only:
+        notes.append("Disabled, hosted only while access.open_weights is local: %s."
+                     % join_words([label(m) for m in hosted_only]))
+    notes.extend(ctx.local_notes)
     unconf = sorted(m for m in ctx.models if ctx.models[m].state == "unconfigured")
     if unconf:
         notes.append("Not in config.models (treated as disabled; run /agent-orchestration:refresh to add): %s."
@@ -1074,7 +1192,11 @@ def render_routing(ctx, rows, bridges, agents, date, version, commit, short_why=
     review = next((r for r in rows if r.task["id"] == "review"), None)
     feature = next((r for r in rows if r.task["id"] == "feature"), None)
     families = sorted(set(m.family for m in ctx.enabled))
-    if len(families) <= 1:
+    rev_fam = review.primary.family if review and review.primary else None
+    feat_fam = feature.primary.family if feature and feature.primary else None
+    if len(families) <= 1 or (rev_fam and feat_fam and rev_fam == feat_fam):
+        # Also the case where another family is enabled but none of its models
+        # rates ok or better for review: the row stays in the implementer's family.
         rules.append("Review: single-family. Use a different model from the implementer, and require "
                      "the reviewer to mark claims it could not confirm.")
     elif review and review.primary and feature and feature.primary:
@@ -1440,6 +1562,7 @@ def check_config_keys(config, models, warnings):
     for i, entry in enumerate(as_list(config.get("bridges"))):
         unknown(entry, BRIDGE_KEYS, "bridges[%d]" % i)
     unknown(config.get("logging"), LOGGING_KEYS, "logging")
+    unknown(config.get("hardware"), HARDWARE_KEYS, "hardware")
 
 
 def generate(args, errors, warnings):
@@ -1467,6 +1590,19 @@ def generate(args, errors, warnings):
     cfg_models = config.get("models")
     if not isinstance(cfg_models, dict):
         raise GenError("config.models is missing or not a mapping")
+    hardware = as_dict(config.get("hardware"))
+    hw_mem = hardware.get("memory_gb")
+    hw_kind = str(hardware.get("kind") or "unified").lower()
+    usable_gb = None
+    if isinstance(hw_mem, (int, float)) and not isinstance(hw_mem, bool):
+        usable_gb = hw_mem if hw_kind == "vram" else hw_mem * UNIFIED_USABLE
+    elif hardware:
+        warnings.append("hardware.memory_gb is missing or not a number; local models are not checked for fit")
+    hw_warned = bool(hardware)
+    if hardware and hw_kind not in ("vram", "unified"):
+        warnings.append("hardware.kind is %r; expected vram or unified (treated as unified)" % hardware.get("kind"))
+    open_weights_type = str(as_dict(as_dict(config.get("access")).get("open_weights")).get("type") or "none").lower()
+    local_notes, unfit_ids = [], set()
     for mid, entry in cfg_models.items():
         entry = as_dict(entry)
         if mid not in models:
@@ -1492,6 +1628,61 @@ def generate(args, errors, warnings):
             errors.append("profile %s is enabled but could not be read" % mid)
         if m.state == "enabled" and m.status in ("deprecated", "unreleased"):
             warnings.append("%s is %s but enabled in config.models" % (mid, m.status))
+        # Where the model runs. host: local is explicit; a profile that runs
+        # locally defaults to local when the user's open-weights access is local.
+        host = entry.get("host")
+        if host is not None and host not in ("local", "api"):
+            warnings.append("config.models.%s.host is %r; expected local or api (ignored)" % (mid, host))
+            host = None
+        if host is None and m.runs_locally and open_weights_type == "local":
+            host = "local"
+        m.host = host
+        if m.state == "enabled" and host == "local":
+            if not m.runs_locally:
+                warnings.append("config.models.%s.host is local but core/models/%s.md has no local block; "
+                                "fit not checked" % (mid, m.file_id))
+            elif usable_gb is None:
+                if not hw_warned:
+                    warnings.append("config.models.%s runs locally but hardware.memory_gb is not set; "
+                                    "fit not checked (add a hardware block to config.yaml)" % mid)
+            else:
+                # A model that can keep some layers on the CPU (sparse MoE such as
+                # gpt-oss) is bounded by the whole of a unified-memory machine, not
+                # by the share the GPU may use. On a dedicated GPU, VRAM still bounds it.
+                offload = bool(m.local.get("cpu_offload")) and hw_kind != "vram"
+                my_usable = hw_mem if offload else usable_gb
+                fit = m.local_build_for(my_usable)
+                if fit is None:
+                    m.state = "disabled"
+                    unfit_ids.add(mid)
+                    usable_builds = [gb for _, gb in m.local_builds()]
+                    need = min(usable_builds) if usable_builds else None
+                    local_notes.append(
+                        "Disabled, does not fit the %s GB %s machine (about %s GB usable%s): %s."
+                        % (hw_mem, hw_kind, int(round(my_usable)),
+                           "; its smallest usable build needs %s GB" % need if need is not None else "",
+                           m.name))
+                    warnings.append("%s is enabled but does not fit hardware.memory_gb %s (%s); disabled"
+                                    % (mid, hw_mem, hw_kind))
+                else:
+                    m.local_fit = fit
+                    # Below the recommended usable memory the model runs as a smaller
+                    # build, with less context, or partly on the CPU: a weaker model
+                    # than the one the task fits describe.
+                    # The GPU's share decides the penalty even for cpu_offload models:
+                    # layers on the CPU are what make the run slower than recommended.
+                    rec = m.local.get("recommended_memory_gb")
+                    if isinstance(rec, (int, float)) and not isinstance(rec, bool) and usable_gb < rec:
+                        m.fit_penalty = 1
+                        if offload and fit[1] > usable_gb:
+                            how = "with some layers on the CPU"
+                        elif len(m.local_builds()) > 1:
+                            how = "as its %s build (about %s GB)" % (fit[0].upper(), fit[1])
+                        else:
+                            how = "with about %s GB usable for its %s GB build" % (int(round(usable_gb)), fit[1])
+                        local_notes.append(
+                            "%s runs on this machine %s; the profile recommends %s GB of usable memory, "
+                            "so its task fits count one step worse here." % (m.name, how, rec))
     effort_cfg = config.get("effort")
     if effort_cfg is not None and not isinstance(effort_cfg, dict):
         errors.append("config.effort must be a mapping of model id to level, not %s" % type(effort_cfg).__name__)
@@ -1513,8 +1704,11 @@ def generate(args, errors, warnings):
     # Re-order enabled models by config order (models table order).
     ctx = Ctx(config, models, tasks)
     ctx.enabled = [models[i] for i in cfg_models if i in models and models[i].state == "enabled"]
+    ctx.local_notes, ctx.unfit_ids = local_notes, unfit_ids
     if not ctx.enabled:
-        errors.append("no model is enabled in config.models")
+        errors.append("no model is enabled in config.models" + (
+            " (%s disabled because it does not fit hardware.memory_gb %s)"
+            % (join_words(sorted(unfit_ids)), hw_mem) if unfit_ids else ""))
 
     used_axes = sorted(set(a for t in tasks for a, _ in ctx.weights(t) if a != "cost")
                        | {"floor", "taste", "thoroughness", "computer_use"})

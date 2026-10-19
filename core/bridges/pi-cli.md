@@ -2,7 +2,7 @@
 id: pi-cli
 harness: pi
 binary: pi
-reaches: []                      # no core/models profile lists pi; reaches any provider/id it has a key or login for
+reaches: [qwen3-8-27b, gpt-oss-20b]   # local via a custom models.json provider, or OpenRouter; also any provider/id it has a key or login for
 auth: "/login in the TUI (OAuth or API key, saved to ~/.pi/agent/auth.json), or per-provider env vars (ANTHROPIC_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY, XAI_API_KEY, OPENROUTER_API_KEY, ...)"
 verified: docs                   # pi is not installed on this machine
 as_of: 2026-10-02

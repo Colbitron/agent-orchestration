@@ -2,7 +2,7 @@
 id: openrouter-api
 harness: none                    # raw HTTP, one-shot chat completion, no tools
 binary: curl                     # plus jq
-reaches: []                      # open-weights models with no core/models profile, e.g. xiaomi/mimo-v2.6-pro
+reaches: [qwen3-8-27b, gpt-oss-20b]   # hosted ids qwen/qwen3.8-27b and openai/gpt-oss-20b; MiMo, GLM and DeepSeek profiles list this bridge too
 auth: "OPENROUTER_API_KEY env var (Bearer header). Never paste the key into a prompt or file"
 verified: unverified             # OpenAI-compatible endpoint shape; not in research/harnesses.md; not run (no key set)
 as_of: 2026-10-02

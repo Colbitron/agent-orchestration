@@ -25,7 +25,7 @@ python3 "KIT_ROOT/core/interview/generate.py" --kit-root "KIT_ROOT" --check --js
 2. **New profiles.** If `unconfigured_profiles` is non-empty, read each
    one's frontmatter in `KIT_ROOT/core/models/`. Propose a
    `config.models` line with `enabled` and `cost` derived from the user's
-   `access` block by "Derivation rules the generator follows" in
+   `access` block by "Derivation rules the interview applies when writing `models`" in
    `KIT_ROOT/core/interview/config-schema.md`. Ask once, with every
    proposal in a single question. Use your harness's question tool if it
    allows several answers at once; ask in plain text if your harness has

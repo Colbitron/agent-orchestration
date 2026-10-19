@@ -123,7 +123,19 @@ without asking. Judge the output, not the price tag.
 
 Cost is an input to the user's config, not a fixed score: the same model is
 "effectively free" on a generous subscription and expensive on API billing.
-The interview captures which access each user has and the generator adjusts.
+The interview captures which access each user has, derives a cost score per
+model into `config.models`, and the generator reads those numbers.
+
+**Local models.** Open-weights profiles (`family: open-weights`, any vendor)
+may carry a `local` block with the memory each quantized build needs, taken
+from third-party measurements. A user who runs models on their own machine
+records `hardware` (memory and whether it is VRAM or unified) and `host:
+local` per model; the generator picks the largest build that fits, disables
+models that do not, and shows the build in the models table. Cost for a
+local model is scored 9: nothing per token, but shared hardware, slow output
+and electricity. The kit never runs or benchmarks a model itself; see
+`research/open-weights-small.md` for the evidence behind the first two
+profiles (Qwen3.8-27B and gpt-oss-20b).
 
 ## Routing principles carried from the research
 

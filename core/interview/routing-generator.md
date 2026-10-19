@@ -10,6 +10,20 @@ deterministic enough that two runs on the same inputs give the same table.
 - `config.yaml` (see `config-schema.md`)
 - every `core/models/*.md` whose `id` is enabled in `config.models`
 - `core/tasks.md` for the task list and glossary defaults
+- `config.hardware`, for enabled models with `host: local`: the largest
+  build in the profile's `local.memory_gb_by_quant` that fits (75% of
+  unified memory, all of VRAM) and is at least `local.min_memory_gb` is the
+  one the table assumes; a model with no fitting build is disabled with a
+  note under the models table, and one running on a machine with less
+  usable memory than `local.recommended_memory_gb` has every task fit
+  degraded one step. A profile with `local.cpu_offload: true` counts the
+  whole of a unified-memory machine when deciding whether it fits, while
+  the GPU's share still decides the penalty. A local model that is slow
+  (`speed` 3 or below) or running below its recommended memory does not
+  auto-win the bulk row when another cheap model without those marks is
+  enabled. The review row routes to another family only when a model there
+  rates `ok` or better for review; otherwise it stays single-family and the
+  standing rules say so.
 
 ## Step 1: score each (task, model) pair
 
@@ -65,13 +79,19 @@ Special rules:
   fallback. This keeps a quota-capped model like Fable for the tasks that
   need its floor instead of burning it on quick fixes and polling.
 - `review`: primary must be from a family other than the family most used
-  for `feature`. If only one family is enabled, pick the model with the
-  highest `thoroughness` that is not the `feature` primary and add the line
-  "Single-family setup: a second vendor's reviewer would catch more." If
-  only one model is enabled, say instead: "Only one model enabled; the
-  implementer reviews its own work. Add a second model for a real gate."
-  Warn when the final review and feature primaries share a family while
-  another family is enabled.
+  for `feature`, and must rate `ok` or better for review; a `poor` or
+  `unknown` reviewer is no gate. If no other family has such a model, pick
+  the model with the highest `thoroughness` that is not the `feature`
+  primary and add the line "Single-family setup: a second vendor's reviewer
+  would catch more." (plus "it rates poor for review, so treat its pass as
+  a smoke check, not a gate" when that is so). If only the feature primary
+  qualifies, say "No other enabled model rates ok or better for review, so
+  the implementer reviews its own work"; if only one model is enabled, say
+  "Only one model enabled; the implementer reviews its own work. Add a
+  second model for a real gate." Warn when the final review and feature
+  primaries share a family while another family is enabled. The "Review:"
+  standing rule follows the row: cross-family only when the review and
+  feature primaries differ in family.
 - `computer-use`: if no enabled model has `computer_use` ≥ 6, write
   "No capable computer-use model enabled; verify by running tests and
   reading logs instead" and leave the row's primary empty.
@@ -80,7 +100,9 @@ Special rules:
   model available in the primary harness, just name it as the session model.
 - `bulk`: if a model has user `cost` ≥ 8, it wins the row regardless of
   score as long as its fit is at least `ok`, because bulk work should burn
-  the cheapest capable quota. Theo's rule.
+  the cheapest capable quota. Theo's rule. A local model that is slow
+  (`speed` ≤ 3) or below its recommended memory is passed over when another
+  qualifying model is enabled.
 
 ## Step 3: write routing.md
 

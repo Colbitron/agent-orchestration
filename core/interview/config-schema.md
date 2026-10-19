@@ -52,14 +52,27 @@ access:
   xai:
     type: none
   open_weights:
-    type: none                     # none | api | local
-    provider: null                 # openrouter | ollama | lmstudio | zhipu | ...
-    models: []                     # api ids the user can reach
+    type: none                     # none | api | local | both
+    provider: null                 # openrouter | ollama | lmstudio | llama-cpp | zhipu | ...
+    models: []                     # api ids or Ollama tags the user can reach; quote tags with colons ("qwen3.8:27b")
 
-# The generator fills this from access + profiles. The user may override
-# `enabled` or `cost` per model. `cost` is 1-10 where 10 means "effectively
-# free for me" (Theo scored Codex 9 on a generous sub) and 1 means "every
-# token hurts".
+# The machine local models run on. Only read when a model runs locally.
+# kind is vram for a dedicated GPU or unified for Apple silicon and similar;
+# the generator allows 75% of unified memory to the GPU, all of VRAM.
+hardware:
+  memory_gb: 32
+  kind: unified                  # vram | unified
+  gpu: "Apple M2 Max"            # free text, or null
+  notes: ""
+
+# The setup interview fills this from access + profiles using the derivation
+# rules below; the generator reads the numbers and does not recompute them.
+# The user may override `enabled` or `cost` per model. `cost` is 1-10 where
+# 10 means "effectively free for me" (Theo scored Codex 9 on a generous sub)
+# and 1 means "every token hurts". `host` says where an open-weights model
+# runs: `local` (checked against `hardware`) or `api` (hosted). It defaults
+# to `local` when `access.open_weights.type` is `local` and the profile has a
+# `local` block, otherwise `api`.
 models:
   claude-fable-5-1:  {enabled: true,  cost: 3}
   claude-opus-5-5:   {enabled: true,  cost: 7}
@@ -68,6 +81,8 @@ models:
   claude-haiku-4-5:  {enabled: false, cost: 9}   # superseded; keep disabled
   gpt-6-astra:       {enabled: false, cost: 1}
   gpt-6-1-sol:       {enabled: false, cost: 1}
+  qwen3-8-27b:       {enabled: false, cost: 1, host: api}     # open weights; see the local-only example below
+  gpt-oss-20b:       {enabled: false, cost: 1, host: api}
 
 # What the user cares about when axes conflict. The generator turns this
 # into the ordering rule in routing.md.
@@ -189,12 +204,20 @@ The two level checks (no effort control, not one of the levels) run against
 the row's final primary and are skipped when the override leaves no
 primary. A non-string effort and `max` are errors with or without a primary.
 
-## Derivation rules the generator follows
+## Derivation rules the interview applies when writing `models`
+
+The setup and refresh skills apply these rules and write the results into
+`models`. The generator itself checks only `enabled`, `cost`, `host` and the
+hardware fit. It never reads prices; it reads `access.<vendor>.type` only to
+label disabled models and `access.open_weights.type` to default `host`.
 
 1. **Availability.** A model is `enabled` only if its vendor has `access.type`
    other than `none` and at least one harness in `harnesses` appears in the
    profile's `access.harnesses` or a bridge in `access.invoke_via` has its
-   CLI installed.
+   CLI installed. Open-weights models (`family: open-weights`, whatever the
+   `vendor`) are gated on `access.open_weights`: `local` enables profiles
+   with a `local` block whose smallest usable build fits `hardware`, `api`
+   enables hosted ones, `both` enables either.
 2. **Cost score.** Start from the profile's `cost_efficiency`. Then:
    - `access.type: subscription` with a generous plan (Codex Pro, Claude Max
      20x): +3, capped at 10.
@@ -202,12 +225,15 @@ primary. A non-string effort and `max` are errors with or without a primary.
    - `api`: 0 adjustment, and subtract 2 if the model's `pricing_per_mtok.output`
      is 50 or above.
    - Known quota rules (Fable's 50% cap) subtract 1.
+   - `host: local`: 9. Nothing per token, but the hardware is shared with
+     the user's foreground work, runs are slow, and electricity is not free;
+     reserve 10 for a model that costs nothing at all.
    The user may override any value.
 3. **Primary vs fallback per task.** See `routing-generator.md`.
-4. **Cross-family review.** If two or more families are enabled, the review
-   row routes to a model from a family other than the implementer's. If only
-   one family is enabled, route review to a different model in that family
-   and add a note recommending a second family.
+4. **Cross-family review.** If another enabled family has a model that rates
+   `ok` or better for review, the review row routes there. Otherwise route
+   review to a different model in the implementer's family and add a note
+   recommending a second family; a `poor` reviewer is called a smoke check.
 5. **Autonomy.** Rendered as a "Standing permissions" block in routing.md.
    Nothing in `may` defaults to true except worktrees, PRs, and rebases.
 
@@ -227,7 +253,7 @@ If any check fails, it fixes the file and tells the user what it changed.
 list: at the top level and inside `user`, each `harnesses` and `bridges`
 entry, `access` and each `access.<vendor>`, each `models.<id>`, `priorities`,
 `autonomy`, `autonomy.may`, `autonomy.may_notes`, `routing_overrides.<task>`,
-`preferences`, `standing_rules` and `logging`. A vendor under `access` is
+`preferences`, `standing_rules`, `logging` and `hardware`. A vendor under `access` is
 known if it is listed above or is the `vendor` of a profile. Extra keys
 under `autonomy.may` and `preferences` are still written into `routing.md`
 as given; every other unknown key is ignored. It also warns when one of
@@ -235,3 +261,50 @@ those blocks, or a `routing_overrides.<task>` entry, is present but not a
 mapping (for example `priorities is a string, expected a mapping; ignored`).
 Add a new key here and to
 `generate.py`'s key lists together.
+
+## Example: a local-only user
+
+No subscriptions, no API keys, a 32 GB Apple silicon Mac running Ollama,
+OpenCode as the harness. The two open-weights profiles are enabled and the
+generator checks each against `hardware`: Qwen3.8-27B fits at Q4 (about 18
+GB of the roughly 24 GB the GPU may use) and gpt-oss-20b fits in its native
+format. On a 16 GB machine the same config keeps gpt-oss-20b with some layers on
+the CPU and runs Qwen3.8-27B only as its 2-bit build through llama.cpp;
+both are below their recommended memory there, so every task fit counts one
+step worse and a note says so.
+
+```yaml
+version: 1
+user: {name: Sam, updated: 2026-10-19}
+harnesses:
+  - {id: opencode, primary: true, cli: opencode}
+access:
+  anthropic: {type: none}
+  openai: {type: none}
+  google: {type: none}
+  xai: {type: none}
+  open_weights:
+    type: local
+    provider: ollama
+    models: ["qwen3.8:27b", "gpt-oss:20b"]
+hardware: {memory_gb: 32, kind: unified, gpu: "Apple M2 Max"}
+models:
+  qwen3-8-27b: {enabled: true, cost: 9, host: local}
+  gpt-oss-20b: {enabled: true, cost: 9, host: local}
+priorities:
+  order: [intelligence, taste, cost]
+  frustration_tolerance: medium
+  budget_sensitivity: low
+  speed_matters: false
+autonomy:
+  level: propose           # no second family is available, so no model can gate another's merge
+  reviewer_bots: []
+bridges:
+  - {id: ollama, note: "OLLAMA_CONTEXT_LENGTH=65536 for agent harnesses"}
+logging: {enabled: true, path: ~/.agent-orchestration/runs.jsonl}
+```
+
+Two things the table will say that a local-only user should expect: review
+is single-family (the implementer or its sibling reviews), so `propose` is
+the honest autonomy level; and every speed figure is a third-party
+measurement on someone else's machine until the user records their own.

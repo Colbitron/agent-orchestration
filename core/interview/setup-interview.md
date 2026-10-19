@@ -22,7 +22,16 @@ of the interview is that the table reflects the user's real environment.
    for b in claude codex gemini opencode cursor-agent agent pi grok; do
      command -v "$b" >/dev/null 2>&1 && echo "$b: $(command -v $b)"
    done
+   # local model runtimes and the machine they would run on
+   for b in ollama llama-server lms; do
+     command -v "$b" >/dev/null 2>&1 && echo "$b: $(command -v $b)"
+   done
+   [ "$(uname)" = Darwin ] && sysctl -n hw.memsize machdep.cpu.brand_string
+   command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
    ```
+
+   Treat the hardware line as a prompt for step 2, not an answer: confirm
+   the memory with the user before writing it.
 
 3. Read `core/models/*.md` frontmatter so you know which models and vendors
    exist. Do not read the bodies yet.
@@ -56,7 +65,20 @@ For each vendor, ask how they pay, if at all:
 - **Google**: none / Gemini CLI or AI Studio key / subscription.
 - **xAI**: none / API key / subscription.
 - **Open-weights**: none / hosted API (OpenRouter, Zhipu, Together, …) /
-  local (Ollama, LM Studio, …). If yes, ask which models they actually run.
+  local (Ollama, LM Studio, llama.cpp, …) / both. If local or both:
+  1. Ask which runtime, and confirm the machine's memory and whether it is a
+     dedicated GPU (`kind: vram`) or unified memory (`kind: unified`). Write
+     `hardware`.
+  2. List the profiles that have a `local` block with their
+     `memory_gb_by_quant`, say which builds fit (75% of unified memory, all
+     of VRAM; a profile with `cpu_offload: true` may use all of a
+     unified-memory machine), and ask which they run or want to run. Write those as
+     `models.<id>: {enabled: true, cost: 9, host: local}` and the Ollama
+     tags they use under `access.open_weights.models`, quoted.
+  3. Ask whether they also have a hosted fallback (OpenRouter, the vendor's
+     API). If so, the type is `both` and hosted-only profiles may be enabled
+     with `host: api`.
+  If hosted only, ask which models they actually run.
 
 Do not ask for keys or secrets. Record `access` only as types and plan
 names.
@@ -90,7 +112,10 @@ Explain the three levels, in this order, then ask which one:
   bots they have (CodeRabbit, Cursor Bugbot, Macroscope, Greptile, other).
   If none, explain that without bots the gate has to be an independent
   review by a model other than the implementer (see the merge gate below),
-  and recommend `propose` only if they do not want that.
+  and recommend `propose` only if they do not want that. If every enabled
+  model is a local open-weights model, say that no second family exists to
+  gate a merge, that the review row will be single-family, and recommend
+  `propose`.
 - **goal-mode**: merge-with-gates plus permission to keep going through a
   todo list until a stated condition holds, including closing superseded
   PRs and rebasing stacks. Say plainly that this is Theo's "yolo" mode and
@@ -121,8 +146,12 @@ Ask, each optional:
 ## 6. Write the config
 
 Write `~/.agent-orchestration/config.yaml` per `config-schema.md`. Fill
-`models` by applying the derivation rules. Show the user the `models` block
-with the derived cost scores and ask if any look wrong. Fix what they say.
+`models` by applying the derivation rules (local models: cost 9, `host:
+local`; quote Ollama tags). Show the user the `models` block with the
+derived cost scores and ask if any look wrong. Fix what they say. If the
+generator later disables a local model as not fitting `hardware`, show the
+note and offer a smaller build or a hosted route rather than editing the
+profile.
 
 ## 7. Generate
 
@@ -157,7 +186,11 @@ Do only what the user says yes to. Describe each change before making it.
 
 Check the bridges: for each non-primary harness, confirm the CLI is
 installed and that a one-shot invocation works (`core/bridges/<id>.md` has
-the smoke-test command). Report which bridges are live.
+the smoke-test command). Report which bridges are live. For local models,
+run the `ollama` bridge's smoke test against a pulled model, and remind the
+user that agent harnesses need a 64K context (`OLLAMA_CONTEXT_LENGTH=65536`;
+Ollama defaults to 4K on machines under 24 GiB), which the memory figures in
+the profiles already assume.
 
 ## 9. Close
 
