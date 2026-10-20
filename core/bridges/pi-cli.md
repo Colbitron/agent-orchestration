@@ -4,7 +4,7 @@ harness: pi
 binary: pi
 reaches: [qwen3-8-27b, gpt-oss-20b]   # local via a custom models.json provider, or OpenRouter; also any provider/id it has a key or login for
 auth: "/login in the TUI (OAuth or API key, saved to ~/.pi/agent/auth.json), or per-provider env vars (ANTHROPIC_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY, XAI_API_KEY, OPENROUTER_API_KEY, ...)"
-verified: docs                   # pi is not installed on this machine
+verified: docs                   # not tested against an install
 as_of: 2026-10-02
 ---
 Pi is Mario Zechner's minimal terminal coding agent (now Earendil Inc., pi.dev). It has **no
@@ -14,7 +14,7 @@ guard is restricting tools with `--tools`. No subagents, no plan mode, by design
 ## Install
 `curl -fsSL https://pi.dev/install.sh | sh` or
 `npm install -g --ignore-scripts @earendil-works/pi-coding-agent`; update with `pi update`.
-Not installed here.
+Not tested against an install.
 
 ## Detect
 ```sh

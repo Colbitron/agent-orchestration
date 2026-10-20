@@ -20,8 +20,9 @@ touched.
   companion repo (`agent-orchestration-sources`, same layout:
   `transcripts/<vendor>/releases/<model-id>.html` plus the cleaned
   `transcripts/txt/<model-id>.txt`) and cite the public video with a
-  timestamp instead. Web research goes straight into the digest under
-  `research/`.
+  timestamp instead. That repo is not public; outside contributors skip
+  this step and cite the video directly. Web research goes straight into
+  the digest under `research/`.
 - [ ] Verify every price against the vendor's pricing page. Write the fetch
   date next to the number. Speakers misread prices, and captions mishear them.
 - [ ] Read timestamps from the transcript. Never estimate one. If a quote has

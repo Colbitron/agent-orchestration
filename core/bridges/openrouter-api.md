@@ -18,7 +18,6 @@ Nothing to install: `curl` and `jq`.
 ```sh
 command -v curl >/dev/null && command -v jq >/dev/null && [ -n "$OPENROUTER_API_KEY" ]
 ```
-Unset on this machine on 2026-10-02.
 
 ## One-shot, read-only
 ```sh

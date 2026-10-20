@@ -16,8 +16,8 @@ as_of: 2026-10-02
 ```sh
 command -v grok >/dev/null 2>&1 && { [ -n "$XAI_API_KEY" ] || [ -s "$HOME/.grok/auth.json" ]; }
 ```
-There is no login-status subcommand in 1.0.0. On 2026-10-02 this machine had neither
-`XAI_API_KEY` nor `~/.grok/auth.json`, so the bridge is **not live** until `grok login`.
+There is no login-status subcommand in 1.0.0. Without `XAI_API_KEY` or `~/.grok/auth.json`
+the bridge is **not live** until `grok login`.
 
 ## One-shot, read-only
 ```sh

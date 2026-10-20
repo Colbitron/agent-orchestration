@@ -4,7 +4,7 @@ harness: antigravity
 binary: agy
 reaches: [gemini-3-8-flash]      # the gemini-3-8-flash profile lists only gemini-cli in invoke_via so far
 auth: "Google sign-in (free / AI Pro / Ultra; OS keyring, browser over SSH), or GEMINI_API_KEY with \"modelProvider\": \"gemini\" in ~/.gemini/antigravity-cli/settings.json [2nd]"
-verified: docs                   # agy is not installed on this machine; some flags are from a secondary source
+verified: docs                   # not tested against an install; some flags are from a secondary source
 as_of: 2026-10-02
 ---
 Antigravity CLI is Google's closed-source successor to Gemini CLI (released 2026-05-19). It is
@@ -12,7 +12,7 @@ the path for consumer Google plans after 2026-06-18. It is the only harness with
 wall clock, `--print-timeout`, and its **default is 5m**: always raise it.
 
 ## Install
-`curl -fsSL https://antigravity.google/cli/install.sh | bash`; self-updates. Not installed here.
+`curl -fsSL https://antigravity.google/cli/install.sh | bash`; self-updates. Not tested against an install.
 
 ## Detect
 ```sh

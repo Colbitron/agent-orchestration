@@ -4,7 +4,7 @@ harness: opencode
 binary: opencode
 reaches: [qwen3-8-27b, gpt-oss-20b]   # `-m ollama/qwen3.8` or `ollama launch opencode --model gpt-oss` locally, OpenRouter hosted; also any provider/model it has auth for
 auth: "opencode auth login (API keys, ChatGPT Plus/Pro, GitHub Copilot, GitLab Duo, OpenCode Zen/Go) or provider env vars. NOT Claude Pro/Max"
-verified: docs                   # opencode is not installed on this machine
+verified: docs                   # not tested against an install
 as_of: 2026-10-02
 ---
 Use OpenCode to reach open-weights models (OpenRouter, Together, Groq, Fireworks, Cerebras,
@@ -15,7 +15,7 @@ API key; prefer `claude-cli` for Claude.
 
 ## Install
 `curl -fsSL https://opencode.ai/install | bash`, `npm install -g opencode-ai`, or
-`brew install anomalyco/tap/opencode`. Not installed here.
+`brew install anomalyco/tap/opencode`. Not tested against an install.
 
 ## Detect
 ```sh

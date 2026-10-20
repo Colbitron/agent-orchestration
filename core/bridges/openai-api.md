@@ -11,13 +11,12 @@ For bulk, cheap fan-out with programmatic verification (Luna: about $0.10 / $0.5
 The callee sees only the text you send: no files, no shell, no repo. Inline everything.
 
 ## Install
-Nothing to install: `curl` and `jq` (`/opt/homebrew/bin/jq` here).
+Nothing to install beyond `curl` and `jq`.
 
 ## Detect
 ```sh
 command -v curl >/dev/null && command -v jq >/dev/null && [ -n "$OPENAI_API_KEY" ]
 ```
-Unset on this machine on 2026-10-02.
 
 ## One-shot, read-only
 ```sh

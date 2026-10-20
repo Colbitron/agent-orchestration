@@ -4,7 +4,7 @@ harness: cursor
 binary: agent                    # AMBIGUOUS: Grok Build also installs `agent`. Call Cursor by absolute path ($CURSOR_AGENT)
 reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, gpt-6-astra, gpt-6-1-sol, gpt-6-luna, gemini-3-8-flash, grok-4-7]
 auth: "agent login (Cursor account/plan) or CURSOR_API_KEY / --api-key"
-verified: docs                   # Cursor CLI is not installed on this machine
+verified: docs                   # not tested against an install
 as_of: 2026-10-02
 ---
 `reaches` lists profiles whose `access.harnesses` include `cursor`; none of them list
@@ -12,7 +12,7 @@ as_of: 2026-10-02
 and 6.1 Sol access in Cursor is reportedly revoked (see those profiles).
 
 ## Install
-`curl https://cursor.com/install -fsS | bash`; auto-updates, or `agent update`. Not installed here.
+`curl https://cursor.com/install -fsS | bash`; auto-updates, or `agent update`. Not tested against an install.
 
 ## Detect
 Find an `agent` that is not Grok's, and export it for the templates:
@@ -84,9 +84,9 @@ Expected (docs, not run): `OK`, exit 0. JSON shape per docs:
 `{type:"result", subtype, is_error, duration_ms, duration_api_ms, result, session_id, request_id?}`.
 
 ## Gotchas
-- **PATH collision.** Grok Build installs `~/.grok/bin/agent -> grok`. On this machine both
-  `agent` entries on PATH (`~/.grok/bin/agent`, `~/.local/bin/agent -> ~/.grok/bin/agent`) are
-  Grok, and `agent --version` prints `grok 1.0.0 ...`. Never call bare `agent`; use the absolute
+- **PATH collision.** Grok Build installs `~/.grok/bin/agent -> grok`. With Grok Build
+  installed, every `agent` on PATH can be Grok (for example `~/.grok/bin/agent` and a
+  `~/.local/bin/agent -> ~/.grok/bin/agent` link), and `agent --version` then prints `grok ...`. Never call bare `agent`; use the absolute
   path found by Detect. Cursor's installer location, and whether it would overwrite the
   existing `~/.local/bin/agent` symlink: UNVERIFIED. Whether a `cursor-agent` alias still
   exists: UNVERIFIED.

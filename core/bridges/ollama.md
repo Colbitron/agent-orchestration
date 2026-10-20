@@ -1,7 +1,7 @@
 ---
 id: ollama
 harness: none                    # local HTTP server, one-shot chat completion, no tools
-binary: curl                     # plus jq; server is `ollama` (installed here: /usr/local/bin/ollama 0.35.1)
+binary: curl                     # plus jq; server is `ollama` (probed against 0.35.1)
 reaches: [qwen3-8-27b, gpt-oss-20b]   # local open-weights models with a core/models profile (tags "qwen3.8:27b", "gpt-oss:20b")
 auth: "none (local server on 127.0.0.1:11434; override with OLLAMA_HOST)"
 verified: local                  # endpoints probed 2026-10-02 (error shape only); no model pulled, so no completion run

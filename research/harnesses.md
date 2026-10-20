@@ -1,23 +1,23 @@
 # Coding-Agent Harnesses: Conventions, Headless CLIs, and a Bridge Matrix
 
-Research date: **2026-10-02**; §9 (OpenClaw) and §10 (Hermes Agent) added **2026-10-19**. Official docs were used first. Secondary sources are labelled. Where docs and the installed binary disagree, the installed binary wins.
+Research date: **2026-10-02**; §9 (OpenClaw) and §10 (Hermes Agent) added **2026-10-19**. Official docs were used first. Secondary sources are labelled. Where docs and a real install disagree, the install wins.
 
 **Verification levels used below**
 
-- **[local]**: checked against `--help` or files on this machine (`claude 2.1.288`, `codex-cli 0.160.0`, `grok 1.0.0`, plus `~/.grok/README.md` shipped with Grok Build).
+- **[cli]**: checked against a real install's `--help` output or the files it ships (tested versions: `claude 2.1.288`, `codex-cli 0.160.0`, `grok 1.0.0`, plus the `~/.grok/README.md` that Grok Build installs).
 - **[docs]**: official documentation (URL given in the section).
 - **[2nd]**: secondary source (blog or third-party guide). Treat as likely, not exact.
 - **UNVERIFIED**: could not confirm. Do not hard-code without testing.
 
-Not installed here: `gemini`, `agy`, `opencode`, Cursor's `agent`, `pi`, `hermes`. Their flags come from docs only. `openclaw` is not on PATH either, but a `~/.openclaw` state dir from version 2026.3.9 (March 2026) is, so §9 has a few `[local]` reconciliations against that older build.
+Not tested against an install: `gemini`, `agy`, `opencode`, Cursor's `agent`, `pi`, `hermes`, `openclaw`. Their flags come from docs only. §9 also notes a few things seen in the state dir of an older OpenClaw release (2026.3.9, March 2026).
 
 ---
 
 ## 0. Headline findings (read first)
 
 1. **Gemini CLI is being retired for consumers.** On **2026-06-18** Google moved free, AI Pro and AI Ultra users to the new closed-source **Antigravity CLI (`agy`)**. Legacy `gemini` still works only with paid Gemini API keys, Vertex AI or Gemini Code Assist Standard/Enterprise. Both get adapter rows below (§4 and §4b).
-2. **`agent` is ambiguous on PATH.** Cursor's CLI installs as `agent`. Grok Build *also* installs an `agent` symlink (`~/.grok/bin/agent -> grok binary`) [local]. On this machine `which agent` resolves to **Grok**. Adapters must call Cursor by absolute path or check `agent --version` first.
-3. **macOS has no `timeout` command.** On this machine both `timeout` and `gtimeout` are missing [local]. Of the eight CLIs, only Antigravity has a wall-clock timeout flag (`--print-timeout`, **default 5m**). The bridge needs its own wrapper (see §C.2).
+2. **`agent` is ambiguous on PATH.** Cursor's CLI installs as `agent`. Grok Build *also* installs an `agent` symlink (`~/.grok/bin/agent -> grok binary`) [cli]. With both installed, `which agent` can resolve to **Grok**, depending on PATH order. Adapters must call Cursor by absolute path or check `agent --version` first.
+3. **macOS has no `timeout` command.** Stock macOS ships neither `timeout` nor `gtimeout` (`gtimeout` comes with Homebrew's coreutils). Of the eight CLIs, only Antigravity has a wall-clock timeout flag (`--print-timeout`, **default 5m**). The bridge needs its own wrapper (see §C.2).
 4. **Codex computer use runs only in the desktop app.** In July 2026 the Codex desktop app was merged into the ChatGPT desktop app. Docs say computer use is "available exclusively in the ChatGPT desktop application". **No documented way to trigger it from `codex` / `codex exec`.**
 5. **Agent Skills (`SKILL.md`) is the de facto cross-harness format.** Codex, Cursor, Gemini CLI, Antigravity, OpenCode, Pi and Grok Build all read it. Claude Code reads it from `.claude/skills/`. The paths differ: `.agents/skills/` is the shared path, but **Claude Code does not document reading `.agents/skills/`**. Several harnesses read `.claude/skills/` for compatibility (Cursor, OpenCode, Grok).
 6. **T3 Code ships its own cross-provider delegation MCP server** (`t3-code`, tool `delegate_task`). When the orchestrator runs inside T3 Code, it can delegate to another provider without shelling out (§8).
@@ -125,7 +125,7 @@ Sources:
 - `/etc/codex/skills`
 - bundled system skills
 
-Invocation: `$skill-name` or `/skills`, or implicitly. Optional `agents/openai.yaml` sets UI metadata and `allow_implicit_invocation: false`. On name conflicts both copies stay (no merge). The legacy `~/.codex/skills/` exists on this machine [local], but docs no longer list it.
+Invocation: `$skill-name` or `/skills`, or implicitly. Optional `agents/openai.yaml` sets UI metadata and `allow_implicit_invocation: false`. On name conflicts both copies stay (no merge). Older installs may still have the legacy `~/.codex/skills/`, but docs no longer list it.
 
 **(3) Subagents.** TOML files, one agent per file, in `~/.codex/agents/` or `.codex/agents/`. Required: `name`, `description`, `developer_instructions`. Optional (any `config.toml` key works): `model`, `model_reasoning_effort`, `sandbox_mode`, `mcp_servers`, `skills.config`. The `[agents]` table in config holds `enabled`, `max_concurrent_threads_per_session`, `default_subagent_model`, `default_subagent_reasoning_effort`. Built-ins `default`, `worker`, `explorer` can be overridden by name [docs].
 
@@ -147,8 +147,8 @@ Handlers are `command` or `mcp_tool`. Hooks are on by default (`[features] hooks
 | Need | Flag (exact) |
 |---|---|
 | One-shot | `codex exec "<prompt>"`. Prompt from arg, or stdin if omitted / `-`. Piped stdin plus an arg gets appended as a `<stdin>` block |
-| Model | `-m, --model <MODEL>` (also `-c model="..."`). IDs in the local models cache: `gpt-6.1-sol`, `gpt-6-astra`, `gpt-6-sol`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-5.5` [local] |
-| Effort | **No dedicated flag.** Use `-c model_reasoning_effort="high"`. Values: `low\|medium\|high\|xhigh\|max\|ultra`, depending on the model. Locally, `ultra` is supported on gpt-6.1-sol, gpt-6-astra, gpt-6-sol, gpt-5.6-sol and gpt-5.6-terra; gpt-5.5 tops out at `xhigh` [local] |
+| Model | `-m, --model <MODEL>` (also `-c model="..."`). IDs in the CLI's models cache: `gpt-6.1-sol`, `gpt-6-astra`, `gpt-6-sol`, `gpt-6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-5.5` [cli] |
+| Effort | **No dedicated flag.** Use `-c model_reasoning_effort="high"`. Values: `low\|medium\|high\|xhigh\|max\|ultra`, depending on the model. In codex-cli 0.160.0, `ultra` is supported on gpt-6.1-sol, gpt-6-astra, gpt-6-sol, gpt-5.6-sol and gpt-5.6-terra; gpt-5.5 tops out at `xhigh` [cli] |
 | Read-only | **Default for `exec` is a read-only sandbox** [docs]. Explicit: `-s read-only` / `--sandbox read-only` |
 | Allow edits | `--sandbox workspace-write`. **`--full-auto` is deprecated (prints a warning) and absent from 0.160.0 `--help`** [docs + local]. `--dangerously-bypass-approvals-and-sandbox` for full access |
 | Output | Default: progress on **stderr**, final message on **stdout**. `--json` gives JSONL events (`thread.started`, `turn.started`, `turn.completed`, `turn.failed`, `item.started`, `item.completed`, `error`). `-o, --output-last-message <FILE>`. `--output-schema <FILE>` for structured output |
@@ -158,7 +158,7 @@ Handlers are `command` or `mcp_tool`. Hooks are on by default (`[features] hooks
 | Local / open models | `--oss [--local-provider lmstudio\|ollama]` |
 | Resume | `codex exec resume [SESSION_ID] \| --last` |
 
-**`codex review` exists** [local]: `codex review [--uncommitted | --base <BRANCH> | --commit <SHA>] [--title T] [PROMPT|-]`. There is also a `codex exec review` subcommand. `codex review --help` shows **no `-m`, `--sandbox` or `--json`**. Use `-c model="..."` / `-c model_reasoning_effort="..."`. Its output format and sandbox defaults are UNVERIFIED.
+**`codex review` exists** [cli]: `codex review [--uncommitted | --base <BRANCH> | --commit <SHA>] [--title T] [PROMPT|-]`. There is also a `codex exec review` subcommand. `codex review --help` shows **no `-m`, `--sandbox` or `--json`**. Use `-c model="..."` / `-c model_reasoning_effort="..."`. Its output format and sandbox defaults are UNVERIFIED.
 
 **Timeouts.** No wall-clock flag. `stream_idle_timeout_ms` defaults to 300000 and `request_max_retries` to 4 [docs]. MCP servers marked `required = true` abort `exec` if they fail to start.
 
@@ -171,7 +171,7 @@ Handlers are `command` or `mcp_tool`. Hooks are on by default (`[features] hooks
 - On **2026-07-09** the standalone Codex desktop app was merged into the **ChatGPT desktop app**, which has Chat, Work and Codex modes. It reached macOS first, then Windows [2nd: Neowin, Addigy, danielvaughan.com].
 - `codex app` "Launch[es] the Desktop app". A secondary source reports it looked for `Codex.app` after the merge and reinstalled a duplicate (issue #32631). The workaround was `open -a ChatGPT .` [2nd].
 - **Computer use** is a plugin ("Computer Use": an MCP server plus a skill) in the ChatGPT desktop app, on macOS (Screen Recording and Accessibility permissions) and Windows. Docs say it is available "exclusively in the ChatGPT desktop application". It "can't automate terminal apps or ChatGPT itself".
-- **No documented CLI/`exec` trigger.** `codex features list` shows `computer_use stable true` and `browser_use stable true` [local], but whether the CLI exposes that tool is **UNVERIFIED**.
+- **No documented CLI/`exec` trigger.** `codex features list` shows `computer_use stable true` and `browser_use stable true` [cli], but whether the CLI exposes that tool is **UNVERIFIED**.
 - `codex app-server` / `codex remote-control` (experimental) are the likely bridges, also **UNVERIFIED**.
 
 **(8) Install.**
@@ -486,15 +486,15 @@ Sources:
 
 ## 7. Grok Build (xAI / "SpaceXAI")
 
-**Identification.** "GrokBuild" is **Grok Build**, xAI's terminal coding agent and harness. Binary `grok`; source `github.com/xai-org/grok-build`, Apache-2.0, Rust. It has a TUI, a headless mode, and ACP (`grok agent stdio`). Installed here as v1.0.0 [local].
+**Identification.** "GrokBuild" is **Grok Build**, xAI's terminal coding agent and harness. Binary `grok`; source `github.com/xai-org/grok-build`, Apache-2.0, Rust. It has a TUI, a headless mode, and ACP (`grok agent stdio`). Checked against v1.0.0 [cli].
 
 Sources:
 - https://docs.x.ai/build/overview
 - https://docs.x.ai/build/cli/headless-scripting
 - https://github.com/xai-org/grok-build
-- The shipped README `~/.grok/README.md` [local], which is the most detailed source
+- The README the installer ships at `~/.grok/README.md` [cli], which is the most detailed source
 
-**(1) Instructions.** Global rules live in `~/.grok/`. Then, inside a git repo, every directory from the repo root to cwd is scanned; outside a repo, only cwd. In each directory Grok looks for `Agents.md`, `Claude.md`, `AGENT.md`, `AGENTS.md`. Deeper files come later and win. Gitignored files are skipped. Each file is capped at **10,000 chars**. `--rules "<text>"` appends more. **It also loads `CLAUDE.md` and `.claude/CLAUDE.md`** via Claude compatibility [local README].
+**(1) Instructions.** Global rules live in `~/.grok/`. Then, inside a git repo, every directory from the repo root to cwd is scanned; outside a repo, only cwd. In each directory Grok looks for `Agents.md`, `Claude.md`, `AGENT.md`, `AGENTS.md`. Deeper files come later and win. Gitignored files are skipped. Each file is capped at **10,000 chars**. `--rules "<text>"` appends more. **It also loads `CLAUDE.md` and `.claude/CLAUDE.md`** via Claude compatibility [cli README].
 
 **(2) Skills.** Priority order:
 1. `./.grok/skills/`
@@ -502,13 +502,13 @@ Sources:
 3. `~/.grok/skills/`
 4. `~/.claude/skills/` (and `.claude/skills/`)
 
-Extra dirs via `[skills] paths/ignore`. Frontmatter requires `name` and `description`. `/skills`, `/skill-name`. `grok inspect` lists discovered skills; here it found 57, including all of `~/.claude/skills` and the Claude plugin skills [local].
+Extra dirs via `[skills] paths/ignore`. Frontmatter requires `name` and `description`. `/skills`, `/skill-name`. `grok inspect` lists discovered skills, and its list includes everything in `~/.claude/skills` plus installed Claude Code plugin skills [cli].
 
 **(3) Subagents and agent profiles.**
 - Agent profiles: `.md` with YAML in `.grok/agents/` or `~/.grok/agents/`, plus **`.claude/agents/`** and `~/.claude/agents/`. Select with `--agent <NAME|path>` / `--agent-profile`, `[agent]` in config, or `GROK_AGENT`.
 - Subagents are on by default. `[subagents.toggle]` enables/disables types. `[subagents.models] explore = "<model>"` gives per-agent model pins (precedence: `[subagents.models]` > the definition's `model` > the parent's model).
 - `[subagents.roles.<name>]` holds `default_capability_mode`, `model`, `prompt_file`. Personas also exist.
-- Inline definitions: `--agents '<json>'`. Disable with `--no-subagents` or `--disallowed-tools Agent` [local].
+- Inline definitions: `--agents '<json>'`. Disable with `--no-subagents` or `--disallowed-tools Agent` [cli].
 
 **(4) Commands.** Built-in slash commands, plus skills as `/name`. Claude plugin `commands/` are discovered too [local README].
 
@@ -530,7 +530,7 @@ Extra dirs via `[skills] paths/ignore`. Frontmatter requires `name` and `descrip
 | Need | Flag (exact) |
 |---|---|
 | One-shot | `grok -p "<prompt>"` (`-p, --single`). Also `--prompt-file <PATH>`, `--prompt-json <JSON>`. Piped stdin works (`git diff \| grok -p ...`) |
-| Model | `-m, --model <MODEL>`. `grok models` lists them (here: `grok-4.5` default, CLI v1.0.0). Docs mention `grok-build` and `grok-4.7` as model names; check with `grok models` |
+| Model | `-m, --model <MODEL>`. `grok models` lists them (`grok-4.5` was the default in CLI v1.0.0). Docs mention `grok-build` and `grok-4.7` as model names; check with `grok models` |
 | Effort | `--reasoning-effort <EFFORT>` (alias `--effort`). Values: `none\|minimal\|low\|medium\|high\|xhigh\|max`, plus per-model ids like `deep` |
 | Output | `--output-format plain\|json\|streaming-json\|streaming-messages-json`. JSON gives `{text, stopReason, sessionId, requestId}`. `--json-schema '<schema>'` implies json |
 | Read-only | `--sandbox read-only` (OS-level Seatbelt/Landlock: writes only to `~/.grok/`, child network blocked). And/or `--tools read_file,grep,list_dir`. `--permission-mode plan` also exists |
@@ -553,7 +553,7 @@ Extra dirs via `[skills] paths/ignore`. Frontmatter requires `name` and `descrip
 - `curl -fsSL https://x.ai/cli/install.sh | bash` (Windows: `irm https://x.ai/cli/install.ps1 | iex`)
 - [2nd] `npm install -g @xai-official/grok`
 - Update with `grok update`
-- **Installs both `grok` and `agent` into `~/.grok/bin`** [local]
+- **Installs both `grok` and `agent` into `~/.grok/bin`** [cli]
 
 ---
 
@@ -654,18 +654,18 @@ Sources:
 
 **Timeouts.** `--timeout <seconds>` on `openclaw agent` and `openclaw agent exec`, default 600 s per model attempt, `0` disables, each fallback gets a fresh budget `[docs]` https://docs.openclaw.ai/cli/agent. Ordinary Gateway turns use `agents.defaults.timeoutSeconds` (unset = 48 h per attempt, `0` unlimited) `[docs]` https://docs.openclaw.ai/gateway/config-agents/models. Exec tool: `tools.exec.timeoutSeconds` default 1800 s; per call `timeoutSeconds: 0` disables `[docs]` https://docs.openclaw.ai/tools/exec. Sub-agents: `agents.defaults.subagents.runTimeoutSeconds` default 0 `[docs]`. ACP: `timeoutSeconds` default 120 for startup/control; `/acp timeout <s>` per session `[docs]`. Exit code 2 on `exec` marks a timeout `[docs]`.
 
-**Auth.** Providers are plugins (Anthropic, OpenAI, Google, Copilot, Ollama, OpenRouter, Bedrock, …) `[docs]` https://docs.openclaw.ai/providers. Credentials: env vars (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`) via process env, `openclaw.json` `env.vars`, `./.env` or `~/.openclaw/.env`, SecretRefs `{source: env|file|exec|store, provider, id}`; `auth.profiles.<id>` {`provider`, `mode: api_key|oauth`} and `auth.order.<provider>[]` in `openclaw.json` `[docs]` https://docs.openclaw.ai/gateway/config-secrets-env. Stored credentials now live in SQLite (`~/.openclaw/state/openclaw.sqlite`, per-agent `~/.openclaw/agents/<id>/agent/openclaw-agent.sqlite`); older `auth-profiles.json`/`credentials/oauth.json` are migrated by `openclaw doctor --fix` `[docs]` https://docs.openclaw.ai/concepts/oauth. Profile ids are `provider:name` (`anthropic:default`); `openai-codex:*` is a **legacy** prefix, use `--provider openai` `[docs]` oauth + openai/authentication pages. Commands: `openclaw onboard [--anthropic-api-key …]`, `openclaw models auth login --provider <id> [--method oauth|device-code|siwc|api-key|setup-token] [--agent <id>] [--profile-id <id>]`, `paste-api-key`, `paste-token`, `setup-token`; `openclaw models status [--json] [--check] [--probe]` (exit 0 ok / 1 missing-expired / 2 expiring), `openclaw models list --provider anthropic`, `openclaw models set <provider/model>` `[docs]` https://docs.openclaw.ai/cli/models. Anthropic `[docs]` https://docs.openclaw.ai/providers/anthropic: API key, or **Claude CLI** reuse (set `agentRuntime: { id: "claude-cli" }` on the model; OpenClaw shells out to `claude` and never reads its tokens), or `claude setup-token` → `openclaw models auth login --provider anthropic --method setup-token`. Vendor note on that page: Anthropic treats third-party/`claude -p` usage as programmatic, subscription usage draws from the subscription's limits, the Agent SDK credit plan was paused 2026-06-15, and the docs recommend an API key for shared/production automation. The `[local]` `auth.profiles` key and workspace `.secrets` file: the former matches docs; `.secrets` is undocumented (UNVERIFIED).
+**Auth.** Providers are plugins (Anthropic, OpenAI, Google, Copilot, Ollama, OpenRouter, Bedrock, …) `[docs]` https://docs.openclaw.ai/providers. Credentials: env vars (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`) via process env, `openclaw.json` `env.vars`, `./.env` or `~/.openclaw/.env`, SecretRefs `{source: env|file|exec|store, provider, id}`; `auth.profiles.<id>` {`provider`, `mode: api_key|oauth`} and `auth.order.<provider>[]` in `openclaw.json` `[docs]` https://docs.openclaw.ai/gateway/config-secrets-env. Stored credentials now live in SQLite (`~/.openclaw/state/openclaw.sqlite`, per-agent `~/.openclaw/agents/<id>/agent/openclaw-agent.sqlite`); older `auth-profiles.json`/`credentials/oauth.json` are migrated by `openclaw doctor --fix` `[docs]` https://docs.openclaw.ai/concepts/oauth. Profile ids are `provider:name` (`anthropic:default`); `openai-codex:*` is a **legacy** prefix, use `--provider openai` `[docs]` oauth + openai/authentication pages. Commands: `openclaw onboard [--anthropic-api-key …]`, `openclaw models auth login --provider <id> [--method oauth|device-code|siwc|api-key|setup-token] [--agent <id>] [--profile-id <id>]`, `paste-api-key`, `paste-token`, `setup-token`; `openclaw models status [--json] [--check] [--probe]` (exit 0 ok / 1 missing-expired / 2 expiring), `openclaw models list --provider anthropic`, `openclaw models set <provider/model>` `[docs]` https://docs.openclaw.ai/cli/models. Anthropic `[docs]` https://docs.openclaw.ai/providers/anthropic: API key, or **Claude CLI** reuse (set `agentRuntime: { id: "claude-cli" }` on the model; OpenClaw shells out to `claude` and never reads its tokens), or `claude setup-token` → `openclaw models auth login --provider anthropic --method setup-token`. Vendor note on that page: Anthropic treats third-party/`claude -p` usage as programmatic, subscription usage draws from the subscription's limits, the Agent SDK credit plan was paused 2026-06-15, and the docs recommend an API key for shared/production automation. An older (2026.3.9) state dir also had an `auth.profiles` key, which matches docs, and a workspace `.secrets` file, which is undocumented (UNVERIFIED).
 
-**(8) Install.** `[docs]` https://docs.openclaw.ai/install: `curl -fsSL https://openclaw.ai/install.sh | bash` (add `--no-onboard`; `--install-method git --version main` for main), `curl -fsSL https://openclaw.ai/install-cli.sh | bash` (prefix install under `~/.openclaw`), `npm install -g openclaw@latest --allow-scripts=openclaw` (drop the flag on npm ≤ 11.15), `pnpm add -g --allow-build=openclaw openclaw@latest`, `bun add -g --trust openclaw@latest`. Node 24.16+ or 26.1+ (26 recommended). Then `openclaw onboard --install-daemon`, `openclaw doctor`, `openclaw gateway status`. Service: `openclaw gateway install [--force]` (LaunchAgent on macOS, systemd user unit on Linux, Scheduled Task on Windows); `openclaw daemon …` is a legacy alias `[docs]` https://docs.openclaw.ai/cli/gateway. Update: `openclaw update [--channel beta|extended-stable|dev] [--dry-run] [--json]`, then `openclaw doctor --fix` and `openclaw gateway restart`; installs older than July 2026 must step through `2026.9.5` first `[docs]` https://docs.openclaw.ai/install/updating (relevant to the `[local]` 2026.3.9 machine). Docker: `ghcr.io/openclaw/openclaw:latest` (mirror `openclaw/openclaw`; tags `main`, `extended-stable`, `<version>`, `-slim`, `-browser`), state volume `/home/node/.openclaw`, `./scripts/docker/setup.sh` + `docker compose up -d openclaw-gateway` `[docs]` https://docs.openclaw.ai/install/docker. macOS menu-bar app: DMGs on GitHub releases (`OpenClaw-2026.10.3-arm64.dmg`), needs macOS 26.2+, bundles a Gateway runtime; no Homebrew cask documented `[docs]` https://docs.openclaw.ai/platforms/macos.
+**(8) Install.** `[docs]` https://docs.openclaw.ai/install: `curl -fsSL https://openclaw.ai/install.sh | bash` (add `--no-onboard`; `--install-method git --version main` for main), `curl -fsSL https://openclaw.ai/install-cli.sh | bash` (prefix install under `~/.openclaw`), `npm install -g openclaw@latest --allow-scripts=openclaw` (drop the flag on npm ≤ 11.15), `pnpm add -g --allow-build=openclaw openclaw@latest`, `bun add -g --trust openclaw@latest`. Node 24.16+ or 26.1+ (26 recommended). Then `openclaw onboard --install-daemon`, `openclaw doctor`, `openclaw gateway status`. Service: `openclaw gateway install [--force]` (LaunchAgent on macOS, systemd user unit on Linux, Scheduled Task on Windows); `openclaw daemon …` is a legacy alias `[docs]` https://docs.openclaw.ai/cli/gateway. Update: `openclaw update [--channel beta|extended-stable|dev] [--dry-run] [--json]`, then `openclaw doctor --fix` and `openclaw gateway restart`; installs older than July 2026 must step through `2026.9.5` first `[docs]` https://docs.openclaw.ai/install/updating (so a 2026.3.9 install cannot jump straight to current). Docker: `ghcr.io/openclaw/openclaw:latest` (mirror `openclaw/openclaw`; tags `main`, `extended-stable`, `<version>`, `-slim`, `-browser`), state volume `/home/node/.openclaw`, `./scripts/docker/setup.sh` + `docker compose up -d openclaw-gateway` `[docs]` https://docs.openclaw.ai/install/docker. macOS menu-bar app: DMGs on GitHub releases (`OpenClaw-2026.10.3-arm64.dmg`), needs macOS 26.2+, bundles a Gateway runtime; no Homebrew cask documented `[docs]` https://docs.openclaw.ai/platforms/macos.
 
 **Exit codes.** `openclaw agent`: 0 completed; 1 error, timeout or cancellation; 130/143 on SIGINT/SIGTERM `[docs]`. `openclaw agent exec`: 0 success; 1 model/result error (also cleanup failure after success); 2 timeout; 130 SIGINT; 143 SIGTERM `[docs]` https://docs.openclaw.ai/cli/agent. `openclaw models status --check`: 0/1/2 as above `[docs]` cli/models.
 
 **Open questions** (not confirmed on 2026-10-19; do not hard-code):
-- Whether `openclaw agent exec` existed in v2026.3.9: the live cli/agent page is undated; the `[local]` binary is not on PATH so `openclaw agent exec --help` could not be run. Treat the bridge row as valid for ≥ 2026.10 only until tested.
-- `agents.defaults.sandbox.mode` full value list: docs show `non-main` (gateway/sandboxing) and `off`/`all` (multi-agent page) but no page lists all values with a default; `[local]` has `sandbox.mode` set so the key exists.
+- Whether `openclaw agent exec` existed in v2026.3.9: the live cli/agent page is undated and `openclaw agent exec --help` was not run against an install. Treat the bridge row as valid for ≥ 2026.10 only until tested.
+- `agents.defaults.sandbox.mode` full value list: docs show `non-main` (gateway/sandboxing) and `off`/`all` (multi-agent page) but no page lists all values with a default; an older (2026.3.9) config had `sandbox.mode` set, so the key exists.
 - RESOLVED: `agents.defaults.subagents.thinking` exists. Sub-agents inherit the caller's thinking level "unless you set `agents.defaults.subagents.thinking` (or per-agent `agents.entries.*.subagents.thinking`)" `[docs]` https://docs.openclaw.ai/tools/subagents/tool-reference. `agents.defaults.maxConcurrent` default is `max(8, CPU parallelism*4)` `[docs]` config-agents/models.
-- `pi` as an ACP harness id: present in `[local]` `acp.allowedAgents` but not on current ACP docs (Claude Code, Cursor, Copilot, Droid, OpenCode, Gemini CLI, Codex). The embedded runtime id is `openclaw`; agent-runtimes page mentions "PI" only in comparison.
-- `subagents/runs.json`, `memory/main.sqlite`, `exec-approvals.json`, workspace `.secrets`: present `[local]` but current docs describe SQLite replacements (`state/openclaw.sqlite`, per-agent `openclaw-agent.sqlite`; `exec-approvals.json` is imported as legacy by `doctor --fix`). `.secrets` not found in any fetched page.
+- `pi` as an ACP harness id: present in an older (2026.3.9) `acp.allowedAgents` but not on current ACP docs (Claude Code, Cursor, Copilot, Droid, OpenCode, Gemini CLI, Codex). The embedded runtime id is `openclaw`; agent-runtimes page mentions "PI" only in comparison.
+- `subagents/runs.json`, `memory/main.sqlite`, `exec-approvals.json`, workspace `.secrets`: present in an older (2026.3.9) state dir but current docs describe SQLite replacements (`state/openclaw.sqlite`, per-agent `openclaw-agent.sqlite`; `exec-approvals.json` is imported as legacy by `doctor --fix`). `.secrets` not found in any fetched page.
 - `--message`/`-m` on `agent exec`: the page lists a positional `[message]` and `--message-file`; whether `-m` is accepted there is unconfirmed.
 - Thinking level set: docs say "provider/runtime-supported levels such as xhigh, adaptive, max, ultra"; no authoritative closed list found (searched cli/agent, concepts/models, config-agents/models).
 - Read-only via `--config-override` tool deny: syntax of `--config-override` is documented, and tool deny semantics are documented, but no doc shows them combined; still not run.

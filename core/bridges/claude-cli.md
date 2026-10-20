@@ -17,7 +17,7 @@ Verified against `2.1.288 (Claude Code)`.
 command -v claude >/dev/null 2>&1 && \
   { claude auth status 2>/dev/null | jq -e '.loggedIn == true' >/dev/null || [ -n "$ANTHROPIC_API_KEY" ]; }
 ```
-`claude auth status` prints JSON: `loggedIn`, `authMethod` (`claude.ai` here), `apiProvider`, `subscriptionType`.
+`claude auth status` prints JSON: `loggedIn`, `authMethod` (`claude.ai` for a subscription login), `apiProvider`, `subscriptionType`.
 
 ## One-shot, read-only
 No `--cwd` flag: `cd` first. Answer is `.result` of a single JSON object on stdout.

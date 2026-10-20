@@ -5,7 +5,7 @@ binary: hermes                   # ~/.local/bin/hermes (checkout in ~/.hermes/he
 reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, gpt-6-astra, gpt-6-1-sol, gpt-6-luna, gemini-3-8-flash, grok-4-7, qwen3-8-27b, gpt-oss-20b, deepseek-v4-1-flash, mimo-v2-6-pro, glm-5-3]   # providers: anthropic, openai-api, openai-codex (ChatGPT OAuth), gemini, xai, openrouter, custom (Ollama/vLLM/LM Studio), plus Nous Portal models that have no kit profile. Which exact models each provider exposes is unverified
 auth: "keys in ~/.hermes/.env (ANTHROPIC_API_KEY, OPENAI_API_KEY, OPENROUTER_API_KEY, XAI_API_KEY, ...; `hermes config set OPENROUTER_API_KEY sk-...` writes them), OAuth via `hermes model` or `hermes auth add <provider>`. Claude Pro cannot use the Anthropic OAuth path and Claude Max draws only on extra-usage credits through it; use ANTHROPIC_API_KEY for Claude"
 api_key_only: [anthropic]        # Claude Pro cannot use the Anthropic OAuth path; Max draws only extra-usage credits (auth above)
-verified: docs                   # plus source: hermes-agent.nousresearch.com docs (reference/cli-commands, user-guide/cli, security, configuration) and hermes_cli/_parser.py, oneshot.py on main, read 2026-10-19 (v0.22.x); hermes is not installed on this machine, nothing below has been run
+verified: docs                   # plus source: hermes-agent.nousresearch.com docs (reference/cli-commands, user-guide/cli, security, configuration) and hermes_cli/_parser.py, oneshot.py on main, read 2026-10-19 (v0.22.x); not tested against an install, nothing below has been run
 as_of: 2026-10-19
 ---
 Hermes Agent (Nous Research) is a Python assistant runtime: terminal agent, messaging
@@ -21,7 +21,7 @@ denied by default). There is **no read-only file toolset**: `file` includes `wri
 `curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash` (provisions its own
 Python 3.14; `--non-interactive` skips the setup wizard), reload the shell, then run `hermes`
 or `hermes setup` once and `hermes model` to add a provider. Update with `hermes update`.
-Not installed here.
+Not tested against an install.
 
 ## Detect
 ```sh

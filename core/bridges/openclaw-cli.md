@@ -16,8 +16,8 @@ directory per call. `<D>/AGENTS.md` is injected as project context.
 
 ## Install
 `curl -fsSL https://openclaw.ai/install.sh | bash`, or
-`npm install -g openclaw@latest --allow-scripts=openclaw` (Node 24.16+ or 26.1+; this machine
-has 24.13.1 under nvm, so `nvm install 24` first), then `openclaw onboard` (`--install-daemon`
+`npm install -g openclaw@latest --allow-scripts=openclaw` (Node 24.16+ or 26.1+; with an older
+Node under nvm, run `nvm install 24` first), then `openclaw onboard` (`--install-daemon`
 only if you want the Gateway as a service; the bridge does not need it). Update with
 `openclaw update`; installs older than July 2026 must step through `2026.9.5` first
 (https://docs.openclaw.ai/install/updating). Not on PATH here.

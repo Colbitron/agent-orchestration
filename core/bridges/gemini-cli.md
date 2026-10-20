@@ -4,7 +4,7 @@ harness: gemini-cli
 binary: gemini
 reaches: [gemini-3-8-flash]
 auth: "PAID only since 2026-06-18: GEMINI_API_KEY, or Vertex (GOOGLE_CLOUD_PROJECT + GOOGLE_CLOUD_LOCATION + ADC/GOOGLE_APPLICATION_CREDENTIALS/GOOGLE_API_KEY), or Code Assist Standard/Enterprise"
-verified: docs                   # gemini is not installed on this machine
+verified: docs                   # not tested against an install
 as_of: 2026-10-02
 ---
 Legacy. On 2026-06-18 Google stopped serving free, AI Pro and AI Ultra sign-ins in Gemini
@@ -13,7 +13,7 @@ key or Vertex; a consumer Google login no longer serves requests.
 
 ## Install
 `npm install -g @google/gemini-cli` (or `brew install gemini-cli`, `npx @google/gemini-cli`).
-Not installed here.
+Not tested against an install.
 
 ## Detect
 ```sh
