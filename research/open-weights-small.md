@@ -2,7 +2,7 @@
 
 **As of 2026-10-19.** Web research done on that date; nothing here was run hands-on. Research note on two open-weights models small enough to run on one machine, written for the same purpose as `research/claude-releases.md`: the conclusions, numbers and decision rules this kit uses, not a general review. Unlike the other digests, the sources are written posts, model cards and benchmark pages rather than videos, so citations are `[KEY](url)` with no timestamps. Saved copies of every source live in the private companion repo under `agent-orchestration-sources/articles/qwen/` and `articles/gpt-oss/`, with a header giving title, author, URL, publication date and fetch date, following the same rule as the video transcripts: cite the public page here, keep the copy private.
 
-The user's reference machine for the "does it fit" questions is a MacBook Pro with an Apple M2 Pro and 16 GB of unified memory, Ollama installed. Figures that depend on that machine are marked as such.
+The reference machine for the "does it fit" questions is a common entry-level setup: a MacBook Pro with an Apple M2 Pro and 16 GB of unified memory, running Ollama. Other machines scale from it by memory and bandwidth (the generator does this from `hardware` in config.yaml). Figures that depend on that machine are marked as such.
 
 ## How to read this
 
@@ -128,7 +128,7 @@ Saved copies of every source are under `agent-orchestration-sources/articles/qwe
   - That gives 0.5 GiB at 8K, 1 GiB at 16K, 2 GiB at 32K, 4 GiB at 64K and 16 GiB at 262K. q8_0 roughly halves these and q4_0 roughly quarters them.
   - The Gated DeltaNet state is fixed size: 48 layers × 48 heads × 128 × 128 × 4 bytes ≈ 0.14 GiB.
   - Quesma's "around 2.3 GB per 32k tokens" at F16 matches [QUESMA](https://quesma.com/blog/qwen38-27b-quantizations-benchmarked/). So does Paul Brown's 64K at q4_0 on a 16 GB GPU: "15769 MiB of the card's 16311 MiB" with a 13.27 GB (GiB) UD-IQ4_XS [PAUL](https://www.paulsprogrammingnotes.com/2026/08/running-qwen-3-8-27b-16gb.html).
-- **Does it fit on the user's MacBook Pro (M2 Pro, 16 GB)?**
+- **Does it fit on the reference MacBook Pro (M2 Pro, 16 GB)?**
   - **Budget:** 16 GiB physical. macOS caps GPU-wired memory at a default of about 75% of RAM. The community note's table gives "~21-24 GB" on a 32 GB machine, i.e. 66-75% [DEVNOTE](https://github.com/ivanopcode/devnote-override-macos-metal-vram-cap). On 16 GB that extrapolates to roughly **10.7 to 12 GiB** usable by Metal (our extrapolation; Apple does not document it). A measured figure agrees: an M2 16 GB Mac mini reports a Metal `recommendedMaxWorkingSetSize` of 12,713 MB, about 11.8 GiB [LCPP-20704](https://github.com/ggml-org/llama.cpp/issues/20704) (saved under `articles/gpt-oss/`; see Model 2 §4). The note advises leaving "8-16 GB" for macOS, which a 16 GB Mac cannot do. Overheads used below: DeltaNet state 0.14 GiB plus about 0.5 GiB of compute buffers (our estimate). File sizes are converted from Unsloth's GB to GiB.
 
   | Build | Weights | + KV + overhead | Total | Fits under ~12 GiB GPU cap? |
@@ -149,7 +149,7 @@ Saved copies of every source are under `agent-orchestration-sources/articles/qwe
   - **Not via Ollama's library:** its smallest tag is 18GB [OLL](https://ollama.com/library/qwen3.8).
   - **Not via LM Studio or MLX official builds:** the smallest are 16.10 GB [LMS](https://lmstudio.ai/models/qwen3.8) and 16.08 GB (mlx-community 4-bit).
   - **MTPLX:** requires "32 GB of unified memory or more". For 16 GB it points to "Prism ML's ternary Qwen 3.8 27B" (Bonsai 2 27B), with an 11.4 GB peak on an M5 Max [MTPLX](https://huggingface.co/Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed). That is a third-party derivative with no independent quality numbers (unverified).
-  - **Expected speed on this Mac (our estimate, not measured):**
+  - **Expected speed on the reference Mac (our estimate, not measured):**
     - The M2 Pro has "200GB/s of unified memory bandwidth" [APPLE](https://www.apple.com/newsroom/2023/01/apple-unveils-m2-pro-and-m2-max-next-generation-chips-for-next-level-workflows/). Each generated token reads all of the weights, so the ceiling at 9.83 GB is 200 ÷ 9.83 ≈ 20 tok/s.
     - Real runs land well below that ceiling. We assume 25-60% of it, which is an assumption, not a measurement. The one nearby data point: a plain M2 Mac mini (16 GB; the M2 has half the M2 Pro's bandwidth, i.e. 100 GB/s [APPLE](https://www.apple.com/newsroom/2023/01/apple-unveils-m2-pro-and-m2-max-next-generation-chips-for-next-level-workflows/)) ran the predecessor Qwen3.6-27B at 1-bit at "like 3-5tok/s" [HNREL](https://news.ycombinator.com/item?id=49304224).
     - Expect about **5-12 tok/s** generation (our estimate). Prompt processing on Apple silicon was about 65 tok/s on an M1 with 64 GB [HNSW](https://news.ycombinator.com/item?id=49344660), so a 20K-token agent preamble could take several minutes before the first output token.
@@ -222,12 +222,12 @@ Saved copies of every source are under `agent-orchestration-sources/articles/qwe
 
 ## 7. Harness specifics
 
-Commands below are copied from the cited source. Where we combined flags from several sources, we say so; those combinations are untested on the user's machine.
+Commands below are copied from the cited source. Where we combined flags from several sources, we say so; those combinations are untested.
 
 - **llama.cpp (the only practical route on the 16 GB Mac):**
   - Build: clone `ggml-org/llama.cpp` and build with CMake. "For Apple Mac / Metal devices, set `-DGGML_CUDA=OFF`... Metal support is on by default" [UNS](https://unsloth.ai/docs/models/qwen3.8). You need a build from 2026-08-16 or later [QUESMA](https://quesma.com/blog/qwen38-27b-quantizations-benchmarked/).
-  - Download: `hf download unsloth/Qwen3.8-27B-GGUF --local-dir unsloth/Qwen3.8-27B-GGUF --include "*UD-Q4_K_XL*"`. For this Mac, change the pattern to `"*UD-Q2_K_XL*"` [UNS](https://unsloth.ai/docs/models/qwen3.8).
-  - Server for this Mac, composed from flags in the cited sources (untested here):
+  - Download: `hf download unsloth/Qwen3.8-27B-GGUF --local-dir unsloth/Qwen3.8-27B-GGUF --include "*UD-Q4_K_XL*"`. For a 16 GB Mac, change the pattern to `"*UD-Q2_K_XL*"` [UNS](https://unsloth.ai/docs/models/qwen3.8).
+  - Server for a 16 GB Mac, composed from flags in the cited sources (untested):
     ```
     llama-server -hf unsloth/Qwen3.8-27B-GGUF:UD-Q2_K_XL \
       --ctx-size 32768 -fa on --cache-type-k q8_0 --cache-type-v q8_0 \
@@ -247,8 +247,8 @@ Commands below are copied from the cited source. Where we combined flags from se
   - OpenCode: `ollama launch opencode --model qwen3.8`, or an `opencode.json` provider using `"npm": "@ai-sdk/openai-compatible"` and `"baseURL": "http://localhost:11434/v1"`. "OpenCode requires a context length of 64k or higher" [OLL](https://docs.ollama.com/integrations/opencode).
   - Running a smaller Unsloth GGUF through Ollama via `hf.co/...`: not verified for this architecture (not found).
 - **LM Studio:** model `qwen/qwen3.8-27b`, 16.10 GB [LMS](https://lmstudio.ai/models/qwen3.8). Raise the context from the 8,192 default [SW](https://simonwillison.net/2026/Aug/16/qwen-38-27b/). Simon's `llm` CLI call: `llm -a <image-url> -m lmstudio/qwen/qwen3.8-27b '<prompt>'` [SW](https://simonwillison.net/2026/Aug/16/qwen-38-27b/). It does not fit on the 16 GB Mac.
-- **MLX:** `mlx-lm` (text-only) and `mlx-vlm` (vision + text) support the Qwen3.5-architecture series [QWGH](https://github.com/QwenLM/Qwen3.8). The official mlx-community 4-bit is 16.08 GB, too big for this Mac. MTPLX: `pip install mtplx`, then `mtplx serve --model Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed`, serving OpenAI- and Anthropic-compatible APIs at `http://127.0.0.1:8000`; it needs 32 GB or more [MTPLX](https://huggingface.co/Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed).
-- **vLLM / SGLang (NVIDIA servers, not this Mac):** `vllm serve Qwen/Qwen3.8-27B --port 8000 --tensor-parallel-size 4 --max-model-len 262144 --reasoning-parser qwen3 --enable-auto-tool-choice --tool-call-parser qwen3_coder` [QWGH](https://github.com/QwenLM/Qwen3.8). NVFP4 with MTP: `vllm serve unsloth/Qwen3.8-27B-NVFP4 --speculative-config '{"method": "mtp", "num_speculative_tokens": 2}'` (Blackwell only) [UNS](https://unsloth.ai/docs/models/qwen3.8).
+- **MLX:** `mlx-lm` (text-only) and `mlx-vlm` (vision + text) support the Qwen3.5-architecture series [QWGH](https://github.com/QwenLM/Qwen3.8). The official mlx-community 4-bit is 16.08 GB, too big for a 16 GB Mac. MTPLX: `pip install mtplx`, then `mtplx serve --model Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed`, serving OpenAI- and Anthropic-compatible APIs at `http://127.0.0.1:8000`; it needs 32 GB or more [MTPLX](https://huggingface.co/Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed).
+- **vLLM / SGLang (NVIDIA servers, not Macs):** `vllm serve Qwen/Qwen3.8-27B --port 8000 --tensor-parallel-size 4 --max-model-len 262144 --reasoning-parser qwen3 --enable-auto-tool-choice --tool-call-parser qwen3_coder` [QWGH](https://github.com/QwenLM/Qwen3.8). NVFP4 with MTP: `vllm serve unsloth/Qwen3.8-27B-NVFP4 --speculative-config '{"method": "mtp", "num_speculative_tokens": 2}'` (Blackwell only) [UNS](https://unsloth.ai/docs/models/qwen3.8).
 - **Pi:** Simon's `~/.pi/agent/models.json` defines a provider with `"baseUrl": ".../v1"`, `"api": "openai-responses"`, `"apiKey": "dummy"`, and model `{"id": "qwen3.8-27b", "reasoning": true}`. Run with `pi --provider spark --model qwen3.8-27b` [SW](https://simonwillison.net/2026/Aug/16/qwen-38-27b/). This confirms the `--provider/--model` flags that model-gaps §4 marked unverified. For a local llama-server, point `baseUrl` at `http://localhost:8080/v1`; whether llama-server serves the `openai-responses` API is not verified.
 - **Qwen Code:** add a `modelProviders.openai` entry in `settings.json` with `"id"`, `"envKey"`, `"baseUrl": "http://localhost:11434/v1"` (Ollama) or `"http://localhost:1234/v1"` (LM Studio), and `generationConfig` keys such as `timeout`, `streamIdleTimeoutMs` and `contextWindowSize`. Any placeholder API key works for local servers [QCODE](https://qwenlm.github.io/qwen-code-docs/en/users/configuration/model-providers/). Headless use: `qwen -p "..." --output-format json` (model-gaps §4). Hosted QwenCloud is "compatible with various API specifications, including OpenAI and Anthropic" [QWGH](https://github.com/QwenLM/Qwen3.8).
 - **Claude Code via an Anthropic-compatible proxy:** use Ollama's built-in Anthropic API (above) or MTPLX's Anthropic-compatible server (32 GB+) [MTPLX](https://huggingface.co/Youssofal/Qwen3.8-27B-MTPLX-Optimized-Speed). Unsloth Desktop also lists Claude Code under "Connect tools" [UNS](https://unsloth.ai/docs/models/qwen3.8). Whether llama-server speaks the Anthropic Messages API, and the exact QwenCloud Anthropic base URL, were not found.
@@ -261,7 +261,7 @@ Commands below are copied from the cited source. Where we combined flags from se
   - Avoid 1-bit builds entirely [QUESMA](https://quesma.com/blog/qwen38-27b-quantizations-benchmarked/).
 - **On a 32 GB+ Mac or a 24 GB GPU:** a credible **local coding agent and subagent** (Pi or OpenCode) at Q4_K_M, with no measured loss against BF16 on Terminal-Bench [QUESMA](https://quesma.com/blog/qwen38-27b-quantizations-benchmarked/). Use effort medium, or xhigh only for hard one-shots; give it 64K+ context; expect 10-45 tok/s on Apple silicon.
 - **Hosted:** prefer **Qwen3.8-Flash-Next** over the 27B for open-weights API routing. It scores AA 40 vs 34, costs $0.37 vs $1.01 per AA task, and lists at $0.15 / $0.47 [AA](https://artificialanalysis.ai/models/qwen3-8-flash-next). Use the hosted 27B only when you need Apache 2.0 weights you can later self-host, or a specific cheap provider.
-- **vs gpt-oss-20b:** gpt-oss-20b is far cheaper and faster (AA 9, 258 tok/s, $0.01 per task) but much less capable [AA](https://artificialanalysis.ai/models/gpt-oss-20b). Ollama lists it at 14GB, which is also above this Mac's estimated GPU cap; its fit here was not verified. For reasoning-light bulk classification it is the cheaper hosted choice. For anything needing judgement, vision or tool-driven coding, the 27B is in a different class.
+- **vs gpt-oss-20b:** gpt-oss-20b is far cheaper and faster (AA 9, 258 tok/s, $0.01 per task) but much less capable [AA](https://artificialanalysis.ai/models/gpt-oss-20b). Ollama lists it at 14GB, which is also above a 16 GB Mac's estimated GPU cap; its fit here was not verified. For reasoning-light bulk classification it is the cheaper hosted choice. For anything needing judgement, vision or tool-driven coding, the 27B is in a different class.
 - **vs MoE siblings:**
   - No Qwen3.8 30B/35B-A3B exists (section 3).
   - Qwen3.6-35B-A3B (AA 18) is the speed pick on 32 GB+ Macs, at 60-90 tok/s vs about 10 for the 27B [HNREL](https://news.ycombinator.com/item?id=49304287) [HNREL](https://news.ycombinator.com/item?id=49307087).
@@ -417,7 +417,7 @@ Saved copies of every source are under `agent-orchestration-sources/articles/gpt
 
   - Cross-check from `config.json` [HFCARD](https://huggingface.co/openai/gpt-oss-20b): the 12 dense layers × 8 KV heads × 64 dims × 2 (K and V) × 2 bytes = 24,576 bytes per token. That gives 0.20 GB per 8K tokens, matching the guide. The 12 sliding layers keep only 128 tokens each.
   - The guide notes that larger `-ub`/`-b` values grow the compute buffers [LCPP](https://github.com/ggml-org/llama.cpp/discussions/15396). The 2.7 GB figure is for `-ub 2048`.
-- **The user's MacBook Pro M2 Pro, 16 GB: it runs, but not well, and only at short context.**
+- **The reference MacBook Pro M2 Pro, 16 GB: it runs, but not well, and only at short context.**
   - **GPU budget:** an M2 16 GB Mac mini logs Metal `recommendedMaxWorkingSetSize = 12713.12 MB`, about 12.7 GB [LCPP-20704](https://github.com/ggml-org/llama.cpp/issues/20704). The llama.cpp guide advises staying under 70% of total memory, about 12.0 GB on a 16 GiB machine [LCPP](https://github.com/ggml-org/llama.cpp/discussions/15396).
   - **Arithmetic:** model data alone (12.0 GB) uses about 94% of the 12.7 GB GPU budget. The full 8K setup (14.9 GB) exceeds it by about 2.2 GB, and 128K (17.9 GB) exceeds total RAM. Part of the model must therefore run on the CPU, and macOS plus your apps share what is left.
   - **llama.cpp's command for 16 GB Macs:** it keeps 12 of the 24 MoE layers on the CPU and caps context at 32K (`--n-cpu-moe 12 -c 32768`) [LCPP](https://github.com/ggml-org/llama.cpp/discussions/15396).
@@ -439,7 +439,7 @@ Saved copies of every source are under `agent-orchestration-sources/articles/gpt
     | Prompt processing at 16K | 367 tok/s (44.7 s to read 16K tokens) |
 
     Source: [LCPP](https://github.com/ggml-org/llama.cpp/discussions/15396).
-  - **Practical context on this Mac:** 8K to 16K tokens. 32K is the guide's ceiling with CPU offload. The 64K that Ollama says OpenCode, Codex and Claude Code need does not fit (section 7).
+  - **Practical context on a 16 GB Mac:** 8K to 16K tokens. 32K is the guide's ceiling with CPU offload. The 64K that Ollama says OpenCode, Codex and Claude Code need does not fit (section 7).
 - **Larger Macs for comparison:**
 
   | Machine | Runtime | Generation | Source |
@@ -525,11 +525,11 @@ Saved copies of every source are under `agent-orchestration-sources/articles/gpt
 - **Untrusted content risk.** Its instruction hierarchy is weaker than o4-mini's [CARD](https://arxiv.org/abs/2508.10925). Do not give it write tools while it reads untrusted web pages.
 - **Parallelism costs memory.** llama.cpp's multi-slot example (`-np 4`, 524,288 context) "requires extra memory" [LCPP](https://github.com/ggml-org/llama.cpp/discussions/15396). Ollama: "Required RAM will scale by `OLLAMA_NUM_PARALLEL` * `OLLAMA_CONTEXT_LENGTH`" [OLDOCS](https://github.com/ollama/ollama/tree/main/docs). On the 16 GB Mac, run one slot.
 - **Check the provider before trusting results.** Run OpenAI's compatibility test; a correct implementation shows "0 invalid requests and over 90% on both pass@k and pass^k" [VERIFY](https://cookbook.openai.com/articles/gpt-oss/verifying-implementations). Simon ran OpenAI's AIME25 eval against LM Studio on his Mac in about 3.5 hours [SW-EVAL](https://simonwillison.net/2025/Aug/17/gpt-oss-eval-suite/).
-- **Hosted vs local:** for a non-private task, a hosted 20b at $0.03-0.075 input is far faster than this Mac [OR](https://openrouter.ai/openai/gpt-oss-20b). Local only makes sense for offline or private data.
+- **Hosted vs local:** for a non-private task, a hosted 20b at $0.03-0.075 input is far faster than a 16 GB Mac [OR](https://openrouter.ai/openai/gpt-oss-20b). Local only makes sense for offline or private data.
 
 ## 7. Harness specifics
 
-- **Ollama (installed on the user's Mac):**
+- **Ollama:**
   - Pull: `ollama pull gpt-oss:20b` (14 GB) [OLLIB](https://ollama.com/library/gpt-oss).
   - Run: `ollama run gpt-oss:20b --think=low --hidethinking --verbose` (`--verbose` shows "timings for response") [OLDOCS](https://github.com/ollama/ollama/tree/main/docs).
   - Default context is "< 24 GiB VRAM: 4k context". Agents and coding tools "should be set to at least 64000 tokens" [OLDOCS](https://github.com/ollama/ollama/tree/main/docs). On 16 GB, set 16K instead: `launchctl setenv OLLAMA_CONTEXT_LENGTH 16384`, then restart the app. Check the CPU/GPU split with `ollama ps`.
@@ -541,10 +541,10 @@ Saved copies of every source are under `agent-orchestration-sources/articles/gpt
   - 16 GB Mac: `llama-server -hf ggml-org/gpt-oss-20b-GGUF --n-cpu-moe 12 -c 32768 --jinja --no-mmap` [LCPP](https://github.com/ggml-org/llama.cpp/discussions/15396). Lower `-c` to 16384 if it swaps.
   - Add `--temp 1.0 --top-p 1.0 --chat-template-kwargs '{"reasoning_effort": "low"}'` [LCPP](https://github.com/ggml-org/llama.cpp/discussions/15396).
   - Serves an OpenAI-compatible API and web UI on port 8080 [SW-LCPP](https://simonwillison.net/2025/Aug/19/gpt-oss-with-llama-cpp/).
-  - `sudo sysctl iogpu.wired_limit_mb=...` raises the GPU memory cap. The guide shows it only for a 192 GB machine; on 16 GB it starves macOS (untested here).
+  - `sudo sysctl iogpu.wired_limit_mb=...` raises the GPU memory cap. The guide shows it only for a 192 GB machine; on 16 GB it starves macOS (untested).
 - **LM Studio:** `lms get openai/gpt-oss-20b` [HFCARD](https://huggingface.co/openai/gpt-oss-20b). Raise the context above its default (4096 in August 2025) and set partial GPU offload (one 16 GB user used 8/24 layers) [SW](https://simonwillison.net/2025/Aug/5/gpt-oss/) [HN-vinhnx](https://news.ycombinator.com/item?id=44811891).
 - **MLX:** `pip install mlx-lm`, then `load("mlx-community/gpt-oss-20b-MXFP4-Q4")` and `generate(...)` in Python (11.2 GB) [MLX](https://huggingface.co/mlx-community/gpt-oss-20b-MXFP4-Q4). No measured M2 Pro MLX speed found.
-- **vLLM:** `vllm serve openai/gpt-oss-20b`. The install command uses a CUDA wheel (`cu128`) [HFCARD](https://huggingface.co/openai/gpt-oss-20b), so it is for NVIDIA servers, not this Mac.
+- **vLLM:** `vllm serve openai/gpt-oss-20b`. The install command uses a CUDA wheel (`cu128`) [HFCARD](https://huggingface.co/openai/gpt-oss-20b), so it is for NVIDIA servers, not Macs.
 - **Codex CLI:**
   - Run: `codex --oss -m gpt-oss:20b`, or `--local-provider ollama|lmstudio`. The default OSS model is `gpt-oss:20b`, and Codex **pulls the model automatically if it is missing** (14 GB) [CODEX](https://github.com/openai/codex/blob/main/codex-rs/ollama/src/lib.rs).
   - Ollama route: `ollama launch codex`. Ollama: "Use a context window of at least 64k tokens for Codex" [OLDOCS](https://github.com/ollama/ollama/tree/main/docs).
@@ -552,18 +552,18 @@ Saved copies of every source are under `agent-orchestration-sources/articles/gpt
 - **OpenCode:**
   - Run: `ollama launch opencode --model gpt-oss` [OLLIB](https://ollama.com/library/gpt-oss).
   - Manual setup: in `opencode.json`, add an `ollama` provider with `"npm": "@ai-sdk/openai-compatible"`, `baseURL` `http://localhost:11434/v1`, and model `gpt-oss:20b` [OLDOCS](https://github.com/ollama/ollama/tree/main/docs).
-  - "OpenCode requires a context length of 64k or higher" [OLDOCS](https://github.com/ollama/ollama/tree/main/docs), which does not fit this Mac.
+  - "OpenCode requires a context length of 64k or higher" [OLDOCS](https://github.com/ollama/ollama/tree/main/docs), which does not fit in 16 GB.
 - **Pi:**
   - Run: `ollama launch pi --model gpt-oss:20b`.
   - Manual setup: in `~/.pi/agent/models.json`, add provider `ollama` with `"api": "openai-completions"`, `baseUrl` `http://localhost:11434/v1`, and model id `gpt-oss:20b` [OLDOCS](https://github.com/ollama/ollama/tree/main/docs).
   - Its small prompt makes it the best fit for 16 GB [HN-abhikul0](https://news.ycombinator.com/item?id=47134991).
 - **Claude Code via Ollama's Anthropic-compatible API:**
   - Run: `ollama launch claude --model gpt-oss` [OLLIB](https://ollama.com/library/gpt-oss), or set `ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_API_KEY="" ANTHROPIC_BASE_URL=http://localhost:11434` and run `claude --model gpt-oss:20b` [OLDOCS](https://github.com/ollama/ollama/tree/main/docs).
-  - Not on this Mac. Since v0.40.2, "`ollama launch claude` uses the model's full context length" [OLREL](https://github.com/ollama/ollama/releases/tag/v0.40.2), which for this model is 131K, about 17.9 GB by the table in section 4. Claude Code's prompt alone is 15-40K tokens [HN-d4rkp4ttern](https://news.ycombinator.com/item?id=47620689).
+  - Not on a 16 GB Mac. Since v0.40.2, "`ollama launch claude` uses the model's full context length" [OLREL](https://github.com/ollama/ollama/releases/tag/v0.40.2), which for this model is 131K, about 17.9 GB by the table in section 4. Claude Code's prompt alone is 15-40K tokens [HN-d4rkp4ttern](https://news.ycombinator.com/item?id=47620689).
 
 ## 8. Routing-table implications (gpt-oss-20b)
 
-- **Add only as an offline or private tier.** Hosted cheap models dominate it on capability, and on this Mac it is slow and memory-bound (sections 2 and 4).
+- **Add only as an offline or private tier.** Hosted cheap models dominate it on capability, and on a 16 GB Mac it is slow and memory-bound (sections 2 and 4).
 - **Route to gpt-oss-20b (low or medium effort, Pi or a direct Ollama/llama.cpp API call, 8-16K context):**
   - classification and triage with a schema enforced by Ollama `format`
   - extraction to JSON
@@ -572,7 +572,7 @@ Saved copies of every source are under `agent-orchestration-sources/articles/gpt
 - **Do not route:**
   - code edits, refactors or PR work (Terminal-Bench 4.0 = 0%, false "fixed" claims)
   - factual Q&A without sources (hallucination rate 0.94)
-  - long-document reading over about 16K tokens (AA-LCR 34.7%, and slow prefill on this Mac)
+  - long-document reading over about 16K tokens (AA-LCR 34.7%, and slow prefill on a 16 GB Mac)
   - anything through Claude Code, OpenCode or Codex on the 16 GB Mac, since all three need 64K or more context
   - reading untrusted web content with write tools enabled
 - **Effort:** default `low` for classification and extraction, `medium` for tool loops. Avoid `high` on 16 GB: thinking runs long, it loops with tools, and it overflows small contexts.
@@ -637,7 +637,7 @@ Both models are Apache 2.0 open weights that a single machine can run. They sit 
 | AA long-context (AA-LCR) | 82% | 34.7% |
 | AA-Omniscience hallucination rate | 0.30 | 0.94 |
 | Practical local file | Q4_K_M, 17 GB (no measured loss); 2-bit UD-Q2_K_XL, 9.8 GB (Terminal-Bench 64%) | MXFP4 as shipped, 12.8 GiB (Ollama 14 GB); further quantization buys little |
-| Fits the 16 GB M2 Pro? | Only at 2-bit through llama.cpp, 32K to 64K context, about 10.9 GiB total | Yes with 12 of 24 MoE layers on the CPU, 8K to 16K practical context, 32K ceiling |
+| Fits a 16 GB M2 Pro? | Only at 2-bit through llama.cpp, 32K to 64K context, about 10.9 GiB total | Yes with 12 of 24 MoE layers on the CPU, 8K to 16K practical context, 32K ceiling |
 | Expected speed there | 5 to 12 tok/s (our estimate); minutes of prompt processing for an agent preamble | No measurement; below the 34 to 46 tok/s an M1 Pro 32 GB gets fully on GPU |
 | Needs a bigger machine for | Coding agent at Q4 on a 32 GB Mac or 24 GB GPU, 10 to 45 tok/s | Any 64K-context harness (Claude Code, OpenCode, Codex), which needs about 18 GB |
 | Role in this kit | Local or hosted generalist subagent: codebase Q&A, classification, JSON extraction, vision, long reading | Offline or private worker: classification with an enforced schema, extraction, short summaries, grep loops |
@@ -650,6 +650,6 @@ Both models are Apache 2.0 open weights that a single machine can run. They sit 
 
 - **Neither model earns a row in the routing table today.** The table's `bulk` row is Haiku 5.5 at $0.10 / $0.50 per MTok with reasoning on, and `research/model-gaps.md` already lists GPT-6 Luna and DeepSeek V4.1 Flash as cheaper hosted tiers. A local model only wins when the data cannot leave the machine or the network is down.
 - **If an offline tier is wanted on the 16 GB M2 Pro, gpt-oss-20b is the one that fits.** Run it through Ollama or llama.cpp at 8K to 16K context, `low` or `medium` effort, with a JSON schema enforced by the runtime, one request at a time, and have the orchestrator verify every output. Expect classification, extraction and short summaries, not code.
-- **Qwen3.8-27B is the local model to want after a RAM upgrade.** At 32 GB or more it becomes a credible coding subagent through Pi or OpenCode. On the current machine, its 2-bit build is an overnight batch tool at best, and the hosted sibling Qwen3.8-Flash-Next (AA 40, $0.37 per task) is the better API call.
+- **Qwen3.8-27B is the local model to want on 32 GB or more.** At 32 GB or more it becomes a credible coding subagent through Pi or OpenCode. On 16 GB, its 2-bit build is an overnight batch tool at best, and the hosted sibling Qwen3.8-Flash-Next (AA 40, $0.37 per task) is the better API call.
 - **Both digests disagree with `research/model-gaps.md` as of 2026-10-02** on four points, now carried there as dated update notes: the 27B shipped; Qwen3-Coder-Next is not the practical local coder; the gpt-oss AA score of 12 was the 120b (the 20b is 9); and the "256K" context and "June 2026 refresh" trace to one low-trust content site and are false.
 - **Candidate for a follow-up profile:** Qwen 3.5 9B, which two practitioners call the best coding model for 16 GB laptops (Model 2 §8; unverified).
