@@ -5,15 +5,15 @@ vendor: deepseek
 family: open-weights
 status: current
 released: 2026-09                # 2026-09-10
-as_of: 2026-10-02
+as_of: 2026-10-19
 confidence: medium               # price and limits from DeepSeek docs; benchmarks mostly vendor; one hands-on comparison
 
 api_ids: [deepseek-flash]        # legacy deepseek-v4-flash is deprecated and routes here; OpenRouter/OpenCode model strings unverified
 access:
   subscriptions: []
   api: true                      # OpenAI- and Anthropic-compatible endpoints; $5 minimum prepaid balance
-  harnesses: [opencode, pi, cursor]
-  invoke_via: [openrouter-api, opencode-cli]   # no ollama: 552B total parameters does not fit on typical local hardware
+  harnesses: [opencode, pi, cursor, openclaw, hermes]
+  invoke_via: [openrouter-api, opencode-cli, openclaw-cli, hermes-cli]   # no ollama: 552B total parameters does not fit on typical local hardware; openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: via each runtime's OpenRouter provider; model strings unverified
 
 pricing_per_mtok:
   input: 0.15                    # off-peak; 2x at peak (01:00-04:00 and 06:00-10:00 UTC, Mon-Fri)

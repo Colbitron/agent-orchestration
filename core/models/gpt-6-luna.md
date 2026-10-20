@@ -5,15 +5,15 @@ vendor: openai
 family: gpt
 status: current
 released: 2026-09                # about 2026-09-22, alongside GPT-6 Sol (from Theo's GPT-6.1 Sol video)
-as_of: 2026-10-08
+as_of: 2026-10-19
 confidence: low                  # web research only; one aggregator number; Theo: 6.0 Sol and Luna "weren't that good"
 
 api_ids: [gpt-6-luna]
 access:
   subscriptions: [chatgpt-plus, chatgpt-pro]   # unverified: research does not confirm Luna in ChatGPT/Codex plans
   api: true
-  harnesses: [codex, cursor, opencode]          # codex and cursor availability unverified for Luna specifically
-  invoke_via: [codex-cli, openai-api]
+  harnesses: [codex, cursor, opencode, openclaw, hermes]          # codex and cursor availability unverified for Luna specifically
+  invoke_via: [codex-cli, openai-api, openclaw-cli, hermes-cli]   # openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: OpenAI provider (ChatGPT OAuth or API key); this model's availability there unverified
 
 pricing_per_mtok:
   input: 0.10

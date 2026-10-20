@@ -5,15 +5,15 @@ vendor: xai
 family: grok
 status: current
 released: 2026-09                # 2026-09-21
-as_of: 2026-10-02
+as_of: 2026-10-19
 confidence: medium               # ID, price, context from xAI docs; review results from Theo's videos; speed sources conflict
 
 api_ids: [grok-4.7]              # no aliases
 access:
   subscriptions: [supergrok, supergrok-heavy, x-premium-plus]   # unverified (third-party); also included in Cursor (all plans) and GitHub Copilot Pro and up
   api: true
-  harnesses: [grokbuild, cursor, opencode]
-  invoke_via: [grok-cli, xai-api]
+  harnesses: [grokbuild, cursor, opencode, hermes]
+  invoke_via: [grok-cli, xai-api, hermes-cli]   # hermes / hermes-cli added 2026-10-19: Hermes has an xai provider; OpenClaw reaches xAI only through OpenRouter, so it is not listed
 
 pricing_per_mtok:
   input: 2                       # doubles at 200K tokens or more; US regional endpoint +10%

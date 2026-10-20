@@ -7,7 +7,7 @@ keys, Vertex AI and Code Assist (§0.1, §4). Google AI Pro/Ultra users want
 `sh adapters/install.sh gemini [--dry-run]` (paths from
 `research/harnesses.md` §4):
 
-- Copies the seven shared skills to `~/.agents/skills/<name>/SKILL.md`;
+- Copies the eight shared skills to `~/.agents/skills/<name>/SKILL.md`;
   in the user tier `.agents/` beats `.gemini/` (§4(2)). Codex, Cursor and
   Pi read the same dir.
 - Appends the agent-orchestration block to `~/.gemini/GEMINI.md`, or

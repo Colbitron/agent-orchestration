@@ -19,10 +19,12 @@ access:
     - codex                      # `codex --oss -m gpt-oss:20b` (Ollama or LM Studio): a separate launch mode, not a model switch inside a ChatGPT-login session; Ollama says Codex needs 64K+ context
     - opencode                   # `ollama launch opencode --model gpt-oss`; needs 64K+ context
     - pi                         # `ollama launch pi --model gpt-oss:20b`; smallest prompt, best fit for 16 GB
+    - openclaw
+    - hermes
     # Not listed: claude-code, because the generator would print "this session" or "subagent only" for a
     # Claude-subscription user; Claude Code reaches it only in a separate `claude` process pointed at
     # Ollama's Anthropic-compatible API. LM Studio (`lms get openai/gpt-oss-20b`) is a runtime, not a kit harness id.
-  invoke_via: [ollama, opencode-cli, pi-cli, openrouter-api]   # ollama and openrouter-api have no tools. Not listed: codex-cli (the bridge documents no --oss flags; only ollama.md mentions `codex exec --oss --local-provider ollama`, unverified) and openai-api (that bridge uses Chat Completions, which OpenAI does not serve for this model)
+  invoke_via: [ollama, opencode-cli, pi-cli, openrouter-api, openclaw-cli, hermes-cli]   # ollama and openrouter-api have no tools. Not listed: codex-cli (the bridge documents no --oss flags; only ollama.md mentions `codex exec --oss --local-provider ollama`, unverified) and openai-api (that bridge uses Chat Completions, which OpenAI does not serve for this model); openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: Ollama provider in OpenClaw, custom OpenAI-compatible base URL in Hermes; model strings unverified
 
 pricing_per_mtok:                # no first-party list price exists; local runs cost nothing per token
   input: 0.058                   # Artificial Analysis price for gpt-oss-20b (High), 2026-10-19; OpenRouter providers range 0.018 to 0.075

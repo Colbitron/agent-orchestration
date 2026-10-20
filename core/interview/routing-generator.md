@@ -117,7 +117,10 @@ than editing this file; lessons go in lessons.md.
 ## Models available to me
 | Model | Family | Reach it via | Effort | My cost (10 = free) | Floor | Taste | Thorough |
 |---|---|---|---|---|---|---|---|
-(one row per enabled model, from profile scores and config cost)
+(one row per enabled model, from profile scores and config cost; Reach it
+ via leaves out a bridge, or a primary harness driven by one, whose
+ `api_key_only` names the model's vendor while access.<vendor>.type is
+ `subscription`, and one note under the table says so)
 
 ## Routing table
 | Task | Primary | Fallback | Effort | Why |

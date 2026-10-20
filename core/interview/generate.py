@@ -86,6 +86,7 @@ HARNESS_NAMES = {
     "claude-code": "Claude Code", "codex": "Codex", "cursor": "Cursor",
     "gemini-cli": "Gemini CLI", "opencode": "OpenCode", "pi": "Pi",
     "grokbuild": "Grok Build", "t3-code": "T3 Code", "antigravity": "Antigravity",
+    "openclaw": "OpenClaw", "hermes": "Hermes Agent",
 }
 
 # Config keys this script reads, plus the few config-schema.md documents for
@@ -589,6 +590,7 @@ class Ctx(object):
         self.local_provider = str(as_dict(as_dict(config.get("access")).get("open_weights")).get("provider") or "").lower()
         self.local_notes = []     # sentences about local models that do not fit the hardware
         self.unfit_ids = set()    # models disabled by the hardware check
+        self.key_only_omits = {}  # model id -> (vendor, omitted routes, unreachable), from reach_via
 
     def axis(self, model, name):
         if name == "cost":
@@ -977,8 +979,20 @@ def harness_name(hid):
 def reach_via(ctx, model, bridges, agents):
     parts = []
     harness_ids = [str(h.get("id")) for h in ctx.harnesses]
+    # A bridge whose api_key_only names this vendor cannot use its subscription login,
+    # so it is not a route while access.<vendor>.type is subscription. Neither is a
+    # primary harness that such a bridge drives.
+    subscription = vendor_access(ctx.config, model) == "subscription"
+
+    def key_only(bridge):
+        return subscription and model.vendor in [str(v) for v in as_list(as_dict(bridge).get("api_key_only"))]
+    omitted = []
+    session_key_only = any(key_only(b) for b in bridges.values()
+                           if str(as_dict(b).get("harness")) == ctx.primary_harness)
     if ctx.primary_harness in [str(h) for h in as_list(model.access.get("harnesses"))]:
-        if model.subagent_only:
+        if session_key_only:
+            omitted.append("%s (this session)" % harness_name(ctx.primary_harness))
+        elif model.subagent_only:
             names = subagents_for(ctx, model, agents)
             parts.append("subagent only" + (" (%s)" % ", ".join("`%s`" % n for n in names) if names else ""))
         else:
@@ -1005,13 +1019,17 @@ def reach_via(ctx, model, bridges, agents):
         if bid == "ollama" and model.local_fit and not ollama_has_build:
             continue  # Ollama's library has no build this small; the label names the runtime that does
         if via_harness or via_config or via_local:
-            if via_local:
+            if key_only(bridge):
+                omitted.append("`%s`" % bid)
+            elif via_local:
                 parts.append("`%s` (%s)" % (bid, local_label))
                 local_label = None
             else:
                 parts.append("`%s`" % bid)
     if local_label:
         parts.append(local_label)
+    if omitted:
+        ctx.key_only_omits[model.id] = (model.vendor, tuple(omitted), not parts)
     if not parts:
         return UNREACHABLE
     if len(parts) == 1:
@@ -1113,6 +1131,25 @@ def render_routing(ctx, rows, bridges, agents, date, version, commit, short_why=
         notes.append("Disabled, hosted only while access.open_weights is local: %s."
                      % join_words([label(m) for m in hosted_only]))
     notes.extend(ctx.local_notes)
+    key_only = {}  # (vendor, omitted routes) -> (models, models left unreachable)
+    for m in ctx.enabled:
+        if m.id in ctx.key_only_omits:
+            vendor, omitted, lost = ctx.key_only_omits[m.id]
+            group = key_only.setdefault((vendor, omitted), ([], []))
+            group[0].append(m)
+            if lost:
+                group[1].append(m)
+    for (vendor, omitted), (ms, lost) in key_only.items():
+        one = len(omitted) == 1
+        families = sorted(set({"claude": "Claude", "gpt": "GPT", "gemini": "Gemini", "grok": "Grok"}
+                              .get(m.family, m.family) for m in ms))
+        notes.append("%s %s not listed for %s models: %s an API key and access.%s.type is subscription. "
+                     "Set it to both to list %s." % (
+                         join_words(omitted), "is" if one else "are", join_words(families),
+                         "it needs" if one else "they need", vendor, "it" if one else "them"))
+        if lost:
+            notes.append("Until then %s %s unreachable." % (
+                join_words([m.name for m in lost]), "is" if len(lost) == 1 else "are"))
     unconf = sorted(m for m in ctx.models if ctx.models[m].state == "unconfigured")
     if unconf:
         notes.append("Not in config.models (treated as disabled; run /agent-orchestration:refresh to add): %s."

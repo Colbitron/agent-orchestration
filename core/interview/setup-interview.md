@@ -19,7 +19,7 @@ of the interview is that the table reflects the user's real environment.
 2. Detect what is installed, silently, and keep the results for step 1:
 
    ```bash
-   for b in claude codex gemini opencode cursor-agent agent pi grok; do
+   for b in claude codex gemini agy opencode cursor-agent agent pi grok openclaw hermes; do
      command -v "$b" >/dev/null 2>&1 && echo "$b: $(command -v $b)"
    done
    # local model runtimes and the machine they would run on
@@ -45,10 +45,16 @@ use it; otherwise ask in plain text and parse the reply.
 
 Ask: "Which of these do you drive agents from? Which one do you live in?"
 
-Options: Claude Code, Codex CLI or app, Cursor, Gemini CLI, OpenCode, Pi,
-GrokBuild, T3 Code, other. Pre-check the ones detected in step 0 and say
-which binaries were found. Record `harnesses[]` with exactly one
-`primary: true`.
+Options: Claude Code, Codex CLI or app, Cursor, Gemini CLI, Antigravity CLI,
+OpenCode, Pi, GrokBuild, T3 Code, OpenClaw, Hermes Agent, other. Pre-check
+the ones detected in step 0 and say which binaries were found. Record
+`harnesses[]` with exactly one `primary: true`.
+
+OpenClaw and Hermes Agent are assistant runtimes (chat channels, cron,
+gateway) rather than terminal coding agents. A user who lives in one of
+them still orchestrates coding work there, so they count as harnesses: the
+primary if that is where they type, otherwise a bridge target
+(`core/bridges/openclaw-cli.md`, `core/bridges/hermes-cli.md`).
 
 If T3 Code is selected, ask which underlying agents it wraps for them (it
 is a front end, not a model host) and record those as harnesses too.
@@ -58,7 +64,9 @@ is a front end, not a model host) and record those as harnesses too.
 For each vendor, ask how they pay, if at all:
 
 - **Anthropic**: none / Claude subscription (Pro, Max 5x, Max 20x, Team) /
-  API key / both.
+  API key / both. If they run OpenClaw or Hermes Agent and answer
+  subscription, tell them Claude through those two runtimes needs an API key,
+  and record `both` if they have one.
 - **OpenAI**: none / ChatGPT subscription (Plus, Pro, Business) / API key /
   both. Mention that the Codex CLI is how GPT models are reached from other
   harnesses.
@@ -181,8 +189,9 @@ Do only what the user says yes to. Describe each change before making it.
   imports are not supported by their version) to `~/.codex/AGENTS.md`.
 - **Cursor**: offer to write a user rule that references the file.
 - **Gemini CLI**: offer to append to `~/.gemini/GEMINI.md`.
-- **OpenCode / Pi / others**: offer the harness's global instructions file
-  per `research/harnesses.md`.
+- **OpenCode / Pi / OpenClaw / Hermes / others**: offer the harness's
+  global instructions file per `research/harnesses.md` (OpenClaw: the
+  workspace `AGENTS.md`; Hermes: see `adapters/hermes/README.md`).
 
 Check the bridges: for each non-primary harness, confirm the CLI is
 installed and that a one-shot invocation works (`core/bridges/<id>.md` has

@@ -108,7 +108,13 @@ marked block in your instructions file; see `adapters/README.md`.
 
 - New model: follow [docs/MAINTAINING.md](docs/MAINTAINING.md), then commit
   and push to `main`. That push is the release; there is no version to bump.
-- New harness: add `core/bridges/<id>.md` and `adapters/<id>/`.
+- New harness: a section in `research/harnesses.md`, `core/bridges/<id>.md`,
+  `adapters/<id>/README.md`, a `case` arm in `adapters/install.sh`, a row in
+  the `adapters/README.md` matrix, and the harness id in `generate.py`
+  (`HARNESS_NAMES`), `core/interview/config-schema.md`, the interview's
+  harness question and detect step, and the table in
+  `core/bridges/README.md`. Add the id to `access.harnesses` (and the bridge
+  to `invoke_via`) of the profiles it can select.
 - Routing felt wrong: edit `~/.agent-orchestration/config.yaml`, not the
   generated `routing.md`, then run `/agent-orchestration:refresh` (not setup).
 

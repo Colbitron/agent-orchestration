@@ -5,15 +5,15 @@ vendor: anthropic
 family: claude
 status: current
 released: 2026-10
-as_of: 2026-10-08
+as_of: 2026-10-19
 confidence: medium               # official specs and prices (high); one launch-day video with a few hands-on runs; vendor benchmarks; no AA index number found
 
 api_ids: [claude-haiku-5-5]      # Bedrock and Vertex ids not checked
 access:
   subscriptions: [claude-pro, claude-max]   # Max verified (Theo used it on his Claude Code sub); Pro unverified
   api: true
-  harnesses: [claude-code, cursor, opencode, t3-code]   # claude-code verified on camera; cursor, opencode, t3-code unverified for this model
-  invoke_via: [claude-cli, cursor-cli]
+  harnesses: [claude-code, cursor, opencode, t3-code, openclaw, hermes]   # claude-code verified on camera; cursor, opencode, t3-code unverified for this model
+  invoke_via: [claude-cli, cursor-cli, openclaw-cli, hermes-cli]   # openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: API key in both; Claude subscription OAuth is restricted or disallowed there, see the bridges
 
 pricing_per_mtok:                # prompt <= 100K tokens; see notes_on_cost for the > 100K tier
   input: 0.10

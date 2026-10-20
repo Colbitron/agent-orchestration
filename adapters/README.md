@@ -31,7 +31,15 @@ brackets).
   Cursor, Gemini CLI and Pi read `~/.agents/skills/` globally, so one
   install serves all four. OpenCode, Antigravity and Grok get their own
   native global dirs because their `~/.agents/skills` support is
-  undocumented.
+  undocumented. OpenClaw reads `~/.agents/skills/` too but gets its managed
+  dir so the skills are shared by every OpenClaw agent; Hermes reads only
+  its own `~/.hermes/skills/<category>/` unless configured otherwise.
+- **OpenClaw and Hermes Agent are assistant runtimes** [§0.7]: a chat
+  gateway, cron and subagents around an embedded agent. Their global
+  instructions files are the workspace `AGENTS.md` (OpenClaw) and
+  `SOUL.md` (Hermes), both injected into every session. Both seed those
+  files on first run, so the installer refuses to create them and asks for
+  `openclaw onboard` or a first `hermes` run instead.
 - **`AGENTS.md` is read by most harnesses** [B.2]. Gemini CLI and
   Antigravity use `~/.gemini/GEMINI.md` globally. Cursor has no global file;
   its User Rules live in settings.
@@ -58,6 +66,8 @@ brackets).
 | Grok Build [§7] | `AGENTS.md`, `Agents.md`, `AGENT.md`, `CLAUDE.md` | `~/.grok/AGENTS.md` (filename UNVERIFIED) | `~/.grok/skills/` | `~/.grok/agents/*.md`, `[subagents.models]` | `config.toml` `[[hooks.<Event>]]`, Claude schema | fragment; hook optional |
 | Antigravity `agy` [§4b] | `GEMINI.md`, `AGENTS.md` | `~/.gemini/GEMINI.md` | `~/.gemini/antigravity-cli/skills/` | `agents/` dir (schema UNVERIFIED) | `hooks/` dir (schema UNVERIFIED) | fragment |
 | Gemini CLI [§4] | `GEMINI.md` (AGENTS.md opt-in) | `~/.gemini/GEMINI.md` | `~/.agents/skills/` | `~/.gemini/agents/*.md`, `model` | `~/.gemini/settings.json`, `SessionStart` | fragment; hook optional |
+| OpenClaw [§9] | `<repo>/AGENTS.md` with `agent exec --cwd` | `~/.openclaw/workspace/AGENTS.md` (`$OPENCLAW_WORKSPACE_DIR`; per-agent `workspace-<id>/`) | `~/.openclaw/skills/` | `agents.entries.<id>` in `openclaw.json`, `model: provider/model`; `sessions_spawn` takes `model` per call | `~/.openclaw/hooks/<name>/HOOK.md`, `agent:bootstrap` | fragment; `bootstrap-extra-files` unsuitable (workspace-only); `agent-guidance` plugin possible (16 KiB/file, reload on regenerate) |
+| Hermes Agent [§10] | `AGENTS.md`, `CLAUDE.md`, `.hermes.md` | `~/.hermes/SOUL.md` (`$HERMES_HOME`) | `~/.hermes/skills/agent-orchestration/` | `delegate_task`; global `delegation.model` + `delegation.provider` | `hooks:` in `config.yaml`, `on_session_start` (observe-only) | fragment; `skills.auto_load` optional |
 
 Gemini CLI and Antigravity share `~/.gemini/GEMINI.md`; the marker check
 makes the second install a no-op for that file.

@@ -16,8 +16,9 @@ tools.
    generated from that config plus the model profiles. No routing table exists
    until the interview has run.
 3. **Thin adapters.** Each harness (Claude Code, Codex, Cursor, OpenCode, Pi,
-   Gemini CLI, …) gets an adapter under `adapters/` that renders the core into
-   that harness's native format. Adapters contain glue, not knowledge.
+   Gemini CLI, OpenClaw, Hermes Agent, …) gets an adapter under `adapters/`
+   that renders the core into that harness's native format. Adapters contain
+   glue, not knowledge.
 4. **Maintainable by one person.** A new model means adding one profile
    file. The generator (`core/interview/generate.py`) rebuilds each user's
    table from their `config.yaml` plus the profiles and records what it read

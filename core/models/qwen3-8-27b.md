@@ -16,8 +16,8 @@ api_ids:
 access:
   subscriptions: []
   api: true
-  harnesses: [opencode, pi]      # the practitioner-reported coding agents. Not listed: claude-code, because the generator would print "this session" for a Claude-subscription user; Claude Code reaches this model only in a separate session pointed at Ollama's Anthropic API (`ollama launch claude --model qwen3.8`) or MTPLX. Qwen Code and LM Studio also drive it but are not kit harness ids
-  invoke_via: [ollama, opencode-cli, pi-cli, openrouter-api]   # ollama: one-shot, no tools, needs the 18 GB tag; opencode-cli: `-m ollama/qwen3.8` locally or OpenRouter hosted (provider strings unverified); pi-cli: custom models.json provider (Simon Willison's config) or OpenRouter; openrouter-api: `qwen/qwen3.8-27b`, no tools
+  harnesses: [opencode, pi, openclaw, hermes]      # the practitioner-reported coding agents. Not listed: claude-code, because the generator would print "this session" for a Claude-subscription user; Claude Code reaches this model only in a separate session pointed at Ollama's Anthropic API (`ollama launch claude --model qwen3.8`) or MTPLX. Qwen Code and LM Studio also drive it but are not kit harness ids
+  invoke_via: [ollama, opencode-cli, pi-cli, openrouter-api, openclaw-cli, hermes-cli]   # ollama: one-shot, no tools, needs the 18 GB tag; opencode-cli: `-m ollama/qwen3.8` locally or OpenRouter hosted (provider strings unverified); pi-cli: custom models.json provider (Simon Willison's config) or OpenRouter; openrouter-api: `qwen/qwen3.8-27b`, no tools; openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: Ollama provider in OpenClaw, custom OpenAI-compatible base URL in Hermes; model strings unverified
 
 pricing_per_mtok:                # QwenCloud official hosted price; running locally costs nothing per token
   input: 0.50

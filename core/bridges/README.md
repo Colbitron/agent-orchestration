@@ -54,6 +54,7 @@ harness: codex                   # which harness this reaches
 binary: codex                    # executable name; absolute path notes if ambiguous
 reaches: [gpt-6-astra, gpt-6-1-sol, gpt-6-luna]   # model ids from core/models
 auth: "ChatGPT login (codex login) or CODEX_API_KEY"
+api_key_only: []                 # optional: access vendors (anthropic, openai, ...) whose subscription login this bridge cannot use; it needs their API key
 verified: local | docs | unverified   # how the flags were confirmed, with date
 as_of: 2026-10-02
 ---
@@ -101,5 +102,6 @@ things that are UNVERIFIED.
 | Bounded implementation on another model | `claude-cli` (from non-Claude harnesses), `codex-cli` | Always on a worktree |
 | Bulk / cheap fan-out with programmatic verification | `openai-api` (Luna), `openrouter-api`, `ollama` | No tools; one-shot completions |
 | Delegation from inside T3 Code | `t3-code-mcp` | Uses `delegate_task`, no shell needed |
+| A model whose auth lives only in OpenClaw or Hermes (Nous Portal, a ChatGPT login set up there) | `openclaw-cli`, `hermes-cli` | Assistant runtimes; neither has a read-only flag; the bridges deny or omit the mutating tools and pipe the diff in, so review on a worktree. Prefer the model's native CLI when the user has it |
 
 The setup interview marks a bridge live only after its smoke test passes.

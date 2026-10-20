@@ -31,14 +31,17 @@ user:
 # bridges.
 harnesses:
   - id: claude-code                # claude-code | codex | cursor | gemini-cli |
-    primary: true                  #   opencode | pi | grokbuild | t3-code
+    primary: true                  #   opencode | pi | grokbuild | t3-code |
+                                   #   antigravity | openclaw | hermes
     cli: claude                    # binary name if installed, else null
   - id: codex
     primary: false
     cli: codex
 
 # How the user pays for each vendor. `type` drives the cost score the
-# generator assigns to that vendor's models.
+# generator assigns to that vendor's models. `both` (subscription and API key)
+# is what lists bridges that need a key, openclaw-cli and hermes-cli, for
+# Claude models: with `subscription` alone the generator leaves them out.
 access:
   anthropic:
     type: subscription             # none | subscription | api | both

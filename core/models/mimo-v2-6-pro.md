@@ -5,15 +5,15 @@ vendor: xiaomi
 family: open-weights
 status: current
 released: 2026-09                # 2026-09-21
-as_of: 2026-10-02
+as_of: 2026-10-19
 confidence: low                  # 11 days old at research time; prices third-party only and possibly promotional; benchmarks mostly vendor
 
 api_ids: [xiaomi/mimo-v2.6-pro]  # OpenRouter id; Xiaomi first-party API id unverified
 access:
   subscriptions: []
   api: true
-  harnesses: [opencode, pi, cursor]
-  invoke_via: [openrouter-api, opencode-cli]   # no ollama: 1.02T total parameters does not fit locally (V2.6-Flash is 310B, also too large for typical machines)
+  harnesses: [opencode, pi, cursor, openclaw, hermes]
+  invoke_via: [openrouter-api, opencode-cli, openclaw-cli, hermes-cli]   # no ollama: 1.02T total parameters does not fit locally (V2.6-Flash is 310B, also too large for typical machines); openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: via each runtime's OpenRouter provider; model strings unverified
 
 pricing_per_mtok:
   input: 0.435                   # unverified: third-party sources only, may be promotional

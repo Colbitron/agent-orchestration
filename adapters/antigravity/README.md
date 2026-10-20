@@ -3,7 +3,7 @@
 `sh adapters/install.sh agy [--dry-run]` (alias `antigravity`) does two
 things (paths from `research/harnesses.md` §4b):
 
-- Copies the seven shared skills to
+- Copies the eight shared skills to
   `~/.gemini/antigravity-cli/skills/<name>/SKILL.md`, the documented global
   skills dir. The workspace path is `.agents/skills/`, but a global
   `~/.agents/skills` is not documented for `agy`.

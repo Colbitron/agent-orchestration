@@ -5,15 +5,15 @@ vendor: anthropic
 family: claude
 status: current
 released: null
-as_of: 2026-10-02
+as_of: 2026-10-19
 confidence: high
 
 api_ids: [claude-fable-5-1]
 access:
   subscriptions: [claude-pro, claude-max]
   api: true
-  harnesses: [claude-code, cursor, opencode, t3-code]
-  invoke_via: [claude-cli, cursor-cli]
+  harnesses: [claude-code, cursor, opencode, t3-code, openclaw, hermes]
+  invoke_via: [claude-cli, cursor-cli, openclaw-cli, hermes-cli]   # openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: API key in both; Claude subscription OAuth is restricted or disallowed there, see the bridges
 
 pricing_per_mtok:
   input: 10

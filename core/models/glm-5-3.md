@@ -5,15 +5,15 @@ vendor: zhipu                      # Z.ai
 family: open-weights
 status: current
 released: 2026-08                  # GLM-5.3-Flash 2026-08-27 (GLM-5.3 2026-08-14)
-as_of: 2026-10-02
+as_of: 2026-10-19
 confidence: low                    # prices from Z.ai docs; benchmarks vendor-only plus one AA index; one Theo anecdote
 
 api_ids: [glm-5.3-flash]           # siblings: glm-5.3 (full), glm-5.3-flashx; OpenRouter/OpenCode strings unverified
 access:
   subscriptions: [glm-coding-plan]   # unverified: plan tiers are third-party, and whether the plan serves Flash or only GLM-5.3 is not stated
   api: true
-  harnesses: [opencode, pi, cursor]
-  invoke_via: [openrouter-api, opencode-cli]   # no ollama: 320B total parameters needs a 256GB+ workstation even quantised
+  harnesses: [opencode, pi, cursor, openclaw, hermes]
+  invoke_via: [openrouter-api, opencode-cli, openclaw-cli, hermes-cli]   # no ollama: 320B total parameters needs a 256GB+ workstation even quantised; openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: via each runtime's OpenRouter provider; model strings unverified
 
 pricing_per_mtok:
   input: 0.15

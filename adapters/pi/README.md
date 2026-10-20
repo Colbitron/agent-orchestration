@@ -3,7 +3,7 @@
 `sh adapters/install.sh pi [--dry-run]` does two things (paths from
 `research/harnesses.md` §6):
 
-- Copies the seven shared skills to `~/.agents/skills/<name>/SKILL.md`,
+- Copies the eight shared skills to `~/.agents/skills/<name>/SKILL.md`,
   one of Pi's documented user skill dirs (§6(2)). Codex, Cursor and Gemini
   CLI read the same dir.
 - Appends the agent-orchestration block to `~/.pi/agent/AGENTS.md`, or

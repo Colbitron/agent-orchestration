@@ -3,7 +3,7 @@
 `sh adapters/install.sh grok [--dry-run]` (paths from
 `research/harnesses.md` §7):
 
-- Copies the seven shared skills to `~/.grok/skills/<name>/SKILL.md`
+- Copies the eight shared skills to `~/.grok/skills/<name>/SKILL.md`
   (§7(2)).
 - Appends the agent-orchestration block to `~/.grok/AGENTS.md`, or creates
   it. **UNVERIFIED filename:** the research says global rules live in

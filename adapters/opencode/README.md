@@ -3,7 +3,7 @@
 `sh adapters/install.sh opencode [--dry-run]` does two things (paths from
 `research/harnesses.md` §5):
 
-- Copies the seven shared skills to
+- Copies the eight shared skills to
   `~/.config/opencode/skills/<name>/SKILL.md` (§5(2)). The global
   `~/.agents/skills` path is only implied by the docs (UNVERIFIED), so the
   native dir is used.

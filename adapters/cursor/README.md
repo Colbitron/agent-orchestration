@@ -3,7 +3,7 @@
 `sh adapters/install.sh cursor [--dry-run]` (paths from
 `research/harnesses.md` §3):
 
-- Copies the seven shared skills to `~/.agents/skills/<name>/SKILL.md`,
+- Copies the eight shared skills to `~/.agents/skills/<name>/SKILL.md`,
   a documented Cursor user skills dir (§3(2)) that Codex, Gemini CLI and
   Pi also read.
 - Writes the agent-orchestration block to

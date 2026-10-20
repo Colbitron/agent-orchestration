@@ -3,7 +3,7 @@
 #
 #   sh adapters/install.sh <harness> [--update] [--force] [--kit-root PATH] [--dry-run]
 #
-# Harnesses: codex cursor opencode pi grok agy (alias: antigravity) gemini claude
+# Harnesses: codex cursor opencode pi grok agy (alias: antigravity) gemini openclaw hermes claude
 #
 # For each harness it:
 #   1. resolves KIT_ROOT (default: the repo this script lives in)
@@ -44,7 +44,8 @@ usage() {
   cat <<'USAGE'
 usage: sh adapters/install.sh <harness> [--update] [--force] [--kit-root PATH] [--dry-run]
 
-harness: codex | cursor | opencode | pi | grok | agy | antigravity | gemini | claude
+harness: codex | cursor | opencode | pi | grok | agy | antigravity | gemini |
+         openclaw | hermes | claude
 
   --update          update an earlier install: overwrite skill files you
                     have not edited (checked against the manifest), skip
@@ -265,6 +266,32 @@ case "$HARNESS" in
     INVOKE='ask for it by name, e.g. "use the <name> skill"  (/skills list shows them)'
     INVOKE_UNVERIFIED='research §4(2) lists /skills list|enable|reload but no per-skill invocation syntax' ;;
 
+  openclaw)
+    # §9(2): managed skills dir ~/.openclaw/skills, shared by every agent
+    # (workspace skills/ and .agents/skills rank higher).
+    SKILLS_DIR="$HOME/.openclaw/skills"
+    # §9(1): the default workspace's AGENTS.md is injected into every
+    # Gateway session; OPENCLAW_WORKSPACE_DIR overrides the default
+    # location. Its precedence against an explicit agents.defaults.workspace
+    # is undocumented ('openclaw agents list' is the authority).
+    # OPENCLAW_PROFILE and OPENCLAW_STATE_DIR are ignored here.
+    # Other agents' workspaces have their own AGENTS.md.
+    INSTR_FILE="${OPENCLAW_WORKSPACE_DIR:-$HOME/.openclaw/workspace}/AGENTS.md"
+    # §9(2): /skill <name> always works; native command names are
+    # sanitized to a-z0-9_, so ao-setup becomes /ao_setup.
+    INVOKE='/skill <name>  (or the native command /ao_setup)' ;;
+
+  hermes)
+    # §10(2): ~/.hermes/skills/<category>/<name>/SKILL.md; HERMES_HOME
+    # relocates ~/.hermes. The category is optional (the loader walks
+    # skills/ recursively); the kit keeps agent-orchestration for grouping.
+    SKILLS_DIR="${HERMES_HOME:-$HOME/.hermes}/skills/agent-orchestration"
+    # §10(1): SOUL.md is the only global instructions file (system prompt
+    # slot 1, verbatim, user-owned).
+    INSTR_FILE="${HERMES_HOME:-$HOME/.hermes}/SOUL.md"
+    # §10(2): every installed skill is a slash command.
+    INVOKE='/<name>  (or hermes chat -s <name>)' ;;
+
   *)
     usage >&2; die "unknown harness: $HARNESS" ;;
 esac
@@ -311,6 +338,46 @@ case "$HARNESS" in
     # §4 / §4b: Gemini CLI and Antigravity share ~/.gemini/GEMINI.md, so the
     # marker check makes a second install a no-op for that file.
     : ;;
+  openclaw)
+    # §9(1): OpenClaw seeds its default AGENTS.md template when it first
+    # prepares the workspace and never overwrites an existing AGENTS.md.
+    # A kit-created file would hold only the kit block, and OpenClaw's
+    # default operating instructions would never be written. So refuse
+    # until the seeded AGENTS.md exists.
+    if [ ! -f "$INSTR_FILE" ]; then
+      die "$INSTR_FILE does not exist. Run 'openclaw onboard' first so OpenClaw seeds it, then re-run."
+    fi
+    # Only the default workspace-<id> layout is detected here; custom
+    # workspace: pins and <agents.defaults.workspace>/<id> are not.
+    if [ -d "$HOME/.openclaw" ] && ls -d "$HOME"/.openclaw/workspace-* >/dev/null 2>&1; then
+      warn "per-agent workspaces exist ($(ls -d "$HOME"/.openclaw/workspace-* | tr '\n' ' ' | sed 's/ $//')); each has its own AGENTS.md. This lists only the default layout; run 'openclaw agents list' to see every workspace. Copy the agent-orchestration block into the ones that should load the routing table."
+    fi ;;
+  hermes)
+    # §10(1): Hermes seeds SOUL.md with its starter identity on first run and
+    # never overwrites it. A SOUL.md holding only the kit block would become
+    # the whole identity, so refuse until the seeded file exists.
+    if [ ! -f "$INSTR_FILE" ]; then
+      die "$INSTR_FILE does not exist. Run 'hermes' once (or 'hermes setup'; 'hermes -p <name>' when HERMES_HOME is a profile) so Hermes seeds it, then re-run."
+    fi
+    # §10(1): an untouched legacy scaffold is a '# Hermes Agent Persona'
+    # heading plus an HTML comment (src: hermes_cli/default_soul.py); Hermes
+    # stops auto-upgrading it once the kit block is appended. The awk exits 0
+    # when any text remains outside <!-- --> comments, headings and blank lines.
+    if [ "$(wc -c < "$INSTR_FILE" | tr -d ' ')" -lt 200 ] || ! awk '
+        { l = $0
+          while (l != "") {
+            if (c) { i = index(l, "-->"); if (!i) { l = ""; break }; l = substr(l, i + 3); c = 0 }
+            else { i = index(l, "<!--"); if (!i) break; if (substr(l, 1, i - 1) ~ /[^[:space:]]/) { t = 1 }; l = substr(l, i + 4); c = 1 }
+          }
+          if (l ~ /[^[:space:]]/ && l !~ /^[[:space:]]*#/) t = 1 }
+        END { exit t ? 0 : 1 }' "$INSTR_FILE"; then
+      warn "SOUL.md looks like the untouched scaffold; run 'hermes' once so it holds real content before appending the kit block."
+    fi
+    # §10(1): each profile has its own SOUL.md and skills/; only the given
+    # home is installed into.
+    if [ -z "${HERMES_HOME:-}" ] && [ -d "$HOME/.hermes/profiles" ] && ls -d "$HOME"/.hermes/profiles/*/ >/dev/null 2>&1; then
+      warn "Hermes profiles found ($(cd "$HOME/.hermes/profiles" && ls -d */ | tr -d / | tr '\n' ' ' | sed 's/ $//')); this install targets the default home only. Set HERMES_HOME=~/.hermes/profiles/<name> to install into a profile."
+    fi ;;
 esac
 
 # ---------------------------------------------------------------- manifest
@@ -522,10 +589,14 @@ say ''
 say 'Next:'
 if [ "$UPDATE" -eq 1 ]; then
   say "  1. Start a new $HARNESS session so it loads the updated skills."
+  [ "$HARNESS" = openclaw ] && say '     In OpenClaw, send /new if the updated skills do not show up (the docs disagree on whether a running session sees them).'
+  [ "$HARNESS" = hermes ] && say '     SOUL.md changes apply to new sessions; new skills are announced on your next message.'
   say '  2. If model profiles changed, run the ao-refresh skill to regenerate'
   say '     ~/.agent-orchestration/routing.md from your config.yaml.'
 else
   say "  1. Start a new $HARNESS session (skills and instructions load at start)."
+  [ "$HARNESS" = openclaw ] && say '     In OpenClaw, send /new if the skills do not show up (the docs disagree on whether a running session sees them).'
+  [ "$HARNESS" = hermes ] && say '     SOUL.md changes apply to new sessions; new skills are announced on your next message.'
   say "  2. Run the ao-setup skill: $skill_cmd"
   say '     It interviews you and writes ~/.agent-orchestration/routing.md.'
   say '  3. From then on every session reads routing.md, glossary.md and lessons.md.'

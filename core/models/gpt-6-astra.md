@@ -5,15 +5,15 @@ vendor: openai
 family: gpt
 status: current
 released: null                   # month not stated in the research
-as_of: 2026-10-02
+as_of: 2026-10-19
 confidence: high                 # two dedicated videos plus a head-to-head; note the verdict soured between them
 
 api_ids: null                    # exact API model id not stated in the research
 access:
   subscriptions: [chatgpt-plus, chatgpt-pro]
   api: true                      # OpenAI API and Amazon Bedrock (announced at launch)
-  harnesses: [codex, cursor, opencode, t3-code]   # cursor access reportedly revoked; see Evidence
-  invoke_via: [codex-cli, cursor-cli, opencode-cli]
+  harnesses: [codex, cursor, opencode, t3-code, openclaw, hermes]   # cursor access reportedly revoked; see Evidence
+  invoke_via: [codex-cli, cursor-cli, opencode-cli, openclaw-cli, hermes-cli]   # openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: OpenAI provider (ChatGPT OAuth or API key); this model's availability there unverified
 
 pricing_per_mtok:
   input: 10

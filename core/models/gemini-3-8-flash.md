@@ -5,15 +5,15 @@ vendor: google
 family: gemini
 status: current
 released: 2026-09                # GA 2026-09-02
-as_of: 2026-10-02
+as_of: 2026-10-19
 confidence: medium               # ID, price, limits from Google docs; benchmarks vendor-run; Theo's remarks are dismissive asides
 
 api_ids: [gemini-3.8-flash]
 access:
   subscriptions: [google-ai-pro, google-ai-ultra]   # plus a free Gemini CLI OAuth tier (60 req/min, 1,000/day)
   api: true
-  harnesses: [gemini-cli, cursor, opencode]
-  invoke_via: [gemini-cli, agy-cli]
+  harnesses: [gemini-cli, cursor, opencode, openclaw, hermes]
+  invoke_via: [gemini-cli, agy-cli, openclaw-cli, hermes-cli]   # openclaw, hermes / openclaw-cli, hermes-cli added 2026-10-19: Google provider with GEMINI_API_KEY; availability of this model there unverified
 
 pricing_per_mtok:
   input: 0.75                    # introductory until 2026-12-31; 1.50 from 2027-01-01
