@@ -1,6 +1,6 @@
 # Claude 5.x Release Videos: Detailed Summaries
 
-Research note on four launch-review videos for the Claude 5.x models, by the same speaker (Theo, t3.gg; he builds T3 Code and Lakebed). It records the conclusions, numbers and decision rules this kit uses, not a summary of each video. Prices and benchmark figures are as the speaker read them on launch day unless marked as checked elsewhere.
+Research note on five launch-review videos for the Claude 5.x models, by the same speaker (Theo, t3.gg; he builds T3 Code and Lakebed). It records the conclusions, numbers and decision rules this kit uses, not a summary of each video. Prices and benchmark figures are as the speaker read them on launch day unless marked as checked elsewhere.
 
 ## Sources
 
@@ -8,6 +8,7 @@ Research note on four launch-review videos for the Claude 5.x models, by the sam
 - OPUS55: "My new favorite model.", Theo (t3.gg), YouTube, https://youtu.be/jgGyX7MPPVg
 - SON55: "OpenAI should be scared of this one", Theo (t3.gg), YouTube, https://youtu.be/8WbW_n95wc4
 - H55: "finally a good small model", Theo (t3.gg), YouTube, https://youtu.be/38_6C0dkKmU
+- FAB52: "Nobody Is Competing With Anthropic", Theo (t3.gg), YouTube, https://youtu.be/yh5IAUow4Hc
 
 Each `[KEY m:ss]` citation links to that video at that timestamp. Timestamps come from the auto-generated captions and may be a few seconds early or late.
 
@@ -40,12 +41,29 @@ The captions are speech-to-text and contain systematic mis-hearings. This docume
 | "61 soul", "GPT61 Soul" | GPT-6.1 Sol |
 | "Lydia" | an Anthropic employee quoted on autocompact settings (name uncertain) |
 | Code Rabbit sponsor segment (Video 4, about 2:18 to 3:40) | skipped |
+| "Fable 52", "Mythos 52", "Table 52", "Babel" (Video 5) | Fable 5.2, Mythos 5.2, Fable |
+| "Fable in Mythos 5.2" | Fable and Mythos 5.2 |
+| "M dash", "M D-Bench" | em dash; "Em-Dash Bench" is his joke count of em dashes in the announcement (29) |
+| "Hellpost" | the (announcement) post |
+| "Enthropic", "Anthomic" | Anthropic |
+| "claw code", "Claw slop" | Claude Code, Claude slop |
+| "Tara", "Terara", "Terra" | Terra, an OpenAI model (exact name and version not given) |
+| "Muse Wonderful" | a model he pairs with Opus for MCP work; name uncertain |
+| "Gemini 4 Carbon" / "Gemini 4 argan" | Gemini 4 Carbon (new top model before Fable 5.2) / Gemini 4 Argon |
+| "Frontier Code 2", "Frontier 2", "knowledge briefcase", "Robo-Dogjo", "bench CAD" | benchmark names as captioned; exact names uncertain |
+| "fermens last beerum" | Fermat's Last Theorem |
+| "Tibo", "TBO" | an OpenAI Codex staff member who grants usage resets |
+| "Boris" | an Anthropic Claude Code lead quoted on code attribution |
+| "Cuff 2", "Cup 2" | the name of one of his machines (a VPS) |
+| "Sloth House", "TStack", "TS Rust", "Lakebed" | his own projects (analytics tool, skills pack, TypeScript-in-Rust rewrite, cloud product) |
+| Blacksmith sponsor segment (Video 5, about 1:51 to 3:14) | skipped |
 
 Caveats:
 
 - Quotes are lightly cleaned ("cache" for "cash" and similar). Square brackets mark words we corrected or inserted; some model names inside quotes keep the caption spelling and should be read per the table.
 - Benchmark figures are the speaker's readings of vendor or Artificial Analysis (AA) charts on launch day, not independent measurements.
 - Videos 1 to 3 do not evaluate Haiku 4.5; the Opus 5.5 and Sonnet 5.5 videos say Haiku 5.5 is "coming in the next few weeks". **Video 4 covers Haiku 5.5's launch** (about 2026-10-07), including the Sonnet 5.5 cache-read cut that shipped with it.
+- **Video 5 covers Fable 5.2 / Mythos 5.2** (announced 2026-11-09), filmed after about 14 hours of use. Its official pricing, context and data-retention figures were fetched 2026-11-11.
 
 ---
 
@@ -510,24 +528,181 @@ The Code Rabbit sponsor segment (about 2:18 to 3:40) is skipped. Figures marked 
 - **Front end:** only for cost-sensitive work, and only with the design skill loaded: "usable... not great".
 
 ---
+
+# Video 5: Claude Fable 5.2 (and Mythos 5.2)
+
+The Blacksmith sponsor segment (about 1:51 to 3:14) is skipped. He filmed after about 14 hours with the model ("from 11:00 a.m. when this dropped until 1:00 a.m.") and roughly 20 landed PRs [FAB52 15:39](https://youtu.be/yh5IAUow4Hc?t=939), without early access [FAB52 38:39](https://youtu.be/yh5IAUow4Hc?t=2319). Figures marked "official" come from Anthropic's pages, not the video.
+
+## 1. Subject and overall thesis
+
+- Launch-day review of **Claude Fable 5.2 / Mythos 5.2** (API ID `claude-fable-5-2`), released 2026-11-09 (official announcement, "Introducing Claude Fable 5.2 and Claude Mythos 5.2"). The number is 5.2, not the 5.5 people expected [FAB52 0:11](https://youtu.be/yh5IAUow4Hc?t=11).
+- **Verdict:** "This is an incredible model, but it really should be used specifically and carefully" [FAB52 1:40](https://youtu.be/yh5IAUow4Hc?t=100). Opus 4.5 and Opus 5.5 each "became the model I use for everything"; "Fable 5.2 just dropped and it is not the model I'll be using for everything" [FAB52 46:30](https://youtu.be/yh5IAUow4Hc?t=2790).
+- **Why 5.2:** "52 would have been 55 if the gap between Opus and Fable was bigger." The Sonnet 5.5 to Opus 5.5 gap is "significantly bigger" than the Opus 5.5 to Fable 5.2 gap [FAB52 46:55](https://youtu.be/yh5IAUow4Hc?t=2815); "if the model was good enough to be Fable 55, it would have been" [FAB52 47:17](https://youtu.be/yh5IAUow4Hc?t=2837).
+- **Character:** "Fable tries a little too hard to be clever. It's like the really smart friend that sucks a little bit to work with but really knows what the hell they're doing"; Opus 5.5 "is just a workhorse. It does exactly what it is told to do" [FAB52 45:53](https://youtu.be/yh5IAUow4Hc?t=2753). Elsewhere: "the smart person on the team that occasionally will not understand the full situation" [FAB52 10:40](https://youtu.be/yh5IAUow4Hc?t=640), which most of the time makes sense, sometimes none, and occasionally is "super genius" [FAB52 11:02](https://youtu.be/yh5IAUow4Hc?t=662). He calls it "spiky", a word he normally keeps for OpenAI models [FAB52 10:32](https://youtu.be/yh5IAUow4Hc?t=632).
+- **Capability is not autonomy** (a friend with early access, which he endorses): "much more capable, but it does not have much more autonomy." It is better at "not getting blocked in long runs and solving hard problems in long runs", not at decisions needing "a human touch or a human thought" [FAB52 38:39](https://youtu.be/yh5IAUow4Hc?t=2319), and "not going to magically make tasteful decisions where other models wouldn't have" [FAB52 39:07](https://youtu.be/yh5IAUow4Hc?t=2347).
+- **Fable vs Mythos:** still the same model. His analogy is one restaurant with two entrances: same kitchen and food, different guards on what goes in and out [FAB52 4:22](https://youtu.be/yh5IAUow4Hc?t=262). Fable has cyber and bio safeguards; Mythos is for organisations admitted through Anthropic's life-sciences and cyber verification programmes [FAB52 5:09](https://youtu.be/yh5IAUow4Hc?t=309).
+- **Anthropic's own routing advice** [FAB52 6:55](https://youtu.be/yh5IAUow4Hc?t=415): Fable and Mythos are "the best for the most ambitious and open-ended technical work"; for "most coding and knowledge tasks" start with Opus 5.5, "their strongest daily driver", then move up to Fable or down to Sonnet or Haiku. Fable 5.2 can act as an **adviser** that other models ask for help on hard problems, or as an **orchestrator** delegating simpler tasks to smaller models [FAB52 7:10](https://youtu.be/yh5IAUow4Hc?t=430). He does not "fully agree with this advice" [FAB52 7:27](https://youtu.be/yh5IAUow4Hc?t=447), but agrees "beyond hard" that Opus 5.5 is the daily driver [FAB52 7:35](https://youtu.be/yh5IAUow4Hc?t=455).
+
+## 2. Strengths (with evidence)
+
+**Anthropic's claims** [FAB52 3:24](https://youtu.be/yh5IAUow4Hc?t=204): improvements in coding, reasoning and vision; during pre-release testing it helped engineers "complete otherwise infeasible software migrations", designed three working electronic devices, solved two open problems in black-hole physics, made progress on robotics evals, and formalised Fermat's Last Theorem in 30 hours. He notes only one item is about software [FAB52 4:05](https://youtu.be/yh5IAUow4Hc?t=245), and he had already done "infeasible" migrations with Opus (TypeScript rewritten in Rust) [FAB52 4:13](https://youtu.be/yh5IAUow4Hc?t=253). Other vendor examples: an agent team on an earlier 5.2 migrated a production Python service to Rust and it starts 26 times faster [FAB52 14:11](https://youtu.be/yh5IAUow4Hc?t=851); a prototype operating system in 8 days with drivers, display and networking [FAB52 14:38](https://youtu.be/yh5IAUow4Hc?t=878). Neither impresses him: "this frog got boiled fast" [FAB52 15:19](https://youtu.be/yh5IAUow4Hc?t=919).
+
+**Benchmarks** (the speaker reading Anthropic's chart; not independently verified):
+
+| Benchmark | Fable 5.2 (or Mythos 5.2) | Comparison |
+|---|---|---|
+| Artificial Analysis Intelligence Index | State of the art | 4.5 to 5 points ahead of Gemini 4 Carbon, the previous top; high and xhigh also "way better" [FAB52 0:52](https://youtu.be/yh5IAUow4Hc?t=52) |
+| Frontier Code 2 (agentic coding) | 70 | GPT-6 Astra 65 [FAB52 8:09](https://youtu.be/yh5IAUow4Hc?t=489) |
+| A second coding row ("Frontier 2", name unclear) | 49.1 | GPT-6 Astra 42.8 [FAB52 8:09](https://youtu.be/yh5IAUow4Hc?t=489) |
+| Business workflows | Second | Gemini 4 Carbon first [FAB52 8:16](https://youtu.be/yh5IAUow4Hc?t=496) |
+| Agentic science research | 74.6 | Fable 5.1 52.6; Astra 68.1, which had led Opus 5.5 by 10 points [FAB52 8:20](https://youtu.be/yh5IAUow4Hc?t=500) |
+| Cyber security, CVE rediscovery (Mythos) | About 90% | "crushed"; Fable will not do these tasks [FAB52 8:56](https://youtu.be/yh5IAUow4Hc?t=536) |
+| Protein design (Mythos) | 85.1 | [FAB52 9:04](https://youtu.be/yh5IAUow4Hc?t=544) |
+| Knowledge-work Elo ("knowledge briefcase", name unclear) | Slightly below Opus 5.5 | [FAB52 9:13](https://youtu.be/yh5IAUow4Hc?t=553) |
+| Bench CAD (hardware engineering) | "a pretty massive gain" | [FAB52 12:58](https://youtu.be/yh5IAUow4Hc?t=778) |
+| Robotics ("Robo-Dogjo", name unclear) | "Absolutely slaughtering" | [FAB52 17:05](https://youtu.be/yh5IAUow4Hc?t=1025) |
+
+- "One of the most utter dominations of a benchmark suite I've seen in a while" [FAB52 9:24](https://youtu.be/yh5IAUow4Hc?t=564), but it does worse on his own benches (section 3).
+- **The gains lean to science.** "A lot of the value in this model is in the sciences outside of computer science" [FAB52 8:37](https://youtu.be/yh5IAUow4Hc?t=517). He expects hardware and electrical engineering to see the gains code has seen [FAB52 13:13](https://youtu.be/yh5IAUow4Hc?t=793).
+- **Effort and cost on Frontier Code** [FAB52 11:16](https://youtu.be/yh5IAUow4Hc?t=676): xhigh has the highest score, beating Opus 5.5 at max for a small price gap; Fable 5.2 high costs about the same as Opus 5.5 xhigh, and Fable 5.2 xhigh about the same as Opus 5.5 max [FAB52 12:44](https://youtu.be/yh5IAUow4Hc?t=764). Max is worse (section 3).
+
+**Speed.** Official claim: up to 30% faster output than Fable 5.1 and Mythos 5.1 [FAB52 5:29](https://youtu.be/yh5IAUow4Hc?t=329). His measurement: 106 TPS, against 81 to 84 for Fable 5.1 and 112 for Opus 5.5, "within about 5% of Opus' speeds" [FAB52 28:14](https://youtu.be/yh5IAUow4Hc?t=1694). "It writes way faster" [FAB52 31:18](https://youtu.be/yh5IAUow4Hc?t=1878).
+
+**Code review.** "Quite good overall" [FAB52 21:00](https://youtu.be/yh5IAUow4Hc?t=1260), a "fine-tuned comb" [FAB52 21:30](https://youtu.be/yh5IAUow4Hc?t=1290). "If Fable thinks a PR is good to go. It'd be surprising if it isn't" [FAB52 21:30](https://youtu.be/yh5IAUow4Hc?t=1290). It lets nitpicks slide where other models get caught on them: "It does miss some things, but it doesn't get stuck anywhere near as bad as other models do" [FAB52 21:46](https://youtu.be/yh5IAUow4Hc?t=1306).
+
+**Plain answers and pushback.**
+
+- **Diagnosis:** Terra (an OpenAI model) gave chart-heavy "slop" six times about why one machine set up worktrees 3.2 to 3.3 times slower [FAB52 35:04](https://youtu.be/yh5IAUow4Hc?t=2104). Fable answered in one line: the machine "is a VPS. The other three are physical machines with local NVME drives. That is the full reason" [FAB52 35:20](https://youtu.be/yh5IAUow4Hc?t=2120). Opus "also had a good response" [FAB52 36:25](https://youtu.be/yh5IAUow4Hc?t=2185). "This model is pleasant to work with. It does what you tell it and it does it relatively well" [FAB52 36:35](https://youtu.be/yh5IAUow4Hc?t=2195).
+- **Calling out bad advice:** after hours with Opus 5.5 and another model ("Muse", name uncertain) recommending an MCP setup step that put a dead link on the page [FAB52 36:43](https://youtu.be/yh5IAUow4Hc?t=2203), Fable immediately questioned it. When told to check his history, it "was able to prove itself wrong" [FAB52 37:25](https://youtu.be/yh5IAUow4Hc?t=2245). "You give it the sources for the data, it can usually disprove itself, but it's not scared to push back" [FAB52 37:56](https://youtu.be/yh5IAUow4Hc?t=2276). "I felt like a co-worker that I was talking to here" [FAB52 37:35](https://youtu.be/yh5IAUow4Hc?t=2255).
+- **Self-unblocking:** "It actually unblocks itself quite well" [FAB52 33:44](https://youtu.be/yh5IAUow4Hc?t=2024).
+
+**Writing.** Anthropic says it communicates more clearly [FAB52 5:29](https://youtu.be/yh5IAUow4Hc?t=329). He finds it "better at writing [prose] in general and talking to models", and has used it to overhaul copy and skills [FAB52 34:22](https://youtu.be/yh5IAUow4Hc?t=2062).
+
+**Front end and games (with the design skill).** Witchai designs had good animations and colour [FAB52 31:26](https://youtu.be/yh5IAUow4Hc?t=1886), and his subscription-math page "that looks very anthropicy was made by the new model" [FAB52 31:18](https://youtu.be/yh5IAUow4Hc?t=1878). An architecture explainer was "genuinely really nice looking" [FAB52 40:47](https://youtu.be/yh5IAUow4Hc?t=2447). Fish Slop "looked quite a bit better" than the Opus build and "runs a hell of a lot better than anything I've gotten out of an OpenAI model" [FAB52 43:36](https://youtu.be/yh5IAUow4Hc?t=2616); Fable "stays more coherent over long runs slightly" [FAB52 45:23](https://youtu.be/yh5IAUow4Hc?t=2723).
+
+**Thread completion.** On his subscription, Fable plus Opus got more threads done than Opus alone, partly because "Fable is more likely to finish a thread in a given turn than Opus", though many of his runs that day were one-shots [FAB52 31:01](https://youtu.be/yh5IAUow4Hc?t=1861).
+
+## 3. Weaknesses, pitfalls and misconceptions
+
+- **Below Opus on his own benches.** On codebase analysis and PR review of his real repos (TS Rust, T3 Code, Lakebed), "Fable 52 is actually underperforming Opus and Sonnet", "in almost all of them" [FAB52 9:53](https://youtu.be/yh5IAUow4Hc?t=593). He blames the clever-owl tendency [FAB52 10:15](https://youtu.be/yh5IAUow4Hc?t=615).
+
+  | His bench | Result |
+  |---|---|
+  | TS Rust codebase analysis | GPT-6.1 Sol first: 38 claims, none false, 29 minutes, $4.19. Fable 5.2 second: 61 claims, 4 wrong, about $23 [FAB52 20:18](https://youtu.be/yh5IAUow4Hc?t=1218) |
+  | T3 Code codebase analysis | Opus 5.5 first, Terra second ("insanely cheap"), Fable 5.2 third with 6 false claims of 83 [FAB52 20:45](https://youtu.be/yh5IAUow4Hc?t=1245) |
+  | PR review, 8 PRs | About 120 minutes of runtime, against roughly 20 to 30 for the GPT models (not logged) [FAB52 21:08](https://youtu.be/yh5IAUow4Hc?t=1268) |
+
+  The captions contradict themselves: he says Fable is "massively outperforming OpenAI models" on this eval set [FAB52 9:53](https://youtu.be/yh5IAUow4Hc?t=593), then that Sol and Astra "build more cohesive understandings of the codebase" and "say a few less stupid things" [FAB52 20:09](https://youtu.be/yh5IAUow4Hc?t=1209), and Sol wins TS Rust outright. Read it as below Opus everywhere, and below Sol on accuracy and cost for analysis.
+- **Review is too slow to use in a loop:** the runtime "kills a lot of the value for me" [FAB52 21:08](https://youtu.be/yh5IAUow4Hc?t=1268).
+- **Max effort is worse for code.** "Fable 52 Max will score worse on most coding tasks consistently and you should not use it as a developer" [FAB52 12:04](https://youtu.be/yh5IAUow4Hc?t=724). Max goes "too far and make[s] mistakes"; this is "now encoded in the benchmarks" [FAB52 11:56](https://youtu.be/yh5IAUow4Hc?t=716). Use it only if you are evaluating it against lower efforts for a specific stopping-too-early problem [FAB52 12:20](https://youtu.be/yh5IAUow4Hc?t=740). He thinks it should sit behind a settings toggle like full-access mode, being "as if not more dangerous and significantly more expensive" [FAB52 12:36](https://youtu.be/yh5IAUow4Hc?t=756).
+- **Needs more supervision than Opus.** "I've had to be in the loop a lot more with this model" [FAB52 33:22](https://youtu.be/yh5IAUow4Hc?t=2002); "it needs you to handhold it a little bit". It does not stall: "it will make a decision that's not super important and then spiral down it in ways that are obviously wrong to a human" [FAB52 33:51](https://youtu.be/yh5IAUow4Hc?t=2031). He had skipped his usual multi-model review ("council") and hoped not to need it; "this model almost needs it a bit more than Opus did" [FAB52 33:29](https://youtu.be/yh5IAUow4Hc?t=2009).
+- **Taste and intent misses.**
+  - Asked to make a page "less ugly", it also changed the screenshots, and the redesign "does not very clearly visualize the gap between these numbers at all", which was the point of the page [FAB52 22:27](https://youtu.be/yh5IAUow4Hc?t=1347).
+  - Asked to find the last architecture diagram and update it, it produced a polished explainer with "no diagram" [FAB52 40:47](https://youtu.be/yh5IAUow4Hc?t=2447); it added one only after a complaint [FAB52 41:14](https://youtu.be/yh5IAUow4Hc?t=2474).
+- **Occasional severe mistakes.** A dashboard "safe mode" for filming showed his email address in the banner announcing safe mode [FAB52 38:14](https://youtu.be/yh5IAUow4Hc?t=2294): "the types of mistakes I would never have expected even Opus to do. This model will sometimes do. You still got to audit your outputs" [FAB52 38:31](https://youtu.be/yh5IAUow4Hc?t=2311).
+- **Data analysis jumps.** More novel ideas, but "they also make jumps sometimes that don't make real sense", and they "forget to check timelines outside of the data set" for confounding events; he had to remind it to look up model release dates while analysing T3 Code data [FAB52 17:22](https://youtu.be/yh5IAUow4Hc?t=1042).
+- **UI tics.** It still adds unnecessary eyebrow text and subheadings [FAB52 34:06](https://youtu.be/yh5IAUow4Hc?t=2046) (fix in section 5). Without the design skill, "you get Tailwind template slop again" [FAB52 32:27](https://youtu.be/yh5IAUow4Hc?t=1947) and "fable slop" [FAB52 32:49](https://youtu.be/yh5IAUow4Hc?t=1969).
+- **Games:** the first Fish Slop pass needed a second for graphics and controls [FAB52 43:16](https://youtu.be/yh5IAUow4Hc?t=2596), and the gameplay "is still not as compelling as it was with Opus" [FAB52 44:01](https://youtu.be/yh5IAUow4Hc?t=2641). "Opus actually makes more fun games. Fable just makes them look a lot better" [FAB52 45:23](https://youtu.be/yh5IAUow4Hc?t=2723).
+- **Still no ZDR** for enterprise use, per the speaker [FAB52 17:44](https://youtu.be/yh5IAUow4Hc?t=1064). Official sources conflict: the model page says it "requires 30-day data retention and isn't available under zero data retention unless expressly authorized by Anthropic", while the announcement says "eligible customers can continue using" it with ZDR before adopting EFS. Treat it as no ZDR unless your account is authorised. Enterprise Frontier Safeguards (beta) lets a company run the verification container in its own infrastructure, in private beta with Bridgewater, Salesforce and Stripe [FAB52 18:01](https://youtu.be/yh5IAUow4Hc?t=1081). He credits ZDR for Opus 5.5's enterprise adoption [FAB52 18:10](https://youtu.be/yh5IAUow4Hc?t=1090).
+- **Safeguards:** Fable refuses cyber and bio tasks; those benchmark rows use Mythos [FAB52 8:56](https://youtu.be/yh5IAUow4Hc?t=536).
+- **System card:** 264 pages; he only skimmed it and will audit further [FAB52 6:23](https://youtu.be/yh5IAUow4Hc?t=383).
+- **Not the internal frontier model.** His speculation: 5.2 is smaller or cheaper to host than 5.1 (faster, cheaper, now offers fast mode) [FAB52 28:34](https://youtu.be/yh5IAUow4Hc?t=1714), and the large internal model ("model 4") "is far from what we got today" [FAB52 29:02](https://youtu.be/yh5IAUow4Hc?t=1742).
+
+## 4. Pricing, speed, context and limits
+
+- **Price:** $8 per million input, $40 per million output, down from $10 / $50 [FAB52 5:37](https://youtu.be/yh5IAUow4Hc?t=337). Cache prices are not stated in the video. The official pricing page (fetched 2026-11-11), USD per million tokens:
+
+  | Model | Input | Output | Cache read | 5m cache write | 1h cache write | Batch in / out |
+  |---|---|---|---|---|---|---|
+  | Fable 5.2 / Mythos 5.2 | 8 | 40 | 0.20 | 10 | 16 | 4 / 20 |
+  | Fable 5.2 fast mode | 16 | 80 | | | | not available |
+  | Fable 5.1 (for comparison) | 10 | 50 | 0.25 | 12.50 | 20 | 5 / 25 |
+  | Opus 5.5 (for comparison) | 4 | 20 | 0.20 | 5 | 8 | 2 / 10 |
+
+  - Every price is 20% below Fable 5.1. Cache reads stay at 0.025x input, so Fable 5.2 cache reads now cost the same as Opus 5.5's ($0.20). Other prices are still 2x Opus.
+  - No long-context tier: the full 1M window is at standard pricing.
+- **Fast mode (new for Fable):** "pay twice as much money in order to get it 2.5 times faster" [FAB52 5:55](https://youtu.be/yh5IAUow4Hc?t=355). Official: "up to 2.5x" output speed at $16 / $80, in Claude Code, the Claude API, Google Cloud and Microsoft Foundry (not Bedrock), not with Batch; Mythos fast mode only for verified organisations. "Not actually that bad", compared with OpenAI's fast mode, where only "ultra fast" gives a real bump, at an "insane" price [FAB52 6:02](https://youtu.be/yh5IAUow4Hc?t=362).
+- **Price history (his account)** [FAB52 27:28](https://youtu.be/yh5IAUow4Hc?t=1648): Mythos was announced at $25 / $125, cut to $10 / $50 after a SpaceX compute deal and because no ZDR would keep companies away; he reads that as Anthropic halving its margin [FAB52 27:52](https://youtu.be/yh5IAUow4Hc?t=1672).
+- **Speed:** 106 TPS, against 81 to 84 for Fable 5.1 and 112 for Opus 5.5 [FAB52 28:22](https://youtu.be/yh5IAUow4Hc?t=1702).
+- **Subscription limits ($200 plan)** [FAB52 23:14](https://youtu.be/yh5IAUow4Hc?t=1394):
+  - Plans have a weekly limit and a separate 7-day Fable limit; the $100 and cheaper plans also have a 5-hour limit [FAB52 23:25](https://youtu.be/yh5IAUow4Hc?t=1405).
+  - The Fable limit is on top of the weekly one, not instead of it: "Every two points you burn in the fable five limit counts as one point in the regular limit." Draining Fable to zero leaves 50% of the week [FAB52 23:41](https://youtu.be/yh5IAUow4Hc?t=1421).
+  - Launch resets: one for accounts under 6 months old, two for 6 to 12 months, three for over 12 [FAB52 24:29](https://youtu.be/yh5IAUow4Hc?t=1469). A reset restores the Fable limit and the half of the weekly limit it consumed [FAB52 25:13](https://youtu.be/yh5IAUow4Hc?t=1513), and keeps the timer, unlike Codex resets, which restart the 7-day clock [FAB52 25:20](https://youtu.be/yh5IAUow4Hc?t=1520).
+- **His usage math ($200 plan, API-equivalent per month)** [FAB52 26:24](https://youtu.be/yh5IAUow4Hc?t=1584):
+
+  | Usage pattern | API-equivalent per month | Multiple of $200 |
+  |---|---|---|
+  | Opus 5.5 only | About $14,062 ("14.5 to 15 grand") | 73x |
+  | Fable 5.2 until its limit, then Opus 5.5 | About $3,000 Fable + about $7,000 Opus, about $4,000 less in total [FAB52 29:46](https://youtu.be/yh5IAUow4Hc?t=1786) | |
+  | Fable 5.2 only | About $3,000 | 15x, "an 80% decrease" [FAB52 30:08](https://youtu.be/yh5IAUow4Hc?t=1808) |
+
+  - Fable 5.2 gives more output tokens per dollar than 5.1, so turns and threads go further even at a similar dollar figure [FAB52 30:38](https://youtu.be/yh5IAUow4Hc?t=1838). Mixing in Fable costs about 20% of turns against all-Opus [FAB52 30:53](https://youtu.be/yh5IAUow4Hc?t=1853).
+  - He calls API prices "inflated": enterprise margins subsidise subscriptions [FAB52 26:40](https://youtu.be/yh5IAUow4Hc?t=1600).
+  - Compare Video 1: the $200 plan gave "up to $8,000 a month" in the Fable 5.1 era.
+- **Context and effort (official, not in the video):** 1M context, 128K max output. Effort levels low, medium, high, xhigh and max; adaptive thinking is always on and cannot be disabled. Default effort conflicts between sources: `high` on the API (model page) but "Medium effort (the default in Claude apps and Claude Code)" in the announcement. Set effort explicitly.
+- **Subscriptions (official):** the announcement gives one to three Fable resets by subscription age, and Fable "up to 50% of weekly usage limits" for Pro and standard Team seats. claude.com/pricing instead lists Pro as "Fable, paid with usage credits" and Max as "up to half your weekly limit". Check your plan.
+
+## 5. Recommended prompting style and workflow
+
+- **Effort:** never `max` for coding (section 3). His Frontier Code reading puts `xhigh` at the top score; `high` costs about the same as Opus 5.5 `xhigh`.
+- **Load the Claude design skill** for any UI work: "this model really needs the design skill or you're going to end up with fable slop" [FAB52 32:49](https://youtu.be/yh5IAUow4Hc?t=1969). "It's crazy how a little bit of markdown can help" [FAB52 32:56](https://youtu.be/yh5IAUow4Hc?t=1976).
+- **Remove eyebrow text and subheadings** by asking the model what it calls the pattern and why it does it, then adding that rule to AGENTS.md; "it hasn't done them as much since" [FAB52 34:15](https://youtu.be/yh5IAUow4Hc?t=2055).
+- **Give it the evidence:** when it makes a claim, point it at the sources (history, data) so it can check itself [FAB52 37:56](https://youtu.be/yh5IAUow4Hc?t=2276).
+- **In data analysis, ask for outside context** such as release dates or other events that could explain changes [FAB52 17:36](https://youtu.be/yh5IAUow4Hc?t=1056).
+- **Name the deliverable** even when it seems implied, for example "include the architecture diagram" [FAB52 41:00](https://youtu.be/yh5IAUow4Hc?t=2460).
+- **Keep a human or a cross-model review in the loop** for anything taste-sensitive or user-facing [FAB52 33:29](https://youtu.be/yh5IAUow4Hc?t=2009) [FAB52 38:39](https://youtu.be/yh5IAUow4Hc?t=2319).
+
+## 6. Subagents, orchestration, delegation and verification
+
+- **Pair it with Opus.** "Once again, I feel like a combination of Opus and Fable is the way to go" [FAB52 44:01](https://youtu.be/yh5IAUow4Hc?t=2641): Fable for visuals, coherence over long runs and hard problems; Opus for the bulk of the work and for gameplay-type judgment. A detailed strengths-and-weaknesses video is promised [FAB52 44:10](https://youtu.be/yh5IAUow4Hc?t=2650).
+- **Adviser and orchestrator** are Anthropic's suggested roles [FAB52 7:10](https://youtu.be/yh5IAUow4Hc?t=430); the speaker does not test either in this video.
+- **Final PR gate:** its approval is trustworthy and it skips nitpicks, but at about 15 minutes per PR it is a last check, not a loop reviewer [FAB52 21:08](https://youtu.be/yh5IAUow4Hc?t=1268).
+- **Analysis subagents:** GPT-6.1 Sol remains "a workhorse for analysis type stuff. Insane value for the money" [FAB52 20:41](https://youtu.be/yh5IAUow4Hc?t=1241).
+- **Verification:** "You still got to audit your outputs" [FAB52 38:39](https://youtu.be/yh5IAUow4Hc?t=2319). The safe-mode leak shows obvious-to-a-human mistakes slip through.
+- **Opus 5.5 is still the bar.** He ran a project audit on Opus 5.5 by mistake and was impressed before noticing [FAB52 39:52](https://youtu.be/yh5IAUow4Hc?t=2392): "Opus 55 is a gift from the heavens" [FAB52 40:08](https://youtu.be/yh5IAUow4Hc?t=2408).
+
+## 7. Claude Code specifics
+
+- **Limits:** a 7-day Fable limit on top of the weekly limit, at 2 Fable points to 1 weekly point; launch resets per account age (section 4).
+- **Max effort:** he wants it gated behind a settings toggle, like full-access mode [FAB52 12:36](https://youtu.be/yh5IAUow4Hc?t=756).
+- **Design skill:** keep it installed (section 5).
+- Hooks, MCP and plugins: not discussed, beyond the MCP guidance anecdote.
+
+## 8. Routing-table implications (Fable 5.2)
+
+- **Opus 5.5 stays the default daily driver.** Both the speaker and Anthropic say so. Fable 5.2 is "not the model I'll be using for everything".
+- **Route to Fable 5.2:** the hardest and most open-ended technical work, long runs where getting unblocked matters, and hard bugs where a plain diagnosis beats a verbose one. Use it as an adviser that Opus consults, and as a careful final PR gate when latency does not matter.
+- **Route to Fable 5.2 (with the design skill):** visual polish and front end, and 3D or game visuals. Prefer Opus for game feel and UX judgment, or combine the two.
+- **Route to Fable or Mythos 5.2:** non-CS science and engineering (agentic science research, CAD and hardware, robotics, protein design via Mythos), where the benchmark gains are largest.
+- **Do not route codebase analysis to Fable 5.2** when GPT-6.1 Sol or Opus 5.5 is available. On his benches it made more false claims at about 5x Sol's cost.
+- **Do not use it as a loop reviewer:** 120 minutes for 8 PRs.
+- **Do not route taste-sensitive or autonomous decision-making to Fable 5.2 unsupervised.** Its gains are in capability, not autonomy. Keep a human or a cross-family review on user-facing output.
+- **Effort:** default `high`; `xhigh` if the score is worth the cost; **never `max`**, now backed by Anthropic's own chart. Fable `high` costs about the same as Opus `xhigh`, so for a given budget the choice is between models, not effort levels.
+- **Cost:** $8 / $40 is 2x Opus 5.5's $4 / $20, but cache reads are now equal ($0.20), which narrows the gap in cache-heavy agentic loops, and the speed gap has closed. On a $200 subscription each Fable point also burns half a weekly point; draining the Fable limit cuts monthly API-equivalent value from about $14K (Opus only) to about $10K.
+- **Data retention:** no ZDR without Anthropic's authorisation (sources conflict, section 3). Route ZDR workloads to Opus.
+- **Against Video 1:** Fable 5.1 was his favourite and the kit's `feature` and `long-run` primary. Video 5 does not show 5.2 beating Opus 5.5 on routine features; it shows more supervision and occasional obvious mistakes. That argues for Opus 5.5 as the `feature` primary, with Fable 5.2 as fallback or adviser, and for keeping Fable on `long-run` and frontend. This rests on one day of use plus Anthropic's own advice; check it against your own merged-PR data before changing the table.
+
+---
 # Cross-video synthesis (for the routing table)
 
-| Dimension | Fable 5.1 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
-|---|---|---|---|---|
-| Price in / out / cache read / cache write ($/M) | 10 / 50 / 0.25 / not stated | 4 / 20 / 0.20 / 5 | 2 / 10 / 0.10 (cut from 0.20 at the Haiku 5.5 launch) / 2.50 | 0.10 / 0.50 / 0.01 / 0.125 at ≤100K prompt tokens; 5x (0.50 / 2.50 / 0.05 / 0.625) above 100K |
-| Speaker's role for it | Hardest long-horizon work, PR takeovers, orchestration, front-end design | **Default daily driver**; ZDR-compliant | **Subagent for analysis / research**; not human-selected | **Subagent and app component** for search, data gathering, categorisation and many cheap attempts; not human-selected; not for writing code |
-| Effort guidance | Default `high`; `low` often fine; little gain beyond `high` | `medium` (default) / `high` / `xhigh`; avoid `low` and `max` | `high` / `xhigh`; avoid `low` and `max`; `medium` weaker than Opus's | Never turn reasoning off; xhigh and max are Anthropic's best value on his AA chart (untested hands-on); official default `medium` |
-| Token efficiency | Poor vs OpenAI; 1.7x Fable 5 output | Poor: about 120K tokens per AA task at max (vs Astra 27K) | Worst: 272K tokens per Cursor Bench task | "Not the usual wasteful" small model on AA (no figure); Fish Slop used 9.73M cache-read tokens for about $1 |
-| Front-end taste | Best (with design skill) | OK and steerable; design skill doesn't help | Weak | "Usable... not great" with the design skill; "classic LLM design" without |
-| Exhaustive review / audit | Better than Opus, below Astra | Below Fable, Astra, Sol, Grok 4.7 | Slightly above Opus on his decomposition bench, at half the cost | Weak: called PRs merge-ready because GitHub checks were green |
-| Known quirks | Few progress updates; dense prose; asks permission; scope creep (nearby fixes, extra tests); safeguard fallback to Opus | Context-window anxiety; dumb spikes; repair loops; slow to commit; runaway at `max` | Faster TPS but slower wall-clock; cache-read pricing makes it no cheaper for long agentic loops [Update 2026-10-08: cache reads cut to $0.10; see § V4.4.] | Bad with reasoning off; corners itself (rate limits, stalled thread); 100K price cliff; can cost more than Opus when it flails |
-| Data retention | No ZDR (Enterprise Frontier Safeguards option) | ZDR available | Not discussed | Not discussed |
+| Dimension | Fable 5.1 | Fable 5.2 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 |
+|---|---|---|---|---|---|
+| Price in / out / cache read / cache write ($/M) | 10 / 50 / 0.25 / not stated | 8 / 40 / 0.20 / 10 (5m write); fast mode 16 / 80 | 4 / 20 / 0.20 / 5 | 2 / 10 / 0.10 (cut from 0.20 at the Haiku 5.5 launch) / 2.50 | 0.10 / 0.50 / 0.01 / 0.125 at ≤100K prompt tokens; 5x (0.50 / 2.50 / 0.05 / 0.625) above 100K |
+| Speaker's role for it | Hardest long-horizon work, PR takeovers, orchestration, front-end design | Hardest open-ended technical work, non-CS science and engineering, adviser to Opus, visual polish, slow final PR gate; **not** the daily driver | **Default daily driver**; ZDR-compliant | **Subagent for analysis / research**; not human-selected | **Subagent and app component** for search, data gathering, categorisation and many cheap attempts; not human-selected; not for writing code |
+| Effort guidance | Default `high`; `low` often fine; little gain beyond `high` | `high` or `xhigh`; **never `max`** (worse on most coding per Anthropic's own chart); default conflicts (API `high`, apps `medium`) | `medium` (default) / `high` / `xhigh`; avoid `low` and `max` | `high` / `xhigh`; avoid `low` and `max`; `medium` weaker than Opus's | Never turn reasoning off; xhigh and max are Anthropic's best value on his AA chart (untested hands-on); official default `medium` |
+| Token efficiency | Poor vs OpenAI; 1.7x Fable 5 output | Not measured; 20% cheaper per token than 5.1 and more output per subscription dollar | Poor: about 120K tokens per AA task at max (vs Astra 27K) | Worst: 272K tokens per Cursor Bench task | "Not the usual wasteful" small model on AA (no figure); Fish Slop used 9.73M cache-read tokens for about $1 |
+| Front-end taste | Best (with design skill) | Best visuals with the design skill; "Tailwind template slop" without; misses intent (no diagram, chart that hid the gap) | OK and steerable; design skill doesn't help | Weak | "Usable... not great" with the design skill; "classic LLM design" without |
+| Exhaustive review / audit | Better than Opus, below Astra | Trusted PR gate that skips nitpicks, but 120 min for 8 PRs; codebase analysis below Opus and Sol (4 to 6 false claims) | Below Fable, Astra, Sol, Grok 4.7 | Slightly above Opus on his decomposition bench, at half the cost | Weak: called PRs merge-ready because GitHub checks were green |
+| Known quirks | Few progress updates; dense prose; asks permission; scope creep (nearby fixes, extra tests); safeguard fallback to Opus | Over-clever; spirals on unimportant decisions; needs more supervision than Opus; eyebrow text and subheadings; occasional obvious errors (email shown in a safe-mode banner) | Context-window anxiety; dumb spikes; repair loops; slow to commit; runaway at `max` | Faster TPS but slower wall-clock; cache-read pricing makes it no cheaper for long agentic loops [Update 2026-10-08: cache reads cut to $0.10; see § V4.4.] | Bad with reasoning off; corners itself (rate limits, stalled thread); 100K price cliff; can cost more than Opus when it flails |
+| Data retention | No ZDR (Enterprise Frontier Safeguards option) | No ZDR without Anthropic's authorisation (sources conflict); EFS in private beta | ZDR available | Not discussed | Not discussed |
 
 Points stated across videos:
 
-- **Never use `max`** on any of these models. In both later videos it is shown to raise the reasoning *floor*, causing more than 10x token blowups and loops, sometimes with worse scores. Video 4 is a partial exception: Haiku 5.5 max is still cheap per AA task and sits on Anthropic's value line, but he still calls Sonnet max senseless. Keep the rule until Haiku max is tested on your own tasks.
+- **Never use `max`** on any of these models. In both later videos it is shown to raise the reasoning *floor*, causing more than 10x token blowups and loops, sometimes with worse scores. Video 4 is a partial exception: Haiku 5.5 max is still cheap per AA task and sits on Anthropic's value line, but he still calls Sonnet max senseless. Keep the rule until Haiku max is tested on your own tasks. Video 5 adds vendor evidence: on Anthropic's own chart Fable 5.2 `max` scores worse on most coding tasks than lower efforts.
 - **Never turn reasoning off** on Anthropic models. Video 4 extends the "avoid `low`" advice: Haiku 5.5 with reasoning off did worse than GPT-6 Luna with reasoning off (ThePrimeagen's result, secondhand).
 - Cache-read pricing, not headline input/output price, decides cost in agentic loops. Video 4 adds the Haiku 5.5 100K tier: above 100K prompt tokens every Haiku price rises 5x, cache reads included.
 - **Anthropic-only stack:** after Video 4 he says "you can avoid Sonnet entirely and just use Opus and [Haiku]", with Haiku as the cheap subagent tier. Across vendors his value line is GPT-6 Luna, GPT-6.1 Sol, Opus 5.5, and his working duo is Opus plus Sol as auditor.
 - Computer use is better routed to OpenAI (Astra). Anthropic models lag there per the speaker, though Sonnet and Opus are now "neck and neck" on OS World. Anthropic's OSWorld numbers put Haiku 5.5 well above GPT-6 Luna, but he has not tried it.
 - The best exhaustive planner/reviewer in his tests is GPT-6 Astra: "most thorough" but "spiky and weird".
+- **Opus 5.5 is the daily driver** in Videos 2 and 5 and in Anthropic's own Fable 5.2 guidance. Fable 5.2 is the step up for ambitious, open-ended work and the adviser Opus consults, not a replacement.
+- **Subscription Fable use is rationed:** in Video 5 each point of the 7-day Fable limit also burns half a point of the weekly limit, so draining Fable on a $200 plan cuts API-equivalent value from about $14K a month (Opus only) to about $10K.

@@ -157,6 +157,7 @@ names; the correction tables are in `research/`.
 | OPUS55 | [My new favorite model.](https://youtu.be/jgGyX7MPPVg) (Opus 5.5) |
 | SON55 | [OpenAI should be scared of this one](https://youtu.be/8WbW_n95wc4) (Sonnet 5.5) |
 | H55 | [finally a good small model](https://youtu.be/38_6C0dkKmU) (Haiku 5.5) |
+| FAB52 | [Nobody Is Competing With Anthropic](https://youtu.be/yh5IAUow4Hc) (Fable 5.2) |
 | OPUSG | [Getting the most out of Opus 5.5](https://youtu.be/ejjBbaq9RmY) |
 | FABG | [So I was using Fable wrong...](https://youtu.be/-XWSJM-Ue-o) |
 | ASTRA | [It's Here.](https://youtu.be/XFWpf0wLbh0) (GPT-6 Astra) |

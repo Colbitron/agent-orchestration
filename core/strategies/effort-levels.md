@@ -73,6 +73,7 @@ Theo's only use for it is "just trying to burn a limit"
 
 | Model | Default | Also fine | Avoid | Notes |
 |---|---|---|---|---|
+| Claude Fable 5.2 | `high` | `xhigh` for one bounded hard pass (top Frontier Code score, at roughly Opus 5.5 `max` cost) | `max` | Anthropic's own chart: "Fable 52 Max will score worse on most coding tasks consistently and you should not use it as a developer" ([FAB52 12:04](https://youtu.be/yh5IAUow4Hc?t=724)). Default conflicts by surface (API `high`, Claude apps and Claude Code `medium`), so set it explicitly. `low` and `medium` untested. |
 | Claude Fable 5.1 | `high` | `low` for routine, known-simple work; `medium` to stop a rabbit hole | `max`; `xhigh` without evidence | "Doesn't seem to benefit as much going beyond high" ([FAB51 13:53](https://youtu.be/r_dw-1109Ag?t=833)). See §6 on the low/xhigh conflict. |
 | Claude Opus 5.5 | `high` | `medium` for scoped or cost-sensitive work; `xhigh` for a polish/refinement pass | `low`, `max` | Harness default appears to be `medium` ([OPUS55 31:02](https://youtu.be/jgGyX7MPPVg?t=1862)). "Low is really bad"; "low and max are dangerous... medium, high, XH high, those all have seemed really good" ([OPUS55 8:27](https://youtu.be/jgGyX7MPPVg?t=507)). |
 | Claude Sonnet 5.5 | `high` | `xhigh` for harder analysis | `low`, `max`; treat `medium` as weaker than Opus `medium` | "Medium is a lot stronger with Opus than it is with Sonnet" ([SON55 16:48](https://youtu.be/8WbW_n95wc4?t=1008)). Exception: `low` is fine when Sonnet is only a wrapper that shells out to another model (§7). |

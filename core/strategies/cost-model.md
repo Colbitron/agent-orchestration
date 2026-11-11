@@ -97,6 +97,7 @@ dominant cost and does not rely on the exact read share.
 
 | Model | Input | Output | Cache read | Cache write | Source |
 |---|---|---|---|---|---|
+| Claude Fable 5.2 | 8 | 40 | 0.20 | 10 (5m), 16 (1h) | [FAB52 5:37](https://youtu.be/yh5IAUow4Hc?t=337); Anthropic pricing page, fetched 2026-11-11. Fast mode 16 / 80 |
 | Claude Fable 5.1 | 10 | 50 | 0.25 | not stated | [FAB51 6:54](https://youtu.be/r_dw-1109Ag?t=414) |
 | Claude Opus 5.5 | 4 | 20 | 0.20 | 5 | [OPUS55 4:45](https://youtu.be/jgGyX7MPPVg?t=285); [SON55 8:35](https://youtu.be/8WbW_n95wc4?t=515); Anthropic pricing page, fetched 2026-10-08 |
 | Claude Sonnet 5.5 | 2 | 10 | 0.10 (0.20 until October 2026) | 2.50 | [SON55 7:32](https://youtu.be/8WbW_n95wc4?t=452); cut per Anthropic pricing page, fetched 2026-10-08; [H55 4:36](https://youtu.be/38_6C0dkKmU?t=276) |

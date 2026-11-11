@@ -2,7 +2,7 @@
 id: openclaw-cli
 harness: openclaw
 binary: openclaw
-reaches: [claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, gpt-6-astra, gpt-6-1-sol, gpt-6-luna, gemini-3-8-flash, qwen3-8-27b, gpt-oss-20b, deepseek-v4-1-flash, mimo-v2-6-pro, glm-5-3]   # any provider/model its provider plugins and auth profiles cover (Anthropic, OpenAI, Google, OpenRouter, Ollama, ...); which exact models each provider exposes is unverified
+reaches: [claude-fable-5-2, claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, gpt-6-astra, gpt-6-1-sol, gpt-6-luna, gemini-3-8-flash, qwen3-8-27b, gpt-oss-20b, deepseek-v4-1-flash, mimo-v2-6-pro, glm-5-3]   # any provider/model its provider plugins and auth profiles cover (Anthropic, OpenAI, Google, OpenRouter, Ollama, ...); which exact models each provider exposes is unverified
 auth: "stored auth profiles in ~/.openclaw (openclaw onboard, openclaw models auth login --provider <id>, or openclaw models auth setup-token --provider <id> on a TTY), reuse of an existing Claude Code login (agentRuntime claude-cli), or ANTHROPIC_API_KEY / OPENAI_API_KEY in the environment (--auth-env-only forces env and loads no config). Docs recommend an API key over subscription tokens for automation"
 api_key_only: [anthropic]        # docs recommend an API key over subscription tokens for automation (auth above)
 verified: docs                   # docs.openclaw.ai cli/agent, gateway/config-tools/tool-policy, providers/anthropic, install, read 2026-10-19 (about v2026.10.5); the openclaw binary is not on PATH here (~/.openclaw is from 2026.3.x), nothing below has been run
