@@ -388,9 +388,9 @@ subset of work". Anthropic's egg-drop demo (one run, vendor numbers): Opus
 ([H55 22:17-23:20](https://youtu.be/38_6C0dkKmU?t=1337)). The rule only holds when each attempt can be checked
 cheaply.
 
-**Subscription credit (reported, unverified).** Max plans reportedly include
-a monthly programmatic-use credit: $100 on Max 5x and $200 on Max 20x
-([H55 20:12-20:36](https://youtu.be/38_6C0dkKmU?t=1212); a secondary report says it covers the Agent SDK, `claude -p`,
+**Subscription credit.** Max and Ultra include a monthly API credit: $100 on
+Max (5x) and $200 on Ultra, the renamed Max 20x (claude.com/pricing, fetched
+2026-11-13; [H55 20:12-20:36](https://youtu.be/38_6C0dkKmU?t=1212)). What it covers is still unverified (a secondary report says it covers the Agent SDK, `claude -p`,
 Claude Code GitHub Actions and third-party apps, billed at API rates). If so,
 `claude -p` bridge calls (`core/bridges/claude-cli.md`) may draw from that
 credit rather than plan quota. Verify this in the account before relying

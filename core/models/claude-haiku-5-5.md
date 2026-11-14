@@ -5,7 +5,7 @@ vendor: anthropic
 family: claude
 status: current
 released: 2026-10
-as_of: 2026-10-19
+as_of: 2026-11-13
 confidence: medium               # official specs and prices (high); one launch-day video with a few hands-on runs; vendor benchmarks; no AA index number found
 
 api_ids: [claude-haiku-5-5]      # Bedrock and Vertex ids not checked
@@ -54,7 +54,7 @@ scores:
   orchestration: 2
 
 tasks:
-  quick-fix:      {fit: poor, note: "Must land. Theo would not use it for code. Exception: a lead may fan out several Haiku attempts when a script can check each one."}
+  quick-fix:      {fit: poor, note: "Must land. Never writes code: 'Don't use haiku to write code please.'"}
   feature:        {fit: poor, note: "Must land and wide. Terminal-Bench 4.0 39.2% vs Sonnet 5.5 70.6%; Anthropic says Sonnet and Opus stay better for complex agentic coding."}
   long-run:       {fit: poor, note: "Cornered itself on a rate limit and stalled; long sessions cross the 100K price tier on every turn; cost inversion when it fails slowly."}
   frontend:       {fit: poor, note: "With the Claude design skill 'usable, not great'; without it 'classic LLM design'. Fable or Opus."}
@@ -73,7 +73,7 @@ tasks:
 role_hints:
   as_primary: "Never. Theo: 'I won't be the one to pick it'; let Opus or Sonnet call it."
   as_subagent: "Cheap, fast, parallel worker for bounded, verifiable jobs: file search, data gathering, categorisation, reading docs, many attempts with programmatic checks. Reasoning on, prompt under 100K."
-  never_for: ["primary or interactive model", "anything that must land without a stronger model's review", "code review or merge gating", "trusting CI status as an audit", "reasoning-off calls", "long agentic loops", "leading other agents", "max effort"]
+  never_for: ["writing code", "one-off side tasks for a lead", "primary or interactive model", "anything that must land without a stronger model's review", "code review or merge gating", "trusting CI status as an audit", "reasoning-off calls", "long agentic loops", "leading other agents", "max effort"]
 ---
 
 ## Summary
@@ -232,6 +232,9 @@ each job small and closed, and never let it own the done state.
 ## Routing guidance
 
 Route here for:
+- Bulk pattern-matching: go through every file (or every log line, PR or
+  record) to find a pattern you can't detect programmatically
+  ([OVF 11:28](https://youtu.be/XtykeVoSmP8?t=688)).
 - File and code search a lead needs when a plain ripgrep will not do
   ([H55 23:27-23:34](https://youtu.be/38_6C0dkKmU?t=1407)).
 - Data gathering: fetching and summarising many items (PRs, issues, logs),
@@ -241,10 +244,16 @@ Route here for:
 - Reading documentation or comparing other projects to answer a lead's
   question.
 - Vetting a lead's hypotheses in parallel during an investigation.
-- Many attempts where each one is checked by running code.
+- Many attempts at a non-code job (extraction, categorisation, a search)
+  where each attempt is checked by a script.
 - Cheap browser or desktop flows, on trial only, with a verification step.
 
 Do not route here for:
+- Writing code, at any size, even with a review after. "Don't use haiku to
+  write code please" ([OVF 11:35](https://youtu.be/XtykeVoSmP8?t=695)), reaffirming the H55 verdict.
+- One-off side tasks for a lead. Anthropic's guide suggests them; Theo: "I
+  hate this framing. I would never ever ever use Haiku for a side task"
+  ([OVF 11:20](https://youtu.be/XtykeVoSmP8?t=680)). Its value is volume, not a single errand.
 - Anything that must land without a stronger model's review: features,
   quick fixes, babysitting, front end, copy.
 - Code review or deciding what is merge-ready.

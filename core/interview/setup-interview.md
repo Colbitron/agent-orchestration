@@ -63,7 +63,7 @@ is a front end, not a model host) and record those as harnesses too.
 
 For each vendor, ask how they pay, if at all:
 
-- **Anthropic**: none / Claude subscription (Pro, Max 5x, Max 20x, Team) /
+- **Anthropic**: none / Claude subscription (Pro, Max 5x, Ultra (formerly Max 20x), Team) /
   API key / both. If they run OpenClaw or Hermes Agent and answer
   subscription, tell them Claude through those two runtimes needs an API key,
   and record `both` if they have one.

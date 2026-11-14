@@ -120,7 +120,9 @@ than editing this file; lessons go in lessons.md.
 (one row per enabled model, from profile scores and config cost; Reach it
  via leaves out a bridge, or a primary harness driven by one, whose
  `api_key_only` names the model's vendor while access.<vendor>.type is
- `subscription`, and one note under the table says so)
+ `subscription`, and one note under the table says so. The Effort cell
+ names every level the profile avoids, and always `max` when the model
+ offers it, so the standing rules do not repeat effort limits)
 
 ## Routing table
 | Task | Primary | Fallback | Effort | Why |
@@ -139,7 +141,6 @@ than editing this file; lessons go in lessons.md.
   if a smarter model with better taste reviews the result before it lands.
   Speed never skips review. (Only if `priorities.speed_requires_review` is
   true.)
-- Never use `max` effort on any model. <effort notes from profiles>.
 - Every delegated prompt states what you want, what "done" means, and when
   to stop and ask. See delegation-prompting.
 - Review: <cross-family rule as resolved>.

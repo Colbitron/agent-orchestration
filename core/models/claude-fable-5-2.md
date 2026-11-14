@@ -5,7 +5,7 @@ vendor: anthropic
 family: claude
 status: current
 released: 2026-11
-as_of: 2026-11-11
+as_of: 2026-11-13
 confidence: medium
 
 api_ids: [claude-fable-5-2]
@@ -55,8 +55,8 @@ tasks:
   feature:        {fit: good, note: "Below Opus 5.5 on the speaker's own codebase benches and needs more supervision; Anthropic and the speaker both name Opus 5.5 the daily driver. Escalate here for hard or cross-package features."}
   long-run:       {fit: best, note: "Better at 'not getting blocked in long runs and solving hard problems in long runs', and stays more coherent over long runs; add checkpoints because it can spiral on an unimportant decision."}
   frontend:       {fit: best, note: "Best visuals available with Anthropic's design skill loaded ('Tailwind template slop' without); name every deliverable, because it misses implied ones (a diagram, a chart that shows the gap)."}
-  review:         {fit: ok, note: "Trusted final gate that lets nitpicks slide, but misses some issues and took about 120 minutes for 8 PRs; too slow for a review loop."}
-  investigate:    {fit: good, note: "Gave the one-line root cause where Terra produced six rounds of noise, and pushes back on bad advice; give it the sources so it can disprove itself."}
+  review:         {fit: ok, note: "A ship-or-not gate, not an exhaustive finder: it lets slightly wrong code through more often than Opus or Sonnet on Theo's evals, but everything it called mergeable so far was. About 120 minutes for 8 PRs; too slow for a review loop."}
+  investigate:    {fit: good, note: "Lead it on the root cause, not on building the repro: it gave the one-line root cause where Terra produced six rounds of noise and caught the flaw an Opus-built repro missed, but Opus 5.5 builds the more thorough repro or test environment, so have Opus build it and Fable work it. Give it the sources so it can disprove itself."}
   analyze:        {fit: ok, note: "Made 4 false claims of 61 (about $23) where 6.1 Sol made none of 38 ($4.19), and ranked third behind Opus 5.5 on T3 Code; in data analysis it jumps and skips outside context."}
   bulk:           {fit: poor, note: "Expensive and quota-capped; use cheaper models."}
   research:       {fit: ok, note: "Big vendor gains on agentic science research (74.6 vs 52.6 for Fable 5.1), but the speaker found research and analysis results mixed: novel ideas, unjustified jumps."}
@@ -68,7 +68,7 @@ tasks:
   orchestrate:    {fit: best, note: "Anthropic positions it as orchestrator or adviser to smaller models; inherits Fable 5.1's subagent planning (untested on 5.2). Every Fable subagent burns Fable quota."}
 
 role_hints:
-  as_primary: "Hardest open-ended technical work: long autonomous runs, front-end design, hard bugs, non-coding science and engineering."
+  as_primary: "Hardest open-ended technical work and unprovable work (design, novel approaches, choosing among very different options): long autonomous runs, front-end design, hard bugs, non-coding science and engineering."
   as_subagent: "Adviser that an Opus 5.5 lead consults on hard problems, and design specialist for front-end work."
   never_for: ["max effort", "workloads requiring zero data retention (ZDR) without Anthropic's authorisation", "routine features when Fable quota is limited", "bulk mechanical work", "unsupervised taste-sensitive decisions", "unsupervised macOS computer use"]
 ---
@@ -213,6 +213,13 @@ Route here for:
 - Non-coding science and engineering: CAD and hardware, robotics, science
   research. Use Mythos 5.2 for cyber and bio if the organisation is verified.
 - Adviser calls from an Opus 5.5 lead on problems Opus is stuck on.
+- Unprovable work, where "you cannot objectively say this is better than
+  that": graphics, a visualiser that doesn't look like every other one,
+  infrastructure ideas, open-ended exploration. "Fable is going to find things
+  opus never [will]" ([OVF 36:01](https://youtu.be/XtykeVoSmP8?t=2161)). The routing question: can the result be
+  checked and hill-climbed? Yes goes to Opus 5.5; no goes to Fable.
+- A wider spread of options when Opus's alternatives cluster around one idea
+  ([OVF 38:28](https://youtu.be/XtykeVoSmP8?t=2308)).
 - Leading orchestrated efforts, with subagents pinned to cheaper models.
 
 Do not route here for:
@@ -221,6 +228,9 @@ Do not route here for:
 - Codebase analysis when GPT-6.1 Sol or Opus 5.5 is available (fewer false
   claims, far cheaper).
 - Review loops: at about 15 minutes per PR, use it only as a final gate.
+- Building exhaustive repro or test environments, or changes that must be
+  perfect: it "did not have all the edges" where Opus did
+  ([OVF 30:26](https://youtu.be/XtykeVoSmP8?t=1826)).
 - Taste-sensitive product decisions without a human check.
 - Max effort, bulk work, or workloads that need ZDR (use Opus 5.5).
 
@@ -231,7 +241,19 @@ Handoff patterns:
   visuals with Opus gameplay and UX judgment ("a combination of Opus and Fable is
   the way to go", [FAB52 44:01](https://youtu.be/yh5IAUow4Hc?t=2641)).
 - **Fable as the final PR gate** after a faster reviewer has cleared the loop.
-- **Fable rescues stuck work** (carried from 5.1): hand over a stuck PR or run.
+  Its job there is "is this good enough to ship", not finding every issue: on
+  Theo's evals it lets slightly wrong code through more often than Opus or
+  Sonnet, but "everything Fable said was good to merge ended up being good to
+  merge" ([OVF 40:46](https://youtu.be/XtykeVoSmP8?t=2446)).
+- **Fable rescues stuck work** (carried from 5.1, confirmed on 5.2): when Opus
+  has been running in circles on a branch, ask Fable to "audit the work that was
+  done here and tell us what we should actually do next". It may fix what Opus
+  could not, or rule that it is already fine and merge ([OVF 39:28](https://youtu.be/XtykeVoSmP8?t=2368),
+  [OVF 41:33](https://youtu.be/XtykeVoSmP8?t=2493)).
+- **Opus builds, Fable audits.** "Verify the work Opus did here … Then I want
+  you to play with it and find the edges that actually cause problems and
+  propose solutions" found a 150x payload cut Opus had missed
+  ([OVF 29:50](https://youtu.be/XtykeVoSmP8?t=1790)).
 
 ## Cost notes
 
@@ -255,6 +277,9 @@ Handoff patterns:
 
 ## Evidence
 
+- OVF: "I think I figured it out", Theo (t3.gg), YouTube,
+  https://youtu.be/XtykeVoSmP8 (2026-11-12, two days into Fable 5.2). Digest:
+  `research/claude-supplemental.md` Video 3.
 - FAB52: "Nobody Is Competing With Anthropic", Theo (t3.gg), YouTube,
   https://youtu.be/yh5IAUow4Hc. Filmed after about 14 hours with the model and
   about 20 landed PRs, without early access. Digest:

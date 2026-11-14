@@ -1060,7 +1060,11 @@ def model_cell(ctx, model, agents, label=None, primary=False):
 def effort_cell(model, effort, overridden):
     if effort is None:
         return "n/a (no effort control)"
-    avoid = [str(a) for a in as_list(model.effort.get("avoid")) if str(a) != effort]
+    avoid = [str(a) for a in as_list(model.effort.get("avoid"))]
+    # The kit never uses max; say so in the cell even if a profile forgot to list it.
+    if "max" in [str(l) for l in as_list(model.effort.get("levels"))] and "max" not in avoid:
+        avoid.append("max")
+    avoid = [a for a in avoid if a != effort]
     note = "never " + join_words(avoid, "or") if avoid else ""
     if overridden:
         note = "set in config" + ("; " + note if note else "")
@@ -1210,20 +1214,6 @@ def render_routing(ctx, rows, bridges, agents, date, version, commit, short_why=
         rules.append("Speed rule: on small tasks a faster or cheaper model may do the work only if a "
                      "smarter model with better taste reviews the result before it lands. Speed never "
                      "skips review.")
-    effort_rule = "Never use `max` effort on any model."
-    avoid_groups = {}
-    for m in ctx.enabled:
-        for lvl in as_list(m.effort.get("avoid")):
-            lvl = str(lvl)
-            if lvl != "max":
-                avoid_groups.setdefault(lvl, []).append(m.short)
-    for lvl in sorted(avoid_groups, key=lambda x: (EFFORT_WORDS.index(x) if x in EFFORT_WORDS else 99, x)):
-        effort_rule += " Never `%s` on %s." % (lvl, join_words(avoid_groups[lvl], "or"))
-    ov = [(ctx.models[k].short, str(v)) for k, v in sorted(ctx.effort_overrides.items())
-          if k in ctx.models and v not in (None, "")]
-    if ov:
-        effort_rule += " Effort set in config.yaml: %s." % ", ".join("%s %s" % p for p in ov)
-    rules.append(effort_rule)
     rules.append("Every delegated prompt states what you want, what \"done\" means, and when to stop "
                  "and ask. See core/strategies/delegation-prompting.md.")
     review = next((r for r in rows if r.task["id"] == "review"), None)

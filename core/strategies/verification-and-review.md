@@ -145,6 +145,14 @@ findings → Claude fixes → OpenAI re-reviews ("better, but I'll still fix two
 small gaps") → Claude fixes → merge gate.
 ```
 
+**Triage before the fixer sees anything, especially when Opus 5.5 fixes.** Opus
+applies every comment, "good or bad"; fed a cross-family reviewer's full output
+it turns "a 30 line of code PR" into "a thousand plus" ([OVF 30:48](https://youtu.be/XtykeVoSmP8?t=1848)). The
+orchestrator passes on only verified, in-scope, must-fix findings, states the
+scope limit in the fix prompt, and reports the rest as follow-ups. Cap the loop
+at a few rounds; if the reviewer is still finding nits, hand the merge call to
+Fable 5.2 as a ship-or-not gate (`claude-fable-5-2.md`).
+
 Delegate this loop rather than relaying by hand: "Hey, can you have Astra
 verify this?" Fable then "will update the code accordingly, then test it again
 and not come back to me until it has results it's happy with"

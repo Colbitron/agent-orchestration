@@ -75,7 +75,7 @@ Theo's only use for it is "just trying to burn a limit"
 |---|---|---|---|---|
 | Claude Fable 5.2 | `high` | `xhigh` for one bounded hard pass (top Frontier Code score, at roughly Opus 5.5 `max` cost) | `max` | Anthropic's own chart: "Fable 52 Max will score worse on most coding tasks consistently and you should not use it as a developer" ([FAB52 12:04](https://youtu.be/yh5IAUow4Hc?t=724)). Default conflicts by surface (API `high`, Claude apps and Claude Code `medium`), so set it explicitly. `low` and `medium` untested. |
 | Claude Fable 5.1 | `high` | `low` for routine, known-simple work; `medium` to stop a rabbit hole | `max`; `xhigh` without evidence | "Doesn't seem to benefit as much going beyond high" ([FAB51 13:53](https://youtu.be/r_dw-1109Ag?t=833)). See §6 on the low/xhigh conflict. |
-| Claude Opus 5.5 | `high` | `medium` for scoped or cost-sensitive work; `xhigh` for a polish/refinement pass | `low`, `max` | Harness default appears to be `medium` ([OPUS55 31:02](https://youtu.be/jgGyX7MPPVg?t=1862)). "Low is really bad"; "low and max are dangerous... medium, high, XH high, those all have seemed really good" ([OPUS55 8:27](https://youtu.be/jgGyX7MPPVg?t=507)). |
+| Claude Opus 5.5 | `high` | `medium` for scoped or cost-sensitive work | `low`, `xhigh`, `max` | Harness default appears to be `medium` ([OPUS55 31:02](https://youtu.be/jgGyX7MPPVg?t=1862)). "Low is really bad"; "low and max are dangerous... medium, high, XH high, those all have seemed really good" ([OPUS55 8:27](https://youtu.be/jgGyX7MPPVg?t=507)). |
 | Claude Sonnet 5.5 | `high` | `xhigh` for harder analysis | `low`, `max`; treat `medium` as weaker than Opus `medium` | "Medium is a lot stronger with Opus than it is with Sonnet" ([SON55 16:48](https://youtu.be/8WbW_n95wc4?t=1008)). Exception: `low` is fine when Sonnet is only a wrapper that shells out to another model (§7). |
 | Claude Haiku 5.5 | `high` for subagent work | `xhigh` for a harder bounded pass | `max` until re-baselined (§6); reasoning off; `low` as for other Anthropic models (§6) | Levels `low` to `max`; API default is `medium`, so set the level explicitly. Theo's AA chart shows `xhigh` and `max` as the best value in Anthropic's range ([H55 14:01-14:09](https://youtu.be/38_6C0dkKmU?t=841)); the never-`max` rule stands until the user's own re-baseline tests it. Never turn reasoning off: Anthropic models are "bad at that" ([H55 10:23-11:25](https://youtu.be/38_6C0dkKmU?t=623)). Thinking can only be disabled at `high` or below (Anthropic docs). |
 | GPT-6 Astra | `high` | `low` for science-style tasks (54.3% on Terminal Bench Science at `low`, [FVA 4:48](https://youtu.be/P7bxbDSnZRM?t=288)) | `max`; `fast` mode; careless `ultra` | "High does seem to be one of the best options"; `xhigh` sometimes scored below `high` ([ASTRA 8:09](https://youtu.be/XFWpf0wLbh0?t=489)). "If you're using fast with Astra, you're probably using Astra wrong" ([FVA 1:06:22](https://youtu.be/P7bxbDSnZRM?t=3982)). |
@@ -110,12 +110,15 @@ fails and then you redo it on medium or high"
 
 ## 5. When `xhigh` makes sense
 
-- A **refinement pass** after a draft at the default. Theo drafted a game at
-  Opus `medium`, then ran "make it as visually appealing as possible" at
-  `xhigh` ([OPUS55 31:02](https://youtu.be/jgGyX7MPPVg?t=1862)).
 - **Deep, detail-sensitive work** where `high` "sometimes misses smaller
-  details" ([OPUSG 14:40](https://youtu.be/ejjBbaq9RmY?t=880)), e.g. Opus or Sonnet on a
+  details" ([OPUSG 14:40](https://youtu.be/ejjBbaq9RmY?t=880)), e.g. Sonnet on a
   hard analysis.
+- **Not on Opus 5.5.** Theo has used Opus `xhigh` for a polish pass
+  ([OPUS55 31:02](https://youtu.be/jgGyX7MPPVg?t=1862)), Windows work, large log
+  corpora and exploratory branches ([OVF 13:16](https://youtu.be/XtykeVoSmP8?t=796)), but
+  calls `high` "goated" ([OVF 8:01](https://youtu.be/XtykeVoSmP8?t=481)). **Kit rule (2026-11-13):** Opus
+  stays at `high`; when `high` is not enough, escalate to Fable 5.2 at `high`
+  instead of raising Opus's effort.
 - **Exhaustive bug hunting with Astra**, accepting ~4x time and tokens
   ([FVA 24:37](https://youtu.be/P7bxbDSnZRM?t=1477)).
 
@@ -142,9 +145,11 @@ limiting; never for `feature`, `long-run`, `frontend`, or `orchestrate`.
 
 **Opus default.** Claude Code's default for Opus 5.5 appears to be `medium`
 and AA rates medium as the best value ([OPUS55 31:02](https://youtu.be/jgGyX7MPPVg?t=1862); [OPUS55 17:10](https://youtu.be/jgGyX7MPPVg?t=1030)); the Opus prompting video says "I just leave it on high or xhigh"
-([OPUSG 14:18](https://youtu.be/ejjBbaq9RmY?t=858)). **Kit rule:** `high` for work that
+([OPUSG 14:18](https://youtu.be/ejjBbaq9RmY?t=858)). The OVF video settles on `high`
+("Opus 55 high is goated"), with medium "a little tiny bit too quick to end
+its turn" ([OVF 7:38](https://youtu.be/XtykeVoSmP8?t=458)). **Kit rule:** `high` for work that
 must land or is wide; `medium` is acceptable for narrow or cost-sensitive work
-when the user's config prefers it.
+when the user's config prefers it; never `xhigh` (§5).
 
 **Anthropic models on `low` generally.** The Sonnet video says "I don't think
 you should use any anthropic model on low right now"

@@ -5,7 +5,7 @@ vendor: anthropic
 family: claude
 status: current
 released: null
-as_of: 2026-10-19
+as_of: 2026-11-13
 confidence: high
 
 api_ids: [claude-opus-5-5]
@@ -32,10 +32,12 @@ notes_on_cost: >
 effort:
   levels: [low, medium, high, xhigh, max]
   default: high
-  avoid: [low, max]
+  avoid: [low, xhigh, max]
   notes: >
-    high for normal work; medium is the cost sweet spot (often matches Fable 5.1 max on
-    coding benches); xhigh for refinement passes. low is poor value; max loops (a 6.5-hour
+    high for normal work ("Opus 55 high is goated"); medium is the cost sweet spot (often
+    matches Fable 5.1 max on coding benches) but a little quick to end its turn. The kit
+    avoids xhigh on Opus (kit rule, 2026-11-13): when high is not enough, escalate to Fable at
+    high rather than raising Opus's effort. low is poor value; max loops (a 6.5-hour
     runaway) for ~1% gain. The API and Claude Code default is medium, so set it explicitly.
 
 scores:
@@ -53,8 +55,8 @@ tasks:
   feature:        {fit: best, note: "PR quality close to Fable 5.1 (similar high-severity rate, slightly more nitpicks); escalate to Fable for wide cross-package work or if output misses the bar."}
   long-run:       {fit: good, note: "Rewrote a stalled TS-to-Rust port in a day; testers ran a 680K-LOC migration. Needs named stops and 'do all phases' or it stops between phases; failure odds rise with run length."}
   frontend:       {fit: ok, note: "Falls back on default styles without direction; good only with an explicit list of styles to avoid. Prefer Fable for open-ended design."}
-  review:         {fit: ok, note: "About twice as good as Opus 5 with no contradicted findings, but finds less than Fable, Astra, 6.1 Sol and Grok 4.7. Never the only reviewer of Claude-written code."}
-  investigate:    {fit: ok, note: "Discernment weakens when the system is already in a bad state; 6.1 Sol found regressions Opus missed. Delegate root-causing to Sol or Sonnet."}
+  review:         {fit: ok, note: "About twice as good as Opus 5 with no contradicted findings, but finds less than Fable, Astra, 6.1 Sol and Grok 4.7. Never the only reviewer of Claude-written code. A nitpicker on its own diffs: it rarely lets anything slide (Allen, in Theo's analogy)."}
+  investigate:    {fit: ok, note: "Builds the most thorough repro and test environments (Fable 5.2 then finds the edges in them). Discernment weakens when the system is already in a bad state; 6.1 Sol found regressions Opus missed. Delegate root-causing to Sol or Sonnet."}
   analyze:        {fit: good, note: "Ranked above Fable on the decomposition bench, below Astra and slightly below Sonnet (which cost about half). Not for sweeping 'find everything' audits."}
   bulk:           {fit: good, note: "Medium effort is cheap per task on AA ($1.34); 6.1 Sol is far cheaper on scoped work if the user has a Codex sub."}
   research:       {fit: good, note: "Clear, front-loaded reports; external web research specifically is not covered in research."}
@@ -68,7 +70,7 @@ tasks:
 role_hints:
   as_primary: "Default daily driver for most coding, writing and multi-phase implementation work, and the lead orchestrator that calls Sol/Sonnet/Fable."
   as_subagent: "Implementation subagent and the ZDR-compatible substitute for Fable."
-  never_for: ["low effort", "max effort", "sole reviewer of Claude-written code", "open-ended front-end design without a style spec", "unsupervised macOS computer use"]
+  never_for: ["low effort", "xhigh effort", "max effort", "sole reviewer of Claude-written code", "fixing unfiltered reviewer feedback", "open-ended front-end design without a style spec", "unsupervised macOS computer use"]
 ---
 
 ## Summary
@@ -174,6 +176,20 @@ model), or computer use. It needs explicit structure to run long: named stops,
   risks a flag ([OPUSG 25:59](https://youtu.be/ejjBbaq9RmY?t=1559)).
 - **Computer use on macOS.** "As long as you don't use Macs." Run long or
   computer-use agents on remote machines.
+- **Applies every piece of feedback.** "If you give it feedback, it will apply
+  the feedback. It doesn't matter how good or bad." With 6.1 Sol commenting on
+  everything, "what should have been a 30 line of code PR will become a thousand
+  plus" ([OVF 30:48](https://youtu.be/XtykeVoSmP8?t=1848)). Never pass a reviewer's raw output
+  to Opus: triage it first (Routing guidance).
+- **Doesn't challenge the task; lets scope creep.** "It will always take the
+  teacher's word"; unless told otherwise it will "bloat out a spec, allow for
+  feature creep", and "does not stop unless it's told to"
+  ([OVF 21:53](https://youtu.be/XtykeVoSmP8?t=1313)). It is not sycophantic, "it's not going to
+  challenge the task it was given" ([OVF 23:32](https://youtu.be/XtykeVoSmP8?t=1412)).
+- **Regresses to the mean.** Asked for five options, it gives near-duplicates
+  and a couple that make no sense; Fable gives more varied ones
+  ([OVF 38:28](https://youtu.be/XtykeVoSmP8?t=2308)). It also missed a design flaw in its own
+  repro environment that Fable spotted at once ([OVF 29:07](https://youtu.be/XtykeVoSmP8?t=1747)).
 
 ## How to prompt it
 
@@ -199,6 +215,17 @@ explicit about what you don't want is even better").
 
 For pair programming, the guide suggests the reverse: "a one-line plan before
 it starts and a short recap at the end."
+
+**Invite pushback** (Theo; it has "resulted in meaningfully better outputs",
+[OVF 23:48](https://youtu.be/XtykeVoSmP8?t=1428)). Append to task prompts:
+
+> If you think this is a good idea, do it. Otherwise, suggest something else.
+
+Its counter-proposals are sometimes worse than the original; the orchestrator
+or the human picks, not Opus.
+
+**State scope limits and the stop condition** on every task, since it lets
+features creep and "does not stop unless it's told to".
 
 **Subagent grant** (Theo; append to lead-agent prompts):
 
@@ -250,7 +277,7 @@ screenshot with "This sucks. Make it better."
 **Other rules:**
 - Steer a running thread with follow-ups instead of restarting it.
 - Attach screenshots and charts rather than pasting errors.
-- If a max run seems stuck: stop it, switch to high/xhigh, ask "what's the state
+- If a max run seems stuck: stop it, switch to high, ask "what's the state
   of the work", then say "continue".
 - Tell it compaction is handled, to counter context anxiety.
 - Constrain which model its subagents may use.
@@ -267,6 +294,12 @@ Route here for:
 - Leading multi-agent work as the orchestrator, with explicit grants.
 - Any coding workload that requires zero data retention.
 - three.js and browser-game builds.
+- Provable work: anything that can be verified and hill-climbed (a TypeScript
+  to Rust rewrite, a migration with a test suite). "Opus is more than good
+  enough for that" ([OVF 35:45](https://youtu.be/XtykeVoSmP8?t=2145)).
+- High-risk changes that must be perfect, and building thorough repro or test
+  environments; it "will find the things that Fable would have glossed over"
+  ([OVF 14:41](https://youtu.be/XtykeVoSmP8?t=881)).
 
 Do not route here for:
 - Open-ended front-end or marketing design without a style spec (Fable).
@@ -274,12 +307,15 @@ Do not route here for:
   architecture critiques (6.1 Sol, Astra, Grok 4.7).
 - Deep root-cause hunts in degraded systems (6.1 Sol, or Fable for wide fixes).
 - Computer use, especially on macOS (OpenAI via Codex).
-- Low or max effort, ever.
+- Unprovable, open-ended work (design, novel approaches, choosing among very
+  different options): Fable 5.2.
+- Low, xhigh or max effort.
 
 Handoff patterns:
 - **Opus delegates review to OpenAI.** Opus implements; 6.1 Sol reviews (reading
-  code and reproducing with computer use); findings go back to Opus; Opus fixes;
-  Sol re-reviews; then merge. The speaker already has Sol callable from inside
+  code and reproducing with computer use); the orchestrator triages the findings
+  and sends back only the must-fix ones, with an explicit scope limit; Opus fixes;
+  Sol re-reviews; then merge. Cap the rounds: Opus applies whatever it is given. The speaker already has Sol callable from inside
   Claude Code for this ([SOL61 29:47](https://youtu.be/vu8X3YroB-w?t=1787)).
 - **Opus delegates investigation.** Root-causing, triage and "what needs to be
   touched and why" go to 6.1 Sol; bounded codebase deep dives go to Sonnet 5.5,
@@ -291,6 +327,11 @@ Handoff patterns:
 - **Opus as Fable's fallback.** It serves Fable's safeguard-flagged requests and
   replaces Fable where ZDR is required.
 - **Opus as judge.** It blind-evaluated 6.1 Sol's work for the speaker.
+- **Opus builds, Fable audits.** Opus builds the repro or test environment;
+  Fable verifies it and finds the edges that matter ([OVF 29:50](https://youtu.be/XtykeVoSmP8?t=1790)).
+- **Fable lands what Opus keeps extending.** When an Opus thread runs in circles
+  or keeps finding "more we should do", hand it to Fable to audit and decide
+  whether to ship ([OVF 39:28](https://youtu.be/XtykeVoSmP8?t=2368)).
 
 ## Cost notes
 
@@ -307,8 +348,9 @@ Handoff patterns:
   sub in Claude, it is running laps around our friends at OpenAI", "maybe not in
   the pure API prices". On API, 6.1 Sol matched Opus 5.5 max on DeepSWE at about
   1/70 of the cost ([SOL61 21:24](https://youtu.be/vu8X3YroB-w?t=1284)).
-- Effort can be raised or lowered mid-session without busting the cache. A
-  value pattern: draft at medium/high, then a polish pass at xhigh.
+- Effort can be raised or lowered mid-session without busting the cache. The
+  release video's pattern of a polish pass at xhigh is not used: the kit avoids
+  xhigh on Opus and escalates to Fable at high instead.
 - Fast mode exists for Opus (2x price per the bundled API reference); not
   discussed in research.
 - Watch for, and forbid unless wanted, Fable subagents spawned by Opus.
@@ -319,6 +361,7 @@ Handoff patterns:
 - SON55: "OpenAI should be scared of this one", Theo (t3.gg), YouTube, https://youtu.be/8WbW_n95wc4
 - OPUSG: "Getting the most out of Opus 5.5", Theo (t3.gg), YouTube, https://youtu.be/ejjBbaq9RmY (reads Anthropic's guide by Addy Osmani).
 - SOL61: "OpenAI fights back", Theo (t3.gg), YouTube, https://youtu.be/vu8X3YroB-w
+- OVF: "I think I figured it out", Theo (t3.gg), YouTube, https://youtu.be/XtykeVoSmP8 (Opus 5.5 vs Fable 5.2; digest in `research/claude-supplemental.md` Video 3).
 - MODELS: "Please stop using stupid models", Theo (t3.gg), YouTube, https://youtu.be/iBrAWpjXNxs covers only unversioned Opus / Opus 5 ("Opus
   sucks"); it does not apply to 5.5 and is not used for scores.
 - API id, 1M context, medium as the API default effort and the fast-mode price
@@ -328,7 +371,9 @@ Handoff patterns:
   "the previous week".
 - Transcript ambiguities: the release video gives medium as the default effort,
   while the supplemental video's speaker leaves it on high or xhigh. This
-  profile recommends high, with medium for cost. Edwin's "medium is Fable 5.1
+  profile recommends high, with medium for cost. The OVF video calls high
+  "goated" and keeps xhigh for Windows work, large log corpora and exploratory
+  branches; the kit avoids xhigh on Opus anyway (kit rule, 2026-11-13). Edwin's "medium is Fable 5.1
   level intelligence" is disputed by the speaker ("a bit of a reach"). The Sol
   video's fish-slop costs ($50 for Opus) are contaminated by an accidental Fable
   subagent. The Opus review-bench finding count is not stated.

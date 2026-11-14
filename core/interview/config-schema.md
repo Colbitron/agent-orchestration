@@ -45,7 +45,7 @@ harnesses:
 access:
   anthropic:
     type: subscription             # none | subscription | api | both
-    plan: max-5x                   # pro | max-5x | max-20x | team | null
+    plan: max-5x                   # pro | max-5x | ultra | team | null (max-20x = ultra, the old name)
     notes: "Fable capped at 50% of weekly quota"
   openai:
     type: none
@@ -222,8 +222,8 @@ label disabled models and `access.open_weights.type` to default `host`.
    with a `local` block whose smallest usable build fits `hardware`, `api`
    enables hosted ones, `both` enables either.
 2. **Cost score.** Start from the profile's `cost_efficiency`. Then:
-   - `access.type: subscription` with a generous plan (Codex Pro, Claude Max
-     20x): +3, capped at 10.
+   - `access.type: subscription` with a generous plan (Codex Pro, Claude Ultra,
+     formerly Max 20x): +3, capped at 10.
    - `subscription` on a basic plan (Pro, Max 5x): +1.
    - `api`: 0 adjustment, and subtract 2 if the model's `pricing_per_mtok.output`
      is 50 or above.

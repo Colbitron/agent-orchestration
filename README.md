@@ -160,6 +160,7 @@ names; the correction tables are in `research/`.
 | FAB52 | [Nobody Is Competing With Anthropic](https://youtu.be/yh5IAUow4Hc) (Fable 5.2) |
 | OPUSG | [Getting the most out of Opus 5.5](https://youtu.be/ejjBbaq9RmY) |
 | FABG | [So I was using Fable wrong...](https://youtu.be/-XWSJM-Ue-o) |
+| OVF | [I think I figured it out](https://youtu.be/XtykeVoSmP8) (Opus 5.5 vs Fable 5.2) |
 | ASTRA | [It's Here.](https://youtu.be/XFWpf0wLbh0) (GPT-6 Astra) |
 | SOL61 | [OpenAI fights back](https://youtu.be/vu8X3YroB-w) (GPT-6.1 Sol) |
 
