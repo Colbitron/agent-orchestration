@@ -104,6 +104,8 @@ dominant cost and does not rely on the exact read share.
 | Claude Haiku 5.5, prompt ≤ 100K tokens | 0.10 | 0.50 | 0.01 | 0.125 | Anthropic pricing page, fetched 2026-10-08 |
 | Claude Haiku 5.5, prompt > 100K tokens | 0.50 | 2.50 | 0.05 | 0.625 | Anthropic pricing page, fetched 2026-10-08 |
 | Claude Haiku 4.5 (superseded by Haiku 5.5) | 1 | 5 | 0.10 | 1.25 | Anthropic pricing page; `core/models/claude-haiku-4-5.md` |
+| GPT-6.2 Astra | 8 | 40 | 0.40 | 10 (30m), 20 (12h) | [AS62 18:35](https://youtu.be/9KvI-zg4mfo?t=1115); OpenAI pricing page, fetched 2026-11-19. Fast 16 / 80 |
+| GPT-6.2 Sol | 2 | 10 | 0.10 | 2.50 (30m), 5 (12h) | [AS62 18:26](https://youtu.be/9KvI-zg4mfo?t=1106); OpenAI pricing page, fetched 2026-11-19. Fast 4 / 20 |
 | GPT-6 Astra | 10 | 50 | 1.00 | 12.50 | [ASTRA 3:33](https://youtu.be/XFWpf0wLbh0?t=213); [FVA 59:14](https://youtu.be/P7bxbDSnZRM?t=3554) |
 | GPT-6.1 Sol | 2 | 10 | 0.10 | not stated | [SOL61 17:40](https://youtu.be/vu8X3YroB-w?t=1060) |
 
@@ -118,8 +120,12 @@ Modifiers:
   writes, and each request is priced on its own (Anthropic pricing page). It
   is the only current Claude model without flat 1M-context pricing (§10, §11).
 - Astra via API above 272K input: 2x input, 1.5x output. Codex is exempt
-  ([ASTRA 5:06](https://youtu.be/XFWpf0wLbh0?t=306)).
+  ([ASTRA 5:06](https://youtu.be/XFWpf0wLbh0?t=306)). The 6.2 models use the same rule, with cache
+  reads and writes also doubled (OpenAI pricing page, 2026-11-19); whether Codex waives it for 6.2 is
+  not stated.
 - OpenAI `fast` mode: ~2x speed at ~2x price ([ASTRA 3:39](https://youtu.be/XFWpf0wLbh0?t=219)).
+- OpenAI Ultrafast (6.2 models): 3x Standard through 2027-02-28, then 6x. Batch is half
+  price (OpenAI pricing page, 2026-11-19).
 - OpenAI Flex: half price, no throughput guarantee, not available in Codex
   ([FVA 1:02:17](https://youtu.be/P7bxbDSnZRM?t=3737)). Good for batch jobs that can wait.
 
@@ -134,6 +140,7 @@ differences.
 | Claude Fable 5.1 | ~78–80K | $7.60–7.63 | AA; same sources |
 | Claude Opus 5.5 | ~120K (max) | ~$6 at max, ~$1.34 at medium | AA; [OPUS55 14:11](https://youtu.be/jgGyX7MPPVg?t=851); [OPUS55 15:17](https://youtu.be/jgGyX7MPPVg?t=917) |
 | Claude Sonnet 5.5 | ~272K | — | **Cursor Bench, not AA** (Opus 218K on the same bench); [SON55 17:41](https://youtu.be/8WbW_n95wc4?t=1061) |
+| GPT-6.2 Astra / 6.2 Sol | — | about 1/2 and 1/8 of Fable 5.2's cost on the same benches | Theo's own benches; [AS62 0:38](https://youtu.be/9KvI-zg4mfo?t=38) |
 | GPT-6.1 Sol | ~110K read per request (vs ~360K for Sonnet) | DeepSWE low $0.21/task | Theo's own runs; [SOL61 19:16](https://youtu.be/vu8X3YroB-w?t=1156) |
 
 The Sonnet and Sol figures come from different measures from the AA rows;

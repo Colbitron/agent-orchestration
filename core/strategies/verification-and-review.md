@@ -64,7 +64,7 @@ Who reviews whom (defaults; the user's routing table overrides):
 
 | Author | Primary reviewer | Second opinion / filter |
 |---|---|---|
-| Claude (Fable, Opus, Sonnet) | OpenAI (GPT-6.1 Sol, or Astra) | Grok 4.7; then a Claude model filters noise |
+| Claude (Fable, Opus, Sonnet) | OpenAI (6.x Sol; GPT-6.2 Astra when the review must find everything) | Grok 4.7; then a Claude model filters noise and restates the findings |
 | OpenAI (Astra, Sol) | Claude (Fable or Opus) for merge-readiness and risk | Automated reviewer bots |
 | Anything that ships | Automated reviewer bots as a gate (§8) | Human for product calls |
 
@@ -75,7 +75,10 @@ Reviewer character ([OPUSG 22:44](https://youtu.be/ejjBbaq9RmY?t=1364); [OPUSG 2
   details and won't let go... It'll report more stuff that doesn't matter,
   but it will occasionally find things that do matter that the Claude models
   just miss entirely." Sol's "Rottweiler nature"
-  ([SOL61 13:05](https://youtu.be/vu8X3YroB-w?t=785)).
+  ([SOL61 13:05](https://youtu.be/vu8X3YroB-w?t=785)). GPT-6.2 Astra scored "pretty much perfect" on
+  Theo's review evals and was "never lying", but its write-ups are hard to
+  parse, so have a Claude model restate them
+  ([AS62 35:11](https://youtu.be/9KvI-zg4mfo?t=2111); [AS62 37:51](https://youtu.be/9KvI-zg4mfo?t=2271)).
 - **Claude models find less but vet it.** Fable's findings "all matter... but
   it just didn't find as much." Opus 5.5 had no contradicted findings on
   Theo's bench. Use a Claude model to filter an OpenAI reviewer's list.

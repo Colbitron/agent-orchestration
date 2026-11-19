@@ -2,7 +2,7 @@
 id: openai-api
 harness: none                    # raw HTTP, one-shot chat completion, no tools
 binary: curl                     # plus jq to build the body and read the answer
-reaches: [gpt-6-luna]            # Astra / 6.1 Sol have api: true but no confirmed API id (api_ids: null)
+reaches: [gpt-6-luna, gpt-6-2-sol, gpt-6-2-astra]   # 6.2 ids confirmed on OpenAI's model pages 2026-11-19; GPT-6 Astra / 6.1 Sol profiles still have api_ids: null
 auth: "OPENAI_API_KEY env var (Bearer header). Never paste the key into a prompt or file"
 verified: unverified             # endpoint/body are the standard OpenAI chat-completions shape; not in research/harnesses.md; not run (no key set)
 as_of: 2026-10-02
@@ -37,7 +37,7 @@ worktree, and run the checks yourself.
 ## Flags
 | Need | Body field / option |
 |---|---|
-| Model | `"model": "gpt-6-luna"` |
+| Model | `"model": "gpt-6-luna"`, `"gpt-6.2-sol"`, `"gpt-6.2-astra"` |
 | Effort | `"reasoning_effort": "<E>"` (OpenAI-compatible convention; values for Luna UNVERIFIED) |
 | Output cap | `"max_completion_tokens": N` (UNVERIFIED for Luna) |
 | Answer | `.choices[0].message.content`; usage in `.usage` |
@@ -45,8 +45,9 @@ worktree, and run the checks yourself.
 
 ## Prompting this model family
 GPT literal style: short imperatives, exact output format, nothing implied. Luna is the cheap
-tier: one narrow task per call, machine-checkable output, escalate misses to 6.1 Sol via
-`codex-cli` instead of retrying Luna.
+tier: one narrow task per call, machine-checkable output, escalate misses to 6.x Sol (here as `gpt-6.2-sol`, or via
+`codex-cli`) instead of retrying Luna. This bridge has no tools and none of Codex's system prompt,
+so anything that needs the repo goes through `codex-cli`.
 
 Review:
 > Below is a diff. Report correctness bugs only, as JSON lines `{"file","line","bug"}`. Do not
@@ -75,5 +76,6 @@ Expected (not run, no key): `OK`, exit 0.
   `null` content plus `finish_reason:"length"` means the output cap was hit.
 - **cwd:** irrelevant; the model cannot read files. Inline the code or diff.
 - `curl -p` is `--proxytunnel`, `codex -p` is `--profile`: never assume `-p` means prompt.
-- Model id `gpt-6-luna` is from the profile's `api_ids`; Astra and 6.1 Sol API ids are not
-  stated anywhere in the research, so do not guess them here.
+- Model ids `gpt-6-luna`, `gpt-6.2-sol` and `gpt-6.2-astra` are from the profiles' `api_ids`.
+  GPT-6 Astra and 6.1 Sol API ids are not stated in the research, so do not guess them here.
+- The 6.2 models reject `reasoning_effort: "none"` (OpenAI model pages).

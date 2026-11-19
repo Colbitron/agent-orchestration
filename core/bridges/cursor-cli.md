@@ -2,14 +2,14 @@
 id: cursor-cli
 harness: cursor
 binary: agent                    # AMBIGUOUS: Grok Build also installs `agent`. Call Cursor by absolute path ($CURSOR_AGENT)
-reaches: [claude-fable-5-2, claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, gpt-6-astra, gpt-6-1-sol, gpt-6-luna, gemini-3-8-flash, grok-4-7]
+reaches: [claude-fable-5-2, claude-fable-5-1, claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, gpt-6-2-astra, gpt-6-2-sol, gpt-6-astra, gpt-6-1-sol, gpt-6-luna, gemini-3-8-flash, grok-4-7]
 auth: "agent login (Cursor account/plan) or CURSOR_API_KEY / --api-key"
 verified: docs                   # not tested against an install
 as_of: 2026-10-02
 ---
 `reaches` lists profiles whose `access.harnesses` include `cursor`; none of them list
 `cursor-cli` in `invoke_via` yet. Cursor uses its own model slugs (`agent models`). GPT-6 Astra
-and 6.1 Sol access in Cursor is reportedly revoked (see those profiles).
+and 6.1 Sol access in Cursor is reportedly revoked (see those profiles); 6.2 access there is unverified.
 
 ## Install
 `curl https://cursor.com/install -fsS | bash`; auto-updates, or `agent update`. Not tested against an install.

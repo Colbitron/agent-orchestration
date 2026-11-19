@@ -1,6 +1,6 @@
 ---
 name: bridge-review
-description: Get an independent code review from a different model family (usually GPT-6.1 Sol via Codex, or Grok, per the user's routing table) of uncommitted changes, a branch diff, a commit, or a PR, then verify its findings before presenting them. Use when the user asks for a second opinion, an independent or cross-family review, or says "have Sol/Codex/Grok look at this"; when the orchestrate skill's review row points at a bridged model; or before merging a change broad enough that another lab's perspective is useful. Read-only; the reviewer never edits files.
+description: Get an independent code review from a different model family (usually a GPT Sol or Astra model via Codex, or Grok, per the user's routing table) of uncommitted changes, a branch diff, a commit, or a PR, then verify its findings before presenting them. Use when the user asks for a second opinion, an independent or cross-family review, or says "have Sol/Codex/Grok look at this"; when the orchestrate skill's review row points at a bridged model; or before merging a change broad enough that another lab's perspective is useful. Read-only; the reviewer never edits files.
 user-invocable: true
 argument-hint: "[uncommitted | branch <name> | commit <sha> | pr <n>] [focus]"
 ---

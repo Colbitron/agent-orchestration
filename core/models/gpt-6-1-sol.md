@@ -5,7 +5,7 @@ vendor: openai
 family: gpt
 status: current
 released: null                   # month not stated; about one week after GPT-6 Sol
-as_of: 2026-10-19
+as_of: 2026-11-19
 confidence: medium               # one dedicated video; other "Sol" mentions are ambiguous between 5.6, 6.0 and 6.1
 
 api_ids: null                    # exact API model id not stated in the research
@@ -74,6 +74,10 @@ role_hints:
 ---
 
 ## Summary
+
+**Succeeded by GPT-6.2 Sol** (`gpt-6-2-sol.md`, 2026-11-17) at the same
+price. The 6.2 profile has little evidence of its own yet and borrows this
+one's scores and guidance; both are still listed by OpenAI.
 
 GPT-6.1 Sol is the cost-efficiency leader and the best-value reviewer and
 investigator in the research. It is a scoped-work model with a much steadier

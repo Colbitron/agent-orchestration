@@ -1,13 +1,14 @@
-# GPT release videos: GPT-6 Astra and GPT-6.1 Sol
+# GPT release videos: GPT-6 Astra, GPT-6.1 Sol, and GPT-6.2 Astra and Sol
 
 **Sources**
 
 - ASTRA: "It's Here. (GPT-6 Astra launch)", Theo (t3.gg), YouTube, https://youtu.be/XFWpf0wLbh0
 - SOL61: "OpenAI fights back (GPT-6.1 Sol launch)", Theo (t3.gg), YouTube, https://youtu.be/vu8X3YroB-w
+- AS62: "Astra 6.2 Is Unusable (GPT-6.2 Astra and Sol launch)", Theo (t3.gg), YouTube, https://youtu.be/9KvI-zg4mfo
 
 A citation `[KEY m:ss]` links to that video at that timestamp. Quotes are from the auto-generated captions, read through the conventions table below.
 
-This note keeps what the kit uses from two launch reviews: verdicts, numbers, prices, and routing rules. The speaker builds **T3 Code** (an agent UI that wraps Codex and Claude Code) and refers to **Lakebed** (his own cloud platform), a **TypeScript-to-Rust port**, and **"orchestrator v2"**. In the Sol 6.1 video he says he had early access, was not paid, and the vendor controlled only *when* he could publish [SOL61 1:22](https://youtu.be/vu8X3YroB-w?t=82).
+This note keeps what the kit uses from three launch reviews: verdicts, numbers, prices, and routing rules. The speaker builds **T3 Code** (an agent UI that wraps Codex and Claude Code) and refers to **Lakebed** (his own cloud platform), a **TypeScript-to-Rust port**, and **"orchestrator v2"**. In the Sol 6.1 video he says he had early access, was not paid, and the vendor controlled only *when* he could publish [SOL61 1:22](https://youtu.be/vu8X3YroB-w?t=82).
 
 ## Transcription conventions and caveats (read first)
 
@@ -15,7 +16,13 @@ The captions are machine-generated, so many names are mangled. This file uses th
 
 | Transcript says | Read as |
 |---|---|
-| "Soul", "5.6 Soul", "6 Soul", "61 Soul" | **Sol** (GPT-5.6 Sol, GPT-6 Sol, GPT-6.1 Sol) |
+| "Soul", "5.6 Soul", "6 Soul", "61 Soul", "62 Soul", "62 Souls" | **Sol** (GPT-5.6 Sol, GPT-6 Sol, GPT-6.1 Sol, GPT-6.2 Sol) |
+| "62 Astra", "GBD62", "GPT62" (Video 3) | **GPT-6.2** Astra / the 6.2 models |
+| "Fable 52", "Opus 55", "Obus" (Video 3) | Fable 5.2, Opus 5.5 |
+| "Alter Wilds", "Out of Wilds", "Belleather" (Video 3) | Outer Wilds (the game), Bellweather (the name the model kept choosing) |
+| "Miniu", "minuite" (Video 3) | the harness OpenAI ran Fable in for its charts. Name uncertain. |
+| "Daybreak", "Verscell", "D3 code" (Video 3) | an OpenAI security-access program (uncertain), Vercel, T3 Code |
+| "agents last exam", "Val science index", "Turtlebench Science" (Video 3) | benchmark names as captioned; the last is **Terminal Bench Science** |
 | "Cloud Code", "quad code", "cloud config" | **Claude Code** / Claude config |
 | "codeex", "codecs" | **Codex** |
 | "Feeble", "Fable" | **Claude Fable** (5 / 5.1) |
@@ -31,7 +38,7 @@ The captions are machine-generated, so many names are mangled. This file uses th
 
 Dollar figures are sometimes garbled. Where a number looks like it lost its decimal point (for example "$512" for a per-task cost), the likely reading is noted next to the transcript's figure.
 
-**Timeline context:** the Astra video came first. In it, GPT-5.6 Sol was the previous OpenAI flagship and Fable 5.1 was Anthropic's latest. The Sol 6.1 video came later. By then Opus 5.5 and Sonnet 5.5 had shipped, GPT-6 Sol and GPT-6 Luna had come out about a week earlier, and the speaker says he **"effectively churned"** off Astra because of its inconsistency [SOL61 10:38](https://youtu.be/vu8X3YroB-w?t=638). **Read the Astra section together with the later re-assessment in the Sol section (see "Cross-video synthesis" at the end).**
+**Timeline context:** the Astra video came first. In it, GPT-5.6 Sol was the previous OpenAI flagship and Fable 5.1 was Anthropic's latest. The Sol 6.1 video came later. By then Opus 5.5 and Sonnet 5.5 had shipped, GPT-6 Sol and GPT-6 Luna had come out about a week earlier, and the speaker says he **"effectively churned"** off Astra because of its inconsistency [SOL61 10:38](https://youtu.be/vu8X3YroB-w?t=638). **Read the Astra section together with the later re-assessment in the Sol section (see "Cross-video synthesis" at the end).** The 6.2 video came on 2026-11-17, a week after Fable 5.2, with Opus 5.5 still his daily driver. It covers 6.2 Astra in depth and 6.2 Sol only in passing.
 
 ---
 
@@ -443,6 +450,203 @@ Lean context (about 110K tokens per request vs about 360K for Sonnet) is much of
 
 ---
 
+# Video 3: GPT-6.2 Astra (and GPT-6.2 Sol)
+
+## 1. Subject and thesis
+
+Context: OpenAI released **GPT-6.2 Astra** and **GPT-6.2 Sol** together on 2026-11-17, about a week after Fable 5.2. The speaker had early access, filmed at 11 PM on a fever after rerunning his tests on changes OpenAI made right before release [AS62 3:49](https://youtu.be/9KvI-zg4mfo?t=229), and says he spent "much less time with Soul than I have with Astra" [AS62 4:11](https://youtu.be/9KvI-zg4mfo?t=251). **This is an Astra video; 6.2 Sol gets a few sentences.**
+
+- **Thesis:** "By all accounts and all measurements, this should be one of the best releases of the year. And that's why it really hurts me to say I I hate using this model" [AS62 1:09](https://youtu.be/9KvI-zg4mfo?t=69). The numbers are great; working with it is not.
+- **Verdict, from the letter he sent OpenAI during testing:** "I would not choose this over Opus 55 for any of my work as a dev" [AS62 35:02](https://youtu.be/9KvI-zg4mfo?t=2102). It got better over the last days of testing, but not enough "to start moving things off of Claude" [AS62 1:48](https://youtu.be/9KvI-zg4mfo?t=108).
+- **What he will still use it for:** "code review and maybe as a member of my council" [AS62 43:34](https://youtu.be/9KvI-zg4mfo?t=2614). The video ends with "I think I need to go open another Claude account" [AS62 45:07](https://youtu.be/9KvI-zg4mfo?t=2707).
+- **His summary of its shape:** "This model isn't just spiky. It almost feels like it defaults to bad with random spikes into good and sometimes even great" [AS62 43:18](https://youtu.be/9KvI-zg4mfo?t=2598). For every demo that worked, "I had two that it failed" [AS62 43:09](https://youtu.be/9KvI-zg4mfo?t=2589).
+- **What he wants next:** a "Snow Leopard style release" that fixes the behavioural quirks even if benchmarks don't move [AS62 43:41](https://youtu.be/9KvI-zg4mfo?t=2621).
+
+## 2. Strengths, with evidence
+
+### Review: the one coding job he endorses
+
+- "It's a great reviewer. It catches things other models miss." In all his evals "it had a pretty much perfect score, finding a ton of things, even most models before it couldn't, and never lying" [AS62 35:11](https://youtu.be/9KvI-zg4mfo?t=2111). "Every other model has a habit of fibbing a bit, especially Fable" [AS62 35:26](https://youtu.be/9KvI-zg4mfo?t=2126).
+- "This model slaughtered in all my evals. So, it is a great reviewer because that's effectively what my evals are measuring" [AS62 35:34](https://youtu.be/9KvI-zg4mfo?t=2134). Note the caveat built in: his benches measure finding things, which is why it tops them while he hates using it.
+
+### Computer use: still the best
+
+- "Computer use of this model absolutely cracked. It flies. It's really good at like knowing what's going to come next and batching a ton of things in one call" [AS62 16:57](https://youtu.be/9KvI-zg4mfo?t=1017). In the letter: "Computer us is nuts. Still the case" [AS62 36:03](https://youtu.be/9KvI-zg4mfo?t=2163).
+
+### 3D, graphics, and play testing
+
+- For "how beautiful of a 3D environment a model can make, 62 Astra is neck and neck with the best, if not ahead of it" [AS62 1:27](https://youtu.be/9KvI-zg4mfo?t=87).
+- Fish slop: "It's stunning. It's one of the best looking things I've ever seen in my browser" [AS62 19:33](https://youtu.be/9KvI-zg4mfo?t=1173). The best result is still "an OpenAI model for asset gen and 3D asset creation and then using anthropic models to actually make the game pleasant to play" [AS62 19:58](https://youtu.be/9KvI-zg4mfo?t=1198).
+- "It does seem like 62 Astra is really good at play testing, so I might have it be the play tester and then keep using Fable as the implement[er]" [AS62 32:18](https://youtu.be/9KvI-zg4mfo?t=1938).
+
+### Science, math, security
+
+- OpenAI calls it "the best model in the world for scientists"; Terminal Bench Science is 9 points above GPT-6 Astra at under a third of the cost [AS62 13:42](https://youtu.be/9KvI-zg4mfo?t=822). The speaker: "If your goal is to use models for science, it is likely that Astra is the best science model ever" [AS62 13:55](https://youtu.be/9KvI-zg4mfo?t=835).
+- Hardest math problems: "neck and neck with the best" [AS62 1:27](https://youtu.be/9KvI-zg4mfo?t=87).
+- Security: "really good at cyber security stuff"; per friends at Vercel, "these models" (both 6.2 models) top every security bench they run; secondhand. Access to it for security work through OpenAI's program ("Daybreak" in the captions) is not there yet [AS62 17:42](https://youtu.be/9KvI-zg4mfo?t=1062).
+
+### Occasional genuinely novel solutions
+
+- It designed a reverse-proxy approach for T3 Code that "would save us as much as $25,000 a month. [Opus] didn't have the balls to explore enough options" [AS62 35:41](https://youtu.be/9KvI-zg4mfo?t=2141). Not shipped yet; he will report back.
+
+### Improvements over GPT-6 Astra
+
+- "Code quality has improved meaningfully compared to Astra, but still not great compared to Opus or or uh Fable" [AS62 36:03](https://youtu.be/9KvI-zg4mfo?t=2163).
+- "It writes pretty good sub agent prompts" [AS62 36:12](https://youtu.be/9KvI-zg4mfo?t=2172).
+- Web design: "significantly better than anything we've seen OpenAI models make ever", and "usable, tunable, and steerable", though still behind Fable 5.2 [AS62 12:43](https://youtu.be/9KvI-zg4mfo?t=763) [AS62 12:52](https://youtu.be/9KvI-zg4mfo?t=772).
+- Slides: Fable 5.2 (SVG only, no image generation) did better on looks, but Astra gets the win for **not adding filler subtitles**, which Fable added despite his system prompt [AS62 16:16](https://youtu.be/9KvI-zg4mfo?t=976) [AS62 16:38](https://youtu.be/9KvI-zg4mfo?t=998).
+- Cheaper per token than GPT-6 Astra (section 4), and OpenAI says it does better work "with fewer output tokens" [AS62 4:35](https://youtu.be/9KvI-zg4mfo?t=275).
+
+### Benchmarks OpenAI shared, with his caveats
+
+| Benchmark | Result | His caveat |
+|---|---|---|
+| "Agents last exam" (multi-step professional work) | **78.3** vs Fable 5.2 **72.8**; +5.2 over GPT-6 Astra at under 1/3 the cost; "5% of the cost" of Fable | Captions say Fable "60 bucks" and Astra "$289"; given "5% of the cost", read as about **$2.89** vs $60 [AS62 13:09](https://youtu.be/9KvI-zg4mfo?t=789) [AS62 13:17](https://youtu.be/9KvI-zg4mfo?t=797). It "scored worse on Max" [AS62 13:24](https://youtu.be/9KvI-zg4mfo?t=804). |
+| Terminal Bench Science | +9 points over GPT-6 Astra at under 1/3 the cost | "More consistent", but xhigh still dipped [AS62 13:42](https://youtu.be/9KvI-zg4mfo?t=822) [AS62 14:33](https://youtu.be/9KvI-zg4mfo?t=873) |
+| A science index (caption "Val science index") | xhigh **64.8** below high **68.1** | Noisy; Fable was run on high only; Astra ran in Codex and Fable in a different harness [AS62 14:03](https://youtu.be/9KvI-zg4mfo?t=843) [AS62 14:40](https://youtu.be/9KvI-zg4mfo?t=880) |
+| Artificial Analysis | Both 6.2 models comparable to Fable on everything except Max, much cheaper | [AS62 0:24](https://youtu.be/9KvI-zg4mfo?t=24) |
+| His own benches | 6.2 Astra first "across the board", 6.2 Sol "a very close second"; Astra cost about half of Fable to run them, Sol "almost as low as an eighth" | [AS62 0:38](https://youtu.be/9KvI-zg4mfo?t=38) [AS62 0:47](https://youtu.be/9KvI-zg4mfo?t=47) |
+
+## 3. Weaknesses, pitfalls, and misconceptions
+
+### No concept of what the human knows ("knowledge gaps")
+
+- It "has no concept of knowledge gaps". On long tasks it manages subagents "pretty well", then asks the human "some weird internal implementation detail that you could not under any earthly circumstance understand" [AS62 36:36](https://youtu.be/9KvI-zg4mfo?t=2196).
+- `/goal make a new level for Outer Wilds`: "2 hours in, it's blocked because it wants me to compare R24 reviewer write permissions for its clips to these random file paths I've never seen" [AS62 36:55](https://youtu.be/9KvI-zg4mfo?t=2215). "56 Soul didn't do this" [AS62 37:03](https://youtu.be/9KvI-zg4mfo?t=2223).
+- On a browser-building goal it asked him to unlock a "disposable QA guest" in a Tart VM he had never heard of [AS62 7:37](https://youtu.be/9KvI-zg4mfo?t=457). It "presumes that you know everything that's gone on throughout the thread" [AS62 7:54](https://youtu.be/9KvI-zg4mfo?t=474). "Separation of knowledge, so to speak, here is just it's zero" [AS62 9:44](https://youtu.be/9KvI-zg4mfo?t=584).
+- Consequence: "It's forced me to set up other agents on crons just to check if 62 Astra asked another stupid question and blocked itself" [AS62 37:20](https://youtu.be/9KvI-zg4mfo?t=2240). It happened in Codex too, not just T3 Code [AS62 37:28](https://youtu.be/9KvI-zg4mfo?t=2248). The release system prompt and T3 Code changes helped, "but still happens" [AS62 37:35](https://youtu.be/9KvI-zg4mfo?t=2255).
+
+### Unreadable reports
+
+- "It speaks in tongues that only 62 Astra understands. This model has the most [unparsable] outputs of any LLM I've used this year" [AS62 37:51](https://youtu.be/9KvI-zg4mfo?t=2271). "It misses the forest for the trees and then says the trees are the only living creatures in the forest" [AS62 38:05](https://youtu.be/9KvI-zg4mfo?t=2285).
+- "I've already built the habit of switching to opus 55 at the end of a long 62 Astro run just to get a readable summary" [AS62 38:13](https://youtu.be/9KvI-zg4mfo?t=2293). "It seems like you can't prompt this out", including system-prompt changes and "explain like I'm five" [AS62 38:26](https://youtu.be/9KvI-zg4mfo?t=2306).
+- The slow-worktree example: asked why one machine was slow, it wrote four paragraphs on pnpm internals; Opus 5.5 said "it's because the SSD is slow" [AS62 38:43](https://youtu.be/9KvI-zg4mfo?t=2323). After the release prompt changes the answer was "better, but still bad" [AS62 38:59](https://youtu.be/9KvI-zg4mfo?t=2339) [AS62 39:41](https://youtu.be/9KvI-zg4mfo?t=2381). He had shown this answer in earlier videos disguised as "Terra" [AS62 5:52](https://youtu.be/9KvI-zg4mfo?t=352): "a very big, very verbose model, not knowing how to prioritize information correctly" [AS62 6:26](https://youtu.be/9KvI-zg4mfo?t=386).
+- "On short tasks, it writes fine code and then explains it in terms more complex than the code that it wrote. I spend more tokens parsing its outputs than I spent making the changes" [AS62 41:44](https://youtu.be/9KvI-zg4mfo?t=2504).
+
+### Loops that go nowhere on multi-goal work
+
+- TS-to-Rust, `/goal make it smaller and faster than` the other Rust TypeScript compilers: "It ran for 7 days and landed zero improvements" [AS62 40:28](https://youtu.be/9KvI-zg4mfo?t=2428). It fixated on size and made the compiler "56% slower" [AS62 40:34](https://youtu.be/9KvI-zg4mfo?t=2434). Told to work on speed only: "four more days and landed at zero changes". Opus 5.5 then "landed a ton of changes in the next two days that made it 50% faster" [AS62 41:05](https://youtu.be/9KvI-zg4mfo?t=2465).
+- "This model is not capable of patting its head and rubbing its tummy at the same time... if one of them might hurt the other, then it will kill the other" [AS62 41:18](https://youtu.be/9KvI-zg4mfo?t=2478). "It is just not capable of completing complex work that is multifaceted" [AS62 41:29](https://youtu.be/9KvI-zg4mfo?t=2489).
+- "On long tasks, it blocks itself for stupid reasons or runs in circles and gets nowhere" [AS62 41:37](https://youtu.be/9KvI-zg4mfo?t=2497).
+- Background: no OpenAI model "could even break ground" on the port "even after 300,000 plus dollars in tokens"; Opus 5.5 did it "in under two weeks for around $20,000 in tokens", about $500 in subscriptions [AS62 40:05](https://youtu.be/9KvI-zg4mfo?t=2405) [AS62 40:12](https://youtu.be/9KvI-zg4mfo?t=2412).
+
+### No respect for the machine it runs on
+
+- "This model has no respect for your computer or the resources on it. I've never had a model so aggressively just waste my RAM, screw up permissions, empty my hard drive, and fill it with garbage" [AS62 8:10](https://youtu.be/9KvI-zg4mfo?t=490).
+- It filled a nearly empty 8 TB drive with "random disposable garbage", "refused to clean up", and he needed Opus to free space [AS62 8:19](https://youtu.be/9KvI-zg4mfo?t=499). Another machine went from 4 TB free to about 15 GB and one idle core, too loaded for basic checks [AS62 8:36](https://youtu.be/9KvI-zg4mfo?t=516) [AS62 8:45](https://youtu.be/9KvI-zg4mfo?t=525).
+
+### Regression to the mean in creative work
+
+- He and Ben independently asked for a new level (Outer Wilds, Majora's Mask) and both got "water themed music themed bellheavy levels named Bellweather". Others got a "Bellweather Station" spy game and a monster named Bellweather [AS62 33:04](https://youtu.be/9KvI-zg4mfo?t=1984) [AS62 33:13](https://youtu.be/9KvI-zg4mfo?t=1993) [AS62 33:22](https://youtu.be/9KvI-zg4mfo?t=2002). "What I mistook initially for creativity feels to be a hard-coded name and vague set of concepts" [AS62 33:44](https://youtu.be/9KvI-zg4mfo?t=2024).
+- The Outer Wilds planet was "in many ways stunning" with "no real payoff whatsoever"; he spent 90 minutes stuck before realising he had reached the end [AS62 26:43](https://youtu.be/9KvI-zg4mfo?t=1603) [AS62 27:04](https://youtu.be/9KvI-zg4mfo?t=1624). Fable 5.2's pass gave "significantly better" water, models, and level design [AS62 31:16](https://youtu.be/9KvI-zg4mfo?t=1876).
+
+### Writing and copy
+
+- OpenAI says its documents "read less like AI". His reply: "maybe, but they read more like somebody who doesn't speak English" [AS62 5:28](https://youtu.be/9KvI-zg4mfo?t=328) [AS62 5:36](https://youtu.be/9KvI-zg4mfo?t=336).
+- Outer Wilds dialogue failed "outright" after explicit instructions, repeated, to match the original's tone [AS62 28:09](https://youtu.be/9KvI-zg4mfo?t=1689) [AS62 28:35](https://youtu.be/9KvI-zg4mfo?t=1715). Someone he found on Twitter who works on model personification got it right in a day; whether he used a model isn't said ("He managed to make the model speak English better than any of y'all") [AS62 29:54](https://youtu.be/9KvI-zg4mfo?t=1794) [AS62 30:50](https://youtu.be/9KvI-zg4mfo?t=1850).
+- Fish slop is "still absolutely full of GPT [UI-isms]": unnecessary subtitles, UI that shifts when clicked, odd controls [AS62 19:07](https://youtu.be/9KvI-zg4mfo?t=1147) [AS62 20:07](https://youtu.be/9KvI-zg4mfo?t=1207).
+- Web design leans on "really cringey image gen... probably too much" [AS62 12:12](https://youtu.be/9KvI-zg4mfo?t=732).
+
+### Pixel-exact art and asset fidelity
+
+- Pokémon ROM hack: after "days" of back and forth, "playable, but not passable". It "doesn't have the capability to generate pixel art in exact specific resolutions without doing weird scaling" [AS62 21:48](https://youtu.be/9KvI-zg4mfo?t=1308) [AS62 22:19](https://youtu.be/9KvI-zg4mfo?t=1339) [AS62 22:53](https://youtu.be/9KvI-zg4mfo?t=1373).
+- FF7 up-res: cringe generated images, flicker between old and new assets, broken shading; "the left one looks better" [AS62 23:49](https://youtu.be/9KvI-zg4mfo?t=1429) [AS62 24:06](https://youtu.be/9KvI-zg4mfo?t=1446) [AS62 25:07](https://youtu.be/9KvI-zg4mfo?t=1507).
+
+### Interpretation
+
+The 6.2 complaints are different from GPT-6 Astra's. The old Astra said it would fix things and didn't, and scope-crept. The new one finishes short tasks with fine code, but on long runs it blocks itself on questions only it understands, loops on one half of a two-part goal, and reports in a way a human can't use. All three are failures of **communicating with and staying aligned to the human**, which his benches (which score finding things) don't measure. That is why it can top his benches and still be "insufferable to work with on real projects" [AS62 41:29](https://youtu.be/9KvI-zg4mfo?t=2489).
+
+## 4. Pricing, speed, context, limits, and access
+
+- **6.2 Astra:** **$8 / M input, $0.40 / M cached input, $40 / M output**, down from $10 / $1 / $50. The cache discount moves from 90% to 95%, "cutting the cash input cost by 60%" [AS62 18:35](https://youtu.be/9KvI-zg4mfo?t=1115) [AS62 18:41](https://youtu.be/9KvI-zg4mfo?t=1121) [AS62 18:49](https://youtu.be/9KvI-zg4mfo?t=1129). Per token it is now Fable 5.2's list price ($8 / $40), with cache reads at $0.40 vs Fable's $0.20.
+- **6.2 Sol:** "the same price as 61 soul" ($2 / $10 / $0.10) [AS62 18:26](https://youtu.be/9KvI-zg4mfo?t=1106).
+- **Cost to run his benches:** Astra about half of Fable 5.2, Sol about 1/8 [AS62 0:38](https://youtu.be/9KvI-zg4mfo?t=38).
+- **Hidden cost:** a long run that blocks or loops for days ships nothing (section 3).
+- **Context window, effort levels, API ids:** not stated in the video. Effort: xhigh scored below high on two of OpenAI's own charts, and max below lower efforts on another (section 2).
+- **Safety:** "strongest safeguards to date", tightened restrictions. "A meaningful number of people" report blocks; he hasn't hit any since release [AS62 18:05](https://youtu.be/9KvI-zg4mfo?t=1085) [AS62 18:12](https://youtu.be/9KvI-zg4mfo?t=1092).
+- **Release system prompt** (he diffed early-access vs release): Codex is told more firmly to persist ("If an authorized step remains, take it"), to "ask before destructive or irreversible actions or before sending something externally", and to "write the final answer fresh for the reader. Do not copy reasoning shorthand or jargon from tool calls or sub agent briefs", which he says was added after his complaints [AS62 10:10](https://youtu.be/9KvI-zg4mfo?t=610) [AS62 11:23](https://youtu.be/9KvI-zg4mfo?t=683) [AS62 11:31](https://youtu.be/9KvI-zg4mfo?t=691). Fonts became suggestions [AS62 11:47](https://youtu.be/9KvI-zg4mfo?t=707). **A bare API call or another harness may not carry these mitigations.**
+
+**Official figures (OpenAI model and pricing pages, fetched 2026-11-19; the launch post returned 403):**
+
+| | GPT-6.2 Astra | GPT-6.2 Sol |
+|---|---|---|
+| API id | `gpt-6.2-astra` | `gpt-6.2-sol` |
+| Input / cached input / output ($/M) | 8 / 0.40 / 40 | 2 / 0.10 / 10 |
+| Cache write ($/M, 30 min / 12 h) | 10 / 20 | 2.50 / 5 |
+| Above 272K input | input and cache 2x, output 1.5x (16 / 0.80 / 60) | same rule (4 / 0.20 / 15) |
+| Batch | half (4 / 0.20 / 20) | half (1 / 0.05 / 5) |
+| Fast mode | 2x Standard (16 / 0.80 / 80) | 2x Standard (4 / 0.20 / 20) |
+| Ultrafast | 3x Standard until 2027-02-28, 6x after | same rule |
+| Context / max input / max output | 1.05M / 922K / 128K | 1.05M / 922K / 128K |
+| Codex default context | 272K (raise with `model_context_window`) | 500K |
+| Effort levels | low, medium, high, xhigh, max (`none` rejected); default not stated | same |
+| Knowledge cutoff | 2026-05-18 | 2026-06-01 |
+| Where | API (Responses, Chat Completions, Batch), ChatGPT, Codex (`codex -m gpt-6.2-astra`) | same (`codex -m gpt-6.2-sol`) |
+
+GPT-6 Astra ($10 / $1 / $50) and GPT-6.1 Sol ($2 / $0.10 / $10) are still listed at their old prices and are not on OpenAI's deprecation page. Simon Willison's launch post (third party) agrees on the prices and found neither 6.2 model as good as Fable 5.2 on his own coding test ([simonwillison.net, 2026-11-17](https://simonwillison.net/2026/Nov/17/gpt62-astra-and-sol/)). The Codex models page describes an **Ultra** effort that "uses subagents to accelerate complex work"; which models offer it is not stated.
+
+## 5. 6.2 Sol: what little the video says
+
+- OpenAI positions it as "our efficient, versatile model for everyday work" [AS62 4:27](https://youtu.be/9KvI-zg4mfo?t=267).
+- "I've been hearing from people at OpenAI that they're not using Astra as much as 62 Soul, and they've mostly been using 62 Soul in [ultra fast]" [AS62 15:10](https://youtu.be/9KvI-zg4mfo?t=910). OpenAI's post: "Many employees at OpenAI are using Soul as their default model for both technical and non-technical tasks" [AS62 15:19](https://youtu.be/9KvI-zg4mfo?t=919).
+- His letter predicted viral "Is Soul secretly better than Astra?" posts by day five; "this happened day one", including at OpenAI [AS62 42:29](https://youtu.be/9KvI-zg4mfo?t=2549).
+- On his benches it was "a very close second place at a way cheaper price" [AS62 0:38](https://youtu.be/9KvI-zg4mfo?t=38).
+- **Nothing else:** no hands-on review, coding, UI, computer-use, or long-run evidence. He offers a dedicated Sol video if asked [AS62 4:11](https://youtu.be/9KvI-zg4mfo?t=251) [AS62 45:11](https://youtu.be/9KvI-zg4mfo?t=2711). Treat 6.2 Sol as 6.1 Sol at the same price until there is evidence.
+
+## 6. Sub-agents, orchestration, delegation, and verification
+
+- It "can pull in a lot of sub agents and manage them pretty well" and writes "pretty good sub agent prompts" [AS62 36:36](https://youtu.be/9KvI-zg4mfo?t=2196) [AS62 36:12](https://youtu.be/9KvI-zg4mfo?t=2172). The failure is upward: subagent-level questions get sent to the human, and the parent run then blocks [AS62 9:02](https://youtu.be/9KvI-zg4mfo?t=542).
+- **Unattended runs need a watcher.** He runs other agents on crons to catch it blocked on a nonsense question [AS62 37:20](https://youtu.be/9KvI-zg4mfo?t=2240).
+- **Have Claude write the summary.** He switches to Opus 5.5 at the end of a long Astra run to get a readable account of what it did [AS62 38:13](https://youtu.be/9KvI-zg4mfo?t=2293). In his day-two prediction, people "start merging bad code because they couldn't understand what 62 Astra said about it, but trusted it was fine" [AS62 42:17](https://youtu.be/9KvI-zg4mfo?t=2537).
+- **Multi-model pipelines:** Outer Wilds came together from Astra (3D and general design), Fable 5.2 (game design and tidying), and the dialogue help from Twitter; Astra may become the play tester with Fable implementing [AS62 32:02](https://youtu.be/9KvI-zg4mfo?t=1922) [AS62 32:18](https://youtu.be/9KvI-zg4mfo?t=1938).
+- **Don't give it compound goals.** Split "smaller and faster" into separate, separately verified runs, or give the whole thing to Opus (section 3).
+
+## 7. Comparisons with Claude models
+
+| Area | Winner, per speaker |
+|---|---|
+| Daily dev work | **Opus 5.5**: "I would not choose this over Opus 55 for any of my work as a dev" [AS62 35:02](https://youtu.be/9KvI-zg4mfo?t=2102) |
+| Review, finding things | **6.2 Astra**: near-perfect on his evals and "never lying"; Fable "fibs" [AS62 35:11](https://youtu.be/9KvI-zg4mfo?t=2111) |
+| Code quality | **Opus 5.5 and Fable 5.2** ("still not great compared to Opus or Fable") [AS62 36:03](https://youtu.be/9KvI-zg4mfo?t=2163) |
+| Explaining what it did | **Opus 5.5** (the SSD answer; summaries after Astra runs) [AS62 38:43](https://youtu.be/9KvI-zg4mfo?t=2323) |
+| Long multi-goal runs | **Opus 5.5**: 50% faster in two days after 11 Astra days with zero changes [AS62 41:05](https://youtu.be/9KvI-zg4mfo?t=2465) |
+| Exploring unusual solutions | **6.2 Astra** (the reverse proxy Opus "didn't have the balls" to find) [AS62 35:41](https://youtu.be/9KvI-zg4mfo?t=2141) |
+| Web design | **Fable 5.2**, though 6.2 is OpenAI's best ever [AS62 12:34](https://youtu.be/9KvI-zg4mfo?t=754) |
+| Slides | **6.2 Astra** narrowly, for avoiding filler subtitles; Fable's looked better [AS62 16:38](https://youtu.be/9KvI-zg4mfo?t=998) |
+| 3D visuals and assets | **6.2 Astra** [AS62 19:33](https://youtu.be/9KvI-zg4mfo?t=1173) |
+| Game feel and level design | **Anthropic** (fish slop play; Fable's Outer Wilds pass) [AS62 19:58](https://youtu.be/9KvI-zg4mfo?t=1198) [AS62 31:16](https://youtu.be/9KvI-zg4mfo?t=1876) |
+| Computer use | **6.2 Astra** [AS62 16:57](https://youtu.be/9KvI-zg4mfo?t=1017) |
+| Science and math | **6.2 Astra** [AS62 13:55](https://youtu.be/9KvI-zg4mfo?t=835) |
+| Cost per bench run | **6.2 Sol** (about 1/8 of Fable), then **6.2 Astra** (about 1/2) [AS62 0:38](https://youtu.be/9KvI-zg4mfo?t=38) |
+
+## 8. Using it inside or alongside Claude Code
+
+- The pattern he describes is Claude-led: Opus 5.5 or Fable 5.2 implements and writes the human-facing summary; Astra reviews, play-tests, does 3D assets and computer use, and sits on a "council" [AS62 43:34](https://youtu.be/9KvI-zg4mfo?t=2614) [AS62 32:18](https://youtu.be/9KvI-zg4mfo?t=1938).
+- He saw the same blocking behaviour in Codex as in T3 Code [AS62 37:28](https://youtu.be/9KvI-zg4mfo?t=2248), so a Codex bridge doesn't avoid it.
+
+## 9. Routing implications (from this video alone)
+
+**Route to 6.2 Astra:**
+
+- **Review of Claude-written code**, as a finder of problems: near-perfect on his evals, no false claims. Have Claude restate its findings before acting on them.
+- **Computer use**, especially hard or long flows.
+- **3D visuals, assets, play testing**, with Claude doing game feel and level design.
+- **Science, math, and security reasoning.**
+- **Exploring options on an open design question**, as one voice on a council. A Claude model decides and implements.
+
+**Do NOT route to 6.2 Astra:**
+
+- **Daily implementation, features, quick fixes.** Fine code on short tasks, but Opus is preferred and its explanations cost more than the change.
+- **Long unattended goals, especially compound ones** ("smaller *and* faster"). It blocks on nonsense questions or loops for days. If you must, run a watcher and split the goal.
+- **Anything where its report is the deliverable.** Have Claude summarise.
+- **Copy, dialogue, frontend design, game feel, pixel-exact art.**
+- **Machines whose disk, RAM, or permissions you care about**, without limits and cleanup checks.
+- **Effort:** default high; don't assume xhigh or max help.
+
+**6.2 Sol:** no new routing evidence. Keep 6.1 Sol's rules (review, investigation, scoped and bulk work, routine computer use; not UI, copy, long runs) at the same price, at low confidence.
+
+---
+
 # Cross-video synthesis (for the routing table)
 
 1. **The Astra assessment changed between videos.** At launch Astra was "the best model ever" [ASTRA 42:20](https://youtu.be/XFWpf0wLbh0?t=2540). By the Sol 6.1 video the speaker "effectively churned" because of its **spikiness** [SOL61 10:38](https://youtu.be/vu8X3YroB-w?t=638): brilliant at times, but at other times "the dumbest I've seen a model do this year" [SOL61 10:26](https://youtu.be/vu8X3YroB-w?t=626). He then used Codex subs only for computer use and says "I am entirely done using Astra after this model" [SOL61 16:55](https://youtu.be/vu8X3YroB-w?t=1015). Astra's lasting value, per the speaker, is **computer use, 3D, and fleet-management judgment** ("Aster is the only one that hasn't really made too many of those dumb mistakes"), not daily coding.
@@ -451,7 +655,10 @@ Lean context (about 110K tokens per request vs about 360K for Sonnet) is much of
 4. **Consistent OpenAI weaknesses in both videos:** frontend and UI taste (filler copy everywhere), game feel and controls, passivity or rigidity (Astra says it will fix things and doesn't; Sol follows process rules into a dead end and won't ask for help), and merge-worthiness of code compared with Claude.
 5. **The emerging architecture the speaker endorses:** **Opus 5.5 as orchestrator and implementer.** It delegates review, investigation, root-cause analysis, triage, and audits to **GPT-6.1 Sol**, and computer use to Sol (cheap) or Astra (best). Use cross-family review in both directions.
 6. **Router design caution, from the "Jev Router" critique:** per-request cheapest-model routing by a non-reasoning classifier with no context can raise total cost and time (104 vs 19 steps). Route by **task type and context**, and count **steps-to-completion and cache-read pricing**, not just per-token list price. Agent workloads are about 96% cache reads.
-7. **Reasoning-effort defaults:** for both OpenAI models, xhigh and max often score *worse* than high (Astra) or low and high (Sol on DeepSWE). Default Astra to **high** and 6.1 Sol to **low or high**.
+7. **Reasoning-effort defaults:** for both OpenAI models, xhigh and max often score *worse* than high (Astra) or low and high (Sol on DeepSWE). Default Astra to **high** and 6.1 Sol to **low or high**. OpenAI's own 6.2 charts repeat the pattern: xhigh below high on two science benches and max below lower efforts on "agents last exam" [AS62 13:24](https://youtu.be/9KvI-zg4mfo?t=804) [AS62 14:03](https://youtu.be/9KvI-zg4mfo?t=843).
+8. **6.2 Astra changes the failure, not the verdict.** GPT-6 Astra's problems were passivity (says it fixed things and didn't) and scope creep. 6.2 Astra writes fine code on short tasks, but on long runs it blocks itself on questions the human can't answer, loops on one half of a compound goal (11 days on TS-to-Rust without a landed compiler improvement), and writes reports a human can't parse. The speaker still won't use it over Opus 5.5 for dev work [AS62 35:02](https://youtu.be/9KvI-zg4mfo?t=2102). Its standing roles are the same as GPT-6 Astra's after the Sol 6.1 re-assessment: **computer use, 3D visuals, science**, plus **review**, where it is now his top scorer and "never lying" [AS62 35:11](https://youtu.be/9KvI-zg4mfo?t=2111).
+9. **The TS-to-Rust story, third telling.** Video 2 says Opus restarted the port and "got it working in a day"; Video 3 says Opus finished it "in under two weeks for around $20,000 in tokens" [AS62 40:12](https://youtu.be/9KvI-zg4mfo?t=2412). Both say OpenAI models stalled and Opus landed it. Read the day as getting it working and the two weeks as finishing it.
+10. **6.2 Sol is untested here.** Same price as 6.1 Sol, a "very close second" on his benches at about 1/8 of Fable's cost, and OpenAI staff prefer it to Astra [AS62 0:38](https://youtu.be/9KvI-zg4mfo?t=38) [AS62 15:19](https://youtu.be/9KvI-zg4mfo?t=919). Nothing on its review, UI, long-run, or computer-use behaviour. Until there is, route it like 6.1 Sol and watch for Astra 6.2's communication problems, which may come from the shared release.
 
 **Price reference from these videos (per 1M tokens):**
 
@@ -462,6 +669,8 @@ Lean context (about 110K tokens per request vs about 360K for Sonnet) is much of
 | GPT-6 Astra above 272K context (API) | $20 | $75 | (not stated) |
 | GPT-6.1 Sol | $2 | $10 | $0.10 |
 | GPT-6 Sol | $2 | $10 | (not stated) |
+| GPT-6.2 Astra | $8 | $40 | $0.40 |
+| GPT-6.2 Sol | $2 | $10 | $0.10 |
 | Claude Fable 5.1 | "nearly identical" to Astra | "nearly identical" to Astra | $0.25 |
 
-The Astra figures above 272K context are derived from the 2x input and 1.5x output multipliers, which Codex waives.
+The 6.2 rows are confirmed on OpenAI's pricing page (fetched 2026-11-19). The GPT-6 Astra figures above 272K context are derived from the 2x input and 1.5x output multipliers, which Codex waives.

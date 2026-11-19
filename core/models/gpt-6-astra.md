@@ -5,7 +5,7 @@ vendor: openai
 family: gpt
 status: current
 released: null                   # month not stated in the research
-as_of: 2026-10-19
+as_of: 2026-11-19
 confidence: high                 # two dedicated videos plus a head-to-head; note the verdict soured between them
 
 api_ids: null                    # exact API model id not stated in the research
@@ -77,6 +77,10 @@ role_hints:
 ---
 
 ## Summary
+
+**Succeeded by GPT-6.2 Astra** (`gpt-6-2-astra.md`, 2026-11-17), which is
+cheaper and still listed alongside it. This profile stays for users on the
+older model.
 
 GPT-6 Astra has the highest ceiling of any model in the research, and its
 floor is the lowest of the frontier models. It is the best model anywhere at

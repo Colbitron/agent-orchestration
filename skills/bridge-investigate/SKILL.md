@@ -1,6 +1,6 @@
 ---
 name: bridge-investigate
-description: Delegate root-cause analysis, deep bug hunting, log digging, codebase audits, or large-document reading to the model the routing table lists for `investigate`, `analyze`, `bulk`, or `research` (often GPT-6.1 Sol on high, or a cheap model for logs), read-only, with a self-contained question. Use when a bug is not visible from reading the code, when the user asks why something happens, to dig through logs, or to read a large document or spec, or when the routing row for that work points at a bridged model. Returns evidence (file:line, commands run, what was ruled out) that you check before relaying.
+description: Delegate root-cause analysis, deep bug hunting, log digging, codebase audits, or large-document reading to the model the routing table lists for `investigate`, `analyze`, `bulk`, or `research` (often GPT-6.x Sol on high, or a cheap model for logs), read-only, with a self-contained question. Use when a bug is not visible from reading the code, when the user asks why something happens, to dig through logs, or to read a large document or spec, or when the routing row for that work points at a bridged model. Returns evidence (file:line, commands run, what was ruled out) that you check before relaying.
 user-invocable: true
 argument-hint: "<symptom or question> [repro / log path / doc path]"
 ---

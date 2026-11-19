@@ -163,6 +163,7 @@ names; the correction tables are in `research/`.
 | OVF | [I think I figured it out](https://youtu.be/XtykeVoSmP8) (Opus 5.5 vs Fable 5.2) |
 | ASTRA | [It's Here.](https://youtu.be/XFWpf0wLbh0) (GPT-6 Astra) |
 | SOL61 | [OpenAI fights back](https://youtu.be/vu8X3YroB-w) (GPT-6.1 Sol) |
+| AS62 | [Astra 6.2 Is Unusable](https://youtu.be/9KvI-zg4mfo) (GPT-6.2 Astra and Sol) |
 
 Harness facts in `research/harnesses.md` and the gap-model profiles come from
 vendor docs and public benchmark sites, linked inline.

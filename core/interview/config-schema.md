@@ -82,6 +82,8 @@ models:
   claude-sonnet-5-5: {enabled: true,  cost: 7}
   claude-haiku-5-5:  {enabled: true,  cost: 9}
   claude-haiku-4-5:  {enabled: false, cost: 9}   # superseded; keep disabled
+  gpt-6-2-astra:     {enabled: false, cost: 1}
+  gpt-6-2-sol:       {enabled: false, cost: 1}
   gpt-6-astra:       {enabled: false, cost: 1}
   gpt-6-1-sol:       {enabled: false, cost: 1}
   qwen3-8-27b:       {enabled: false, cost: 1, host: api}     # open weights; see the local-only example below

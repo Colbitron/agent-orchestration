@@ -2,7 +2,7 @@
 id: codex-cli
 harness: codex
 binary: codex                    # ~/.local/bin/codex -> ~/.codex/packages/standalone/current/bin/codex
-reaches: [gpt-6-astra, gpt-6-1-sol, gpt-6-luna]
+reaches: [gpt-6-2-astra, gpt-6-2-sol, gpt-6-astra, gpt-6-1-sol, gpt-6-luna]
 auth: "ChatGPT login (codex login; --device-auth for headless) or CODEX_API_KEY"
 verified: local                  # codex exec --help / exec review --help / review --help 0.160.0, smoke test run 2026-10-02
 as_of: 2026-10-02
@@ -69,8 +69,8 @@ named in the research; passing it explicitly is the safe choice.
 ## Flags
 | Need | Flag |
 |---|---|
-| Model | `-m <id>`: `gpt-6.1-sol`, `gpt-6-astra`, `gpt-6-luna` (local models cache) |
-| Effort | `-c model_reasoning_effort="low\|medium\|high\|xhigh\|max\|ultra"`; `ultra` on Sol/Astra only |
+| Model | `-m <id>`: `gpt-6.2-sol`, `gpt-6.2-astra`, `gpt-6.1-sol`, `gpt-6-astra`, `gpt-6-luna` (local models cache; the 6.2 ids are from OpenAI's Codex models page, 2026-11-19) |
+| Effort | `-c model_reasoning_effort="low\|medium\|high\|xhigh\|max\|ultra"`; `ultra` on Sol/Astra only (6.2 support per OpenAI's Codex page: unverified) |
 | Sandbox | `-s, --sandbox read-only\|workspace-write\|danger-full-access` |
 | Output | stdout = final message; `-o <FILE>`; `--json` = JSONL; `--output-schema <FILE>` |
 | Working dir | `-C, --cd <DIR>`; `--add-dir <DIR>`; `--skip-git-repo-check` outside git |
